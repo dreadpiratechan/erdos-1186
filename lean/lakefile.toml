@@ -1,0 +1,36 @@
+name = "erdos1186"
+defaultTargets = ["Erdos1186"]
+
+# Standalone verification project for the paper on Erdos Problem 1186 (k = 3).
+# Lean v4.27.0 (lean-toolchain) and Mathlib v4.27.0, pinned by commit in lake-manifest.json
+# (mathlib a3a10db0e9d66acbebf76c5e6a135066525ac900; the package entries are those of the research repository).
+# The 342 Lean sources under Erdos/Proofs/ are byte-identical copies of the research repository's files
+# (see ../docs/PROVENANCE.md).
+#
+# Memory: the largest generated certificate modules need several GB each. This Lake version has no -j option;
+# limit the number of parallel jobs with the environment variable LEAN_NUM_THREADS, for example
+#     LEAN_NUM_THREADS=2 lake build
+# (verification/run_all.sh does this; see ../README.md).
+#
+# The research project's lakefile also set `warn.sorry = false` for the library. It is not set here, so that a
+# `sorry` would show as a warning in the build log; the axiom audit (../verification/AxiomAudit.lean) is the test.
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+relaxedAutoImplicit = false
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.27.0"
+
+# The 342 proof modules, under their original module names.
+[[lean_lib]]
+name = "Erdos"
+globs = ["Erdos.+"]
+
+# Root module: imports the modules of Theorems A, B and C and the negative controls. Its import closure is all 342
+# modules, so `lake build` compiles every one of them.
+[[lean_lib]]
+name = "Erdos1186"

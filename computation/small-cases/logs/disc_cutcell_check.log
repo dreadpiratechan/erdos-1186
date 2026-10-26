@@ -1,0 +1,6 @@
+w=2: largest excess 4  (lemma allows 4w = 8)  OK
+w=4: largest excess 4  (lemma allows 4w = 16)  OK
+w=6: largest excess 4  (lemma allows 4w = 24)  OK
+w=8: largest excess 4  (lemma allows 4w = 32)  OK
+w=10: largest excess 4  (lemma allows 4w = 40)  OK
+RESULT: ALL OK

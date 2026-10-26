@@ -1,0 +1,40 @@
+def Erdos1186Day.monoCount : ℕ → ℕ → (ℕ → Bool) → ℕ :=
+fun k n c => {p ∈ Finset.Icc 1 n ×ˢ Finset.Icc 1 n | p.1 + (k - 1) * p.2 ≤ n ∧ ∀ i < k, c (p.1 + i * p.2) = c p.1}.card
+def Erdos1186Day.minMonoCount : ℕ → ℕ → ℕ :=
+fun k n => sInf {m | ∃ c, monoCount k n c = m}
+def Erdos1186Day.δ : ℕ → ℝ :=
+fun k => Filter.liminf (fun n => ↑(minMonoCount k n) / ↑n ^ 2) Filter.atTop
+erdos_1186.variants.prs_bounds : 1675 / 32768 ≤ δ 3 ∧ δ 3 ≤ 117 / 2192
+'Erdos1186Day.erdos_1186.variants.prs_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.erdos_1186.variants.prs_bounds_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.erdos_1186.variants.prs_bounds_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+delta3_ge_L256 : 6928985 / 134217728 ≤ δ 3
+'Erdos1186Day.delta3_ge_L256' depends on axioms: [propext, Classical.choice, Quot.sound]
+erdos_1186.variants.van_der_waerden : ∀ (k : ℕ), 2 ≤ k → 0 < δ k
+'Erdos1186Day.erdos_1186.variants.van_der_waerden' depends on axioms: [propext, Classical.choice, Quot.sound]
+erdos_1186.variants.probabilistic : ∀ (k : ℕ), 2 ≤ k → δ k ≤ 1 / ((↑k - 1) * 2 ^ k)
+'Erdos1186Day.erdos_1186.variants.probabilistic' depends on axioms: [propext, Classical.choice, Quot.sound]
+delta3_ge_model2_L64 : 1782409 / 33554432 ≤ δ 3
+delta3_ge_model2_L128 : 1788837 / 33554432 ≤ δ 3
+delta3_ge_model2_L256 : 14324135 / 268435456 ≤ δ 3
+delta3_bounds_model2_L256 : 14324135 / 268435456 ≤ δ 3 ∧ δ 3 ≤ 117 / 2192
+'Erdos1186Day.delta3_ge_model2_L64' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.delta3_ge_model2_L128' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.delta3_ge_model2_L256' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.delta3_bounds_model2_L256' depends on axioms: [propext, Classical.choice, Quot.sound]
+Erdos1186Night2.lower_of_cert : ∀ (L : ℕ),
+  2 ≤ L → Even L → ∀ (d : ℕ → ℚ), Erdos1186Night2.DiagCert L d → Erdos1186Night2.prsBound L d ≤ δ 3
+'Erdos1186Night2.lower_of_cert' depends on axioms: [propext, Classical.choice, Quot.sound]
+Erdos1186Night2M2.lower_of_cubeLB : ∀ (L : ℕ),
+  4 ≤ L → Even L → ∀ (σ : ℚ), Erdos1186Night2M2.CubeLB L σ → Erdos1186Night2M2.bound2 L σ ≤ δ 3
+'Erdos1186Night2M2.lower_of_cubeLB' depends on axioms: [propext, Classical.choice, Quot.sound]
+Erdos1186Night2M2.cubeLB64 : Erdos1186Night2M2.CubeLB 64 (183671 / 2048)
+Erdos1186Night2M2.cubeLB128 : Erdos1186Night2M2.CubeLB 128 (242779 / 512)
+Erdos1186Night2M2.cubeLB256 : Erdos1186Night2M2.CubeLB 256 (2190937 / 1024)
+'Erdos1186Night2M2.cubeLB64' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2M2.cubeLB128' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2M2.cubeLB256' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2M2.cubeLB_of_cert' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2M2.Cert.link_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2M2.Cert.psd' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0

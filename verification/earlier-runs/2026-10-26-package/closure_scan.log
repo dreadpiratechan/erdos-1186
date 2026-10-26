@@ -1,0 +1,5 @@
+closure of ['P1186M2Main', 'P1186LowMain']: 189 modules, 12580357 bytes
+manifest written: reproducibility\lean\MANIFEST.sha256
+  P1186Cert128Lib.lean:24: Quot.sound` (no `native_decide`).
+  P1186M2CertLib.lean:18: **What the kernel checks** (all by `decide +kernel`, no `native_decide`):
+forbidden-word lines: 2

@@ -1,0 +1,27 @@
+Erdos Problem 1186 (k = 3): Lean formalization, verification scripts and computations
+Copyright 2026 Chandler Snively
+
+This product includes software developed as part of Formal Conjectures
+(https://github.com/google-deepmind/formal-conjectures), Copyright Google DeepMind and the
+Formal Conjectures contributors, licensed under the Apache License 2.0:
+
+  - verification/upstream/FormalConjectures_ErdosProblems_1186.lean (commit c83a94d785d0, verbatim)
+  - the definitions `monoCount`, `minMonoCount` and `δ` (with their docstrings) in
+    lean/Erdos/Proofs/P1186.lean, which reproduce those upstream definitions
+  - the copies of those definitions and of the upstream statements `prs_bounds`, `prs_conjecture`,
+    `van_der_waerden` and `probabilistic` that verification/make_upstream_pin.py writes into
+    verification/generated/
+
+The licence of those files is in verification/upstream/LICENSE-formal-conjectures-Apache-2.0.
+
+computation/small-cases/oeis_small.py contains terms of the On-Line Encyclopedia of Integer
+Sequences, sequence A121385 (https://oeis.org/A121385), licensed under CC BY-SA 4.0
+(https://creativecommons.org/licenses/by-sa/4.0/).
+
+The Theorem C files formalise an unrefereed proof claim by Carlos Toledo ("The twelve-block
+colouring is optimal: delta_3 = 117/2192", draft v0.2, posted on erdosproblems.com/1186 on
+5 October 2026). The mathematics of that claim is its author's. None of the claimant's files,
+certificates or code is included in this repository.
+
+The Lean files depend on Mathlib (https://github.com/leanprover-community/mathlib4, Apache License
+2.0), which is fetched at build time and not included here.

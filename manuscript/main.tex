@@ -1,0 +1,601 @@
+\documentclass[11pt]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.15in]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\setlength{\emergencystretch}{3em}
+\sloppy
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\mono}{V}
+\newcommand{\mmin}{V_{\min}}
+\newcommand{\lean}[1]{\texttt{#1}}
+
+\title[Results for Erd\H{o}s Problem 1186, $k=3$]{Machine-checked results on the minimum number of monochromatic 3-term arithmetic progressions in two-colourings (Erd\H{o}s Problem~1186, case $k=3$)}
+
+% Authorship is a PROPOSAL, not a decision: see authorship_disclosure_proposal.md (options A, B, C) and submission_readiness.md.
+\author{Chandler Snively}
+
+\date{Draft of 26 October 2026. Not for circulation; see the status note below.}
+
+\subjclass[2020]{05D10, 11B25, 90C22, 68V15}
+\keywords{monochromatic arithmetic progressions, Erd\H{o}s problems, semidefinite programming, triangle inequalities, formal verification, Lean}
+
+\begin{document}
+
+\begin{abstract}
+Let $\delta_3=\liminf_{n\to\infty}\min_c \mono(n,c)/n^2$, where $\mono(n,c)$ is the number of monochromatic 3-term arithmetic
+progressions in a $2$-colouring $c$ of $\{1,\dots,n\}$; this is the case $k=3$ of Erd\H{o}s Problem~1186. Parrilo, Robertson and Saracino proved
+$1675/32768\le\delta_3\le117/2192$ and conjectured that the upper bound is the truth. We give a machine-checked proof of both
+bounds in Lean~4 with Mathlib, against the definitions of the Formal Conjectures repository, where the statement is still
+marked \texttt{sorry}. We also give a machine-checked proof of
+\[\delta_3\;\ge\;\frac{14324135}{268435456}=0.0533615\ldots,\]
+within $1.5\cdot10^{-5}$ of $117/2192=0.0533759\ldots$; we did not find this bound in the searches described in Section~\ref{sec:novelty}. It uses a sharper cover of the counting region than the strip cover of
+Parrilo et al., which recovers the boundary loss of their method (a cell model that charges the cut cells by their inside and outside areas, with a weaker bound that the claim reports as certified and that we did not reproduce, already appears in Section~7 of the claim mentioned below, which presents it as stopping short of $117/2192$), and a Shor-type semidefinite relaxation with triangle cuts, whose
+exact integer certificate ($256\times256$, $11931$ cuts) is verified by the Lean kernel. Exact certificates outside Lean reach $0.0533678$ at
+size $512$, and the gap to $117/2192$ shrinks like $1/L^2$ in the cases we computed up to size $256$; by itself this is evidence for $\delta_3=117/2192$ and
+not a proof of it. The same Lean development, however, contains a machine-checked proof of $\delta_3=117/2192$ itself, that is, of the conjecture of Parrilo et al.\ (Theorem~C, Section~\ref{sec:claim}). It formalises an unrefereed proof claim by another author (October 2026; by that author's statement produced with substantial AI assistance and checked by them line by line), in a discrete form and with five stated departures: the mathematics is that author's, the Lean formalisation is by AI agents of the research project, and Theorem~B is a consequence of it.
+The mathematics and code behind Theorem~B, and the Lean formalisation of Theorem~C, were produced by AI systems in a research workspace owned by the author; Appendix~\ref{app:ai}
+is a draft statement for the author to confirm.
+\end{abstract}
+
+\maketitle
+
+\begin{center}
+\fbox{\parbox{0.92\textwidth}{\small\textbf{Status of this draft (26 October 2026).}
+The mathematics of Sections~\ref{sec:model2}--\ref{sec:cert} and all the Lean proofs were produced by AI agents (the mathematics formalised in Theorem~C is another author's). The Lean theorems are checked
+by the Lean kernel and the certificates also by exact-arithmetic scripts. The prose proofs of Section~\ref{sec:model2} (the continuum cut-cell lemma and its discrete transfer) are \emph{not}
+formalised (Lean proves a different, weaker integer argument) and were only checked by symbolic and exhaustive small-case computations and by AI readers; no human mathematician has refereed them and the author's own check is not yet done.
+The Lean theorems do not depend on those prose proofs. Reading them as bounds on $\delta_3$ depends on the
+Lean definitions being the ones of the Formal Conjectures source, which we checked mechanically (Section~\ref{sec:formal}); whether those definitions express the intended constant is the Formal Conjectures authors' claim, not ours.
+Novelty statements are provisional (``not found in the searches described''). Section~\ref{sec:claim} reports an unrefereed claim by another author and its Lean formalisation (Theorem~C); the argument is not a result of this paper; its author states that they read and checked it line by line, and the claim's report records an outside audit (auditor not named) and a correction of 20 October 2026; so far as we know no one else has read it, and no human has read the Lean text. The Lean files of Theorem~C were built from source twice, with \texttt{lake} in the research repository after the merge of the branch that contains them and here from the shipped sources with plain \texttt{lean}; every build succeeded, and the axioms of Theorem~C and its parts are the three standard ones (Section~\ref{sec:claimchecks}). The authorship line and the AI statement are proposals for the author to confirm.}}
+\end{center}
+
+\section{Introduction}\label{sec:intro}
+
+For a $2$-colouring $c\colon\{1,\dots,n\}\to\{\pm1\}$ let $\mono(n,c)$ be the number of pairs $(a,d)$ with $d\ge1$ and $a+2d\le n$
+for which $c(a)=c(a+d)=c(a+2d)$, and let $\mmin(n)=\min_c\mono(n,c)$. Van der Waerden's theorem, with the usual supersaturation argument, gives $\mmin(n)\gg n^2$ and a random
+colouring gives $\mmin(n)\le(\tfrac1{16}+o(1))n^2$. For $k$-term progressions let $\delta_k=\liminf_n\mmin^{(k)}(n)/n^2$.
+Problem~1186 of the Erd\H{o}s problems database \cite{EP1186}, which cites \cite[p.~93]{Er80}, asks for reasonable bounds, or even an
+asymptotic formula, for $\delta_k$; its formalisation in \cite{FC} reads this as the order of magnitude of $\delta_k$ as $k\to\infty$ and is open.
+This paper is only about $k=3$, the one case where bounds on the constant itself are known. There
+Parrilo, Robertson and Saracino \cite{PRS08} proved
+\begin{equation}\label{eq:prs}
+\frac{1675}{32768}=0.05111\ldots\;\le\;\delta_3\;\le\;\frac{117}{2192}=0.05337\ldots,
+\end{equation}
+the upper bound by an explicit $12$-block colouring (found independently by Butler, Costello and Graham \cite{BCG10}; see \cite{BGL14}), and
+conjectured that it is sharp. According to the database, Graham offered \$100 at a conference in 1999 for the value of $\delta_3$ (the page attributes this report to
+\cite{PRS08}); the value is open. Greenwood, Kariv and
+Williams \cite{GKW23} showed that the $12$-block colouring is optimal among anti-symmetric colourings with at most $12$ blocks.
+
+This paper has two theorems of its own, a third that formalises another author's claim, and some evidence.
+
+\medskip\noindent\textbf{Theorem A} (Lean). \emph{The bounds \eqref{eq:prs} hold:}
+$1675/32768\le\delta_3\le117/2192$, as the statement \texttt{erdos\_1186.variants.prs\_bounds} of Formal Conjectures
+\cite{FC}, with the definitions $\mono$, $\mmin$ and $\delta$ copied verbatim from that repository. (That variant is \texttt{sorry}
+there at commit c83a94d, and still on the main branch on 26 October 2026, as is the main statement \texttt{erdos\_1186} about $\delta_k$ for all $k$, which we do not touch. We found no earlier formal proof; see Section~\ref{sec:novelty}.)
+
+\medskip\noindent\textbf{Theorem B} (Lean). \emph{$\displaystyle\delta_3\ge\frac{14324135}{268435456}=0.05336156\ldots$.}
+Also proved: $\delta_3\ge 1788837/33554432=0.0533114\ldots$ and $\delta_3\ge 1782409/33554432=0.0531199\ldots$ (smaller certificates).
+
+\medskip\noindent\textbf{Theorem C} (Lean; the mathematics is another author's). \emph{$\delta_3=117/2192$,} as the statement \texttt{erdos\_1186.variants.prs\_conjecture} of Formal Conjectures \cite{FC} (\texttt{research open} and \texttt{sorry} there at commit c83a94d), with no hypothesis. It is a Lean formalisation, by AI agents of the research project, of the unrefereed proof claim of Carlos Toledo \cite{Toledo26} (posted on the problem's proof-claims thread; produced, by the claimant's own statement, with substantial AI assistance from Claude, and read and checked line by line by the claimant) described in Section~\ref{sec:claim}, in a discrete form with the departures listed in Section~\ref{sec:thmC}; it implies Theorems~A and~B. Its Lean proof reuses parts of the development of Theorems~A and~B (the definitions, the exact identity of Lemma~\ref{lem:ident}, the cover inequality of Theorem~\ref{thm:cover} and the upper bound of Theorem~A) but none of their certificate tables.
+
+\medskip
+Theorem~B gives the lower bound $0.05336$ where \cite{PRS08} has $0.05111$, so that, if we accept the Lean statement as the
+problem, $\delta_3\in[0.0533615,\,0.0533760]$ (rounded outwards), an interval of relative width $2.7\cdot10^{-4}$; Theorem~C closes this interval, by another route. The proof of Theorem~B, which is the mathematics of this paper, rests on two ideas. The first (Section~\ref{sec:model2}) is a
+cover of the counting region by cells that treats the $2L$ cells cut by the boundary with a sharp cut-cell lemma, instead of charging them at worst case as the
+strip cover of \cite{PRS08} does; it recovers the term $1/(8L)$ that the strip cover loses (this idea is not new to the present paper; see ``Credit and origin'' below). The second (Section~\ref{sec:cert}) is to
+bound the resulting quadratic form on the cube $[-1,1]^L$ not by a diagonal semidefinite certificate (as \cite{PRS08} do), which for this
+cover stalls near $0.0522$, but by a Shor relaxation with triangle inequalities, whose dual certificate is an integer matrix of size
+$L\times L$ with thousands of cuts. The numerical checks that the Lean kernel performs are finite integer arithmetic; the reductions around them are ordinary Lean proofs.
+
+\medskip\noindent\textbf{What is and is not ours.} We did not discover the mathematics of $\delta_3=117/2192$: the argument is an unrefereed claim by another author, Carlos Toledo \cite{Toledo26}, and Theorem~C says only that it has been formalised in Lean. The evidence of Section~\ref{sec:evidence} (exact certificates outside Lean leave a
+gap between $0.94/L^2$ and $1.06/L^2$ to $117/2192$ for $L=64,128,192,256$) is consistent with the equality but, taken alone, proves nothing about $L\to\infty$. Three AI reviewers in the same research project examined the claim before it was formalised: one reached the verdict ``undetermined end to end, with no gap found''; a second rebuilt the claim's five finite problems from its text, in its own reading of the definitions, and certified them with certificates of its own (the claimant's certificates were not run), and a third re-verified those certificates. None of them proved the lemmas of the argument or its counting reduction. Section~\ref{sec:claim} describes the claim and what has been checked about its Lean formalisation, including what was not checked. Since Theorem~B is a consequence of Theorem~C, the value of Theorem~B is that its proof is a different route, with different mathematics, that does not use the claim's argument.
+
+\medskip\noindent\textbf{Credit and origin.} The lower-bound method of Section~\ref{sec:prs} and the colouring of Section~\ref{sec:upper} are
+those of \cite{PRS08}; Theorem~A is a formalisation of known mathematics. The cover of Section~\ref{sec:model2} with its cut-cell lemma, and the certificates of Sections~\ref{sec:cert}--\ref{sec:evidence}, are, in the sense of
+Section~\ref{sec:novelty}, ``not found in the searches described''; they were produced by AI agents.
+Two of the ideas are \emph{not} new to this paper. A Shor relaxation with triangle inequalities is a standard device (Section~\ref{sec:cert}). And Section~7 of the claim's paper (Section~\ref{sec:claim}) already uses a cell model that charges each cut pair its inside and outside areas instead of the worst case, and bounds it by such a relaxation, with a bound of $0.0532492$ at $L=256$ that the claim describes as certified and, by its own statement, was not re-decided by its second verifier (not reproduced here; Table~\ref{tab:prior}). The claim does not compare that model with the strip cover of \cite{PRS08}; that comparison is ours.
+What we believe is specific to the present cover is the cut-cell estimate of Lemma~\ref{lem:cut} (weights $\frac18$ and $\frac38$), the retained parity term, the resulting higher minima (floating-point local-search minima at $L=64,128,256$: $0.053031,\,0.053267,\,0.053347$ for the claim's model, as published in the claim and reproduced by a reviewer, against $0.053120,\,0.053312,\,0.053362$ for ours; the comparison is between two float computations and assumes that the two $L$'s are comparable), the exact certificates and the Lean proofs. The mathematics of the
+claim in Section~\ref{sec:claim}, and therefore of Theorem~C, is its author's; the Lean formalisation of it was written by AI agents.
+
+\medskip\noindent\textbf{Plan.} Section~\ref{sec:setup} fixes the definitions and the exact $\pm1$ identity. Section~\ref{sec:prs} proves
+the lower half of Theorem~A with the strip cover; Section~\ref{sec:upper} the upper half. Sections~\ref{sec:model2} and~\ref{sec:cert} prove Theorem~B.
+Section~\ref{sec:formal} describes the formalisation and what it does and does not cover. Section~\ref{sec:evidence} reports the evidence
+beyond Lean; Section~\ref{sec:novelty} the prior figures; Section~\ref{sec:claim} the claim and Theorem~C; Section~\ref{sec:disc} limitations.
+Appendix~\ref{app:repro} is the reproducibility guide and Appendix~\ref{app:ai} the AI-use statement. Letters are reused between sections ($m$, $K$, $A$, $B$, $\sigma$, $N$ and others); each is defined where it is used.
+
+\section{Definitions and the exact identity}\label{sec:setup}
+
+\subsection{Definitions}
+Following \cite{FC}: for $k\ge2$, $n\ge1$ and $c\colon\N\to\{\text{true},\text{false}\}$, $\mono_k(n,c)$ is the cardinality of
+$\{(a,d)\in[1,n]^2:\ a+(k-1)d\le n,\ c(a+id)=c(a)\ \text{for all}\ i<k\}$; $\mmin^{(k)}(n)=\min_c\mono_k(n,c)$ and
+$\delta_k=\liminf_{n\to\infty}\mmin^{(k)}(n)/n^2$. (Only $c|_{[1,n]}$ matters.) We write $\mono=\mono_3$, $\mmin=\mmin^{(3)}$, $\delta=\delta_3$ and use the sign
+$s_x=\pm1$ of $c(x)$. The definition agrees with OEIS A121385 \cite{OEIS121385} for all $n\le26$ (exhaustive search, \texttt{checks/oeis\_small.py}).
+
+\begin{lemma}[monotonicity]\label{lem:mono}
+$\mmin(n)\le\mmin(n+1)$. Hence if $L\ge1$ and $\mmin(Lm)\ge\beta L^2m^2-aLm-b$ for all $m\ge1$, then $\delta\ge\beta$.
+\end{lemma}
+\begin{proof}
+Restricting a colouring of $[1,n+1]$ to $[1,n]$ removes progressions only. For the second claim put $n'=L\lfloor n/L\rfloor\ge n-L$; then $\mmin(n)/n^2\ge\mmin(n')/n^2\ge(\beta n'^2-an'-b)/n^2\to\beta$.
+\end{proof}
+
+\subsection{The $\pm1$ identity}
+Index a progression by its middle term $y$ and difference $d\le D_y:=\min(y-1,n-y)$. Then there are $N_{AP}=\sum_yD_y=\lfloor(n-1)^2/4\rfloor$
+progressions, and for three signs $4[\text{all equal}]=1+s_1s_2+s_2s_3+s_1s_3$. Summing over all progressions gives the following.
+
+\begin{lemma}\label{lem:ident}
+Let $W=\sum_{(a,b)\in R_n}s_as_b$ with $R_n=\{(a,b)\in[1,n]^2:\ 1\le2b-a\le n\}$, and let $E,O$ be the sums of $s_x$ over even and odd $x\le n$.
+Then
+\[4\mono(n,c)=N_{AP}+(W-n)+\tfrac12(E^2+O^2-n)\ \ge\ N_{AP}+W+\tfrac14(E+O)^2-\tfrac32n,\]
+and consequently $32\,\mono(n,c)\ge2n^2-16n+8W+2(\sum_xs_x)^2$.
+\end{lemma}
+\begin{proof}
+For fixed $y$, the $a$ with $(a,y)\in R_n$ are exactly $a\in[y-D_y,y+D_y]$, so $\sum_ys_y\sum_{1\le|e|\le D_y}s_{y+e}=W-n$ (the diagonal $a=b$ contributes $n$).
+The terms $s_{y-d}s_{y+d}$ run once over all pairs $x<z$ of equal parity, whose sum is $\tfrac12(E^2+O^2-n)$. Finally $E^2+O^2\ge\frac12(E+O)^2$ and
+$N_{AP}\ge(n^2-2n)/4$.
+\end{proof}
+Lemma~\ref{lem:ident} is the form of the reduction of \cite{PRS08} that we use (they work with Fourier-analytic quantities; the $\pm1$ form
+is elementary and was re-derived independently of that paper). The problem becomes a lower bound for $W$, a quadratic form
+in the $\pm1$ vector $s$ over the \emph{parallelogram} $R_n$.
+
+\section{The strip cover of Parrilo, Robertson and Saracino}\label{sec:prs}
+Fix an even $L=2h$ and $n=Lm$. Let $I_i=((i-1)m,im]$ and $X_i=\sum_{x\in I_i}s_x\in[-m,m]$ ($1\le i\le L$). Put $B_{ij}=1$ if $j+1\le2i\le j+L$ and $0$ otherwise,
+and $A=B+B^{\top}$ (so $A_{ii}=2$).
+
+\begin{lemma}[strip cover]\label{lem:strip}
+$W\ \ge\ \tfrac12X^{\top}AX-\tfrac12Lm^2$.
+\end{lemma}
+\begin{proof}
+For $y=(i-1)m+\beta$ ($1\le\beta\le m$) the window $\{a:(a,y)\in R_n\}$ is the interval $[\max(1,2y-n),\min(2y-1,n)]$. The union of blocks $U_i=\bigcup_{B_{ij}=1}I_j$ is the
+same interval moved by $2\beta-1-m$ at its one non-clipped end (the other end is $1$ or $n$ in both). So $\bigl|\sum_{a\in\text{window}}s_a-\sum_{a\in U_i}s_a\bigr|\le|2\beta-1-m|$, and therefore $s_y\sum_{a\in\text{window}}s_a\ge s_y\sum_{a\in U_i}s_a-|2\beta-1-m|$ whatever the sign $s_y$.
+Summing over $y$ in block $i$ gives $\ge X_i\sum_jB_{ij}X_j-\sum_\beta|2\beta-1-m|$, and $\sum_{\beta=1}^m|2\beta-1-m|\le m^2/2$. Sum over $i$:
+$\sum_iX_i\sum_jB_{ij}X_j=X^{\top}BX=\frac12X^{\top}AX$.
+\end{proof}
+
+A \emph{diagonal certificate} for $L$ is a vector $d\in\Q^L_{\ge0}$ with $A+\operatorname{diag}(d)$ positive semidefinite, i.e.\ $X^{\top}AX\ge-\sum d_iX_i^2$ for all real $X$.
+
+\begin{proposition}[PRS08]\label{prop:prs}
+If $d$ is a diagonal certificate for the even $L$, then for $n=Lm$ and every colouring,
+\[\mono(n,c)\ \ge\ \Bigl(\frac1{16}-\frac1{8L}-\frac{\sum_id_i}{8L^2}\Bigr)n^2-\frac n2,\qquad\text{hence}\qquad \delta_3\ge\frac1{16}-\frac1{8L}-\frac{\sum_id_i}{8L^2}.\]
+\end{proposition}
+\begin{proof}
+By Lemma~\ref{lem:ident} (dropping $(\sum s)^2\ge0$) and Lemma~\ref{lem:strip}, $32\mono\ge2n^2-16n+4X^{\top}AX-4Lm^2\ge2n^2-16n-4m^2\sum d_i-4Lm^2$, using $X_i^2\le m^2$.
+Divide by $32$ and put $m=n/L$; then apply Lemma~\ref{lem:mono}.
+\end{proof}
+
+\begin{theorem}[Theorem A, lower half]\label{thm:Alow}
+$\delta_3\ge1675/32768$. More precisely, $L=128$ with a certificate of $\sum d_i=697849/512$ gives $3430919/67108864=0.0511246\ldots$, and $L=256$ with $\sum d_i=1394087/256$ gives
+$6928985/134217728=0.0516249\ldots$
+\end{theorem}
+The certificates are exact rational vectors for which $A+\operatorname{diag}d$ is shown positive semidefinite by the Lean kernel (Section~\ref{sec:formal}; the Python checks show positive definiteness by exact elimination). The published certificate of
+\cite{PRS08} has $\sum d_i=1364$ for $L=128$ and gives exactly $1675/32768$; ours is a different vector with a slightly smaller sum, so that $0.0511246>0.0511169$. The $L=256$ value is PRS's method at a larger size; we did not find it in print, it is
+below the numerical $0.052341$ of \cite{Sjoland14}, and we do not claim it as a record. The same method at $L=512$ gives $55698149/1073741824=0.0518729\ldots$ (exact, outside Lean).
+
+\section{The upper bound by the 12-block colouring}\label{sec:upper}
+Let $c_1$ colour $[1,548]$ in $12$ consecutive blocks of sizes $28,6,28,37,59,116,116,59,37,28,6,28$, alternately true and false, and let $c_K(x)=c_1(\lceil x/K\rceil)$ colour $[1,548K]$.
+Write $a=KA+r$, $d=KD+s$ with $A,D\ge0$ and $1\le r,s\le K$. The three terms $a,a+d,a+2d$ lie in the coarse cells $A+1$, $A+D+1+u$, $A+2D+1+v$, where the carries
+$u=[r+s>K]\in\{0,1\}$ and $v=\lceil(r+2s)/K\rceil-1\in\{0,1,2\}$ depend on $(r,s)$ only. So $(a,d)$ is a monochromatic progression of $[1,548K]$ iff the coarse triple lies in $[1,548]$ and is monochromatic for $c_1$.
+Let $M_{uv}$ be the number of pairs $(A,D)$ with $0\le A,D<548$ for which this holds. A finite computation (done by the Lean kernel, in chunks) gives
+\[M_{00}=16304,\qquad M_{01}=M_{11}=16028,\qquad M_{12}=15756.\]
+Put $R_{00}=\{(r,s):r+2s\le K\}$ and $R_{12}=\{(r,s):r+2s>2K\}$ in $[1,K]^2$. Then $(u,v)=(0,0)$ on $R_{00}$, $(1,2)$ on $R_{12}$, and $(u,v)\in\{(0,1),(1,1)\}$ elsewhere. Hence
+\[\mono(548K,c_K)\ \le\ 16028K^2+276|R_{00}|-272|R_{12}|\ \le\ 16028K^2+4|R_{00}|\ \le\ 16029K^2,\]
+using $|R_{12}|\ge|R_{00}|$ (a short counting argument) and $4|R_{00}|\le K^2$. Since $16029/548^2=117/2192$ and the $\liminf$ is at most the limit along the subsequence $n=548K$, we get $\delta_3\le117/2192$.
+(The exact count is $16029K^2-274K+(K\bmod2)$, which we checked by computer only for $K\le10$; only the inequality is needed and it is what Lean proves.) This is the colouring of \cite{PRS08}.
+
+\begin{theorem}[Theorem A]\label{thm:A}
+$1675/32768\le\delta_3\le117/2192$.
+\end{theorem}
+Proof: Theorem~\ref{thm:Alow} (with $L=128$) and the display above.
+
+\section{A sharper cover of the counting region}\label{sec:model2}
+Fix even $L\ge4$ and even $w\ge2$, $n=Lw$, blocks $I_p=((p-1)w,pw]$, block sums $X_p=\sum_{x\in I_p}s_x$ and means $x_p=X_p/w\in[-1,1]$.
+In Lemma~\ref{lem:strip} the window of each $y$ was replaced by a union of blocks, losing the boundary triangles. Here the cells $I_p\times I_q$ ($a\in I_p$, $b\in I_q$) of the region $R_n$ are examined one by one.
+
+\begin{lemma}[geometry of the cells]\label{lem:cells}
+Put $m=2q-p-1$. The cell $I_p\times I_q$ lies entirely inside $R_n$ if $1\le m\le L-2$, and is disjoint from it if $m\le-2$ or $m\ge L+1$. For the $2L$ remaining cells,
+write $a=(p-1)w+i$ and $b=(q-1)w+j$ with $1\le i,j\le w$: for $m=0$ the intersection is $\{i\le2j-1\}$ (of size $3w^2/4$), for $m=-1$ it is $\{2j\ge i+w+1\}$ ($w^2/4$), for $m=L-1$ it is $\{i\ge2j-w\}$ ($3w^2/4$), for $m=L$ it is $\{i\ge2j\}$ ($w^2/4$).
+\end{lemma}
+\begin{proof}
+$2b-a=mw+(2j-i)$ with $2-w\le2j-i\le2w-1$. The condition $2b-a\ge1$ fails everywhere iff $mw+2w-1<1$, i.e.\ $m\le-2$; it holds everywhere iff $mw+2-w\ge1$, i.e.\ $m\ge1$; for $m=0$ it reads
+$2j-i\ge1$ and for $m=-1$ it reads $2j-i\ge w+1$. The condition $2b-a\le n$ is the mirror statement with $m$ replaced by $m-L$. The two families of boundary cells are disjoint. The sizes are elementary sums ($w$ even).
+\end{proof}
+Let $K_{pq}\in\{1,\tfrac34,\tfrac14,0\}$ be the fraction of the cell inside $R_n$; the Lean file uses $K4=4K\in\{4,3,1,0\}$. Each block is the $a$-block of exactly two cut cells and the $b$-block of exactly two (as an $a$-block, the parity of $p$ decides which two: $m\in\{0,L\}$ for odd $p$, $m\in\{-1,L-1\}$ for even $p$; as a $b$-block, $q\le L/2$ gives $m\in\{0,-1\}$ and $q>L/2$ gives $m\in\{L-1,L\}$).
+
+\subsection{The cut-cell lemma}
+For each cut cell we need a lower bound for $\sum_{(i,j)\in U}s_it_j$ ($s,t$ the sign vectors of the two blocks, $U$ the part inside $R_n$) in terms of the block means $x,y$ only. This is where the cover differs from the strip cover.
+
+\begin{lemma}[cut-cell lemma, continuum form]\label{lem:cut}
+Let $\varphi,\psi\colon[0,1]\to[-1,1]$ be measurable, $x=\int\varphi$, $y=\int\psi$, $\Psi(t)=\int_0^t\psi$ and
+\[E(\varphi,\psi)=\int_0^1\varphi(u)\bigl[\Psi(u/2)-\tfrac y4\bigr]\,du,\qquad\Gamma(x,y)=\frac{1-x^2}{8}+\frac{3(1-y^2)}{8}.\]
+Then $E(\varphi,\psi)\le\Gamma(x,y)$.
+\end{lemma}
+\begin{proof}
+$E(-\varphi,-\psi)=E(\varphi,\psi)$ and $\Gamma$ is even in both arguments, so assume $y\ge0$. For every constant $c$, since $|\varphi|\le1$ and $\int\varphi=x$,
+\[E=\int\varphi\,(\Psi(u/2)-c)\,du+(c-\tfrac y4)x\ \le\ (c-\tfrac y4)x+2\int_0^{1/2}|\Psi(t)-c|\,dt.\]
+Pointwise $\Psi_{lo}(t):=\max(-t,t+y-1)\le\Psi(t)\le t$ on $[0,\frac12]$ (use $|\psi|\le1$ on $[0,t]$ and on $[t,1]$), hence $|\Psi(t)-c|\le g(t):=\max(t-c,\,c-\Psi_{lo}(t))$.
+
+\emph{Case 1: $x\ge2y-1$.} Take $c=0$. Then $-\Psi_{lo}(t)=\min(t,1-y-t)\le t$, so $g(t)=t$ and $E\le\frac14-\frac{xy}4$.
+Moreover $8\bigl(\Gamma-\frac{1-xy}4\bigr)=2-(x-y)^2-2y^2$, and on the triangle $\{-1\le x\le1,\ 0\le y\le\frac{1+x}2\}$ the convex function $(x-y)^2+2y^2$ is at most its largest vertex value, which is $2$ (the vertices $(-1,0),(1,0),(1,1)$ give $1,1,2$). So $E\le\Gamma$.
+
+\emph{Case 2: $x<2y-1$} (so $y>\frac{1+x}2$). Take $c=\frac y2-\frac{1+x}4\in(0,\frac y2]$, $\tau=\frac{1-y}2$ and $t^*=\frac{1-x}4\in(\tau,\frac12]$. One checks that $g=c+t$ on $[0,\tau]$, $g=c-t-y+1$ on $[\tau,t^*]$ and $g=t-c$ on $[t^*,\frac12]$, and integrating,
+\begin{align*}
+(c-\tfrac y4)x+2\int_0^{1/2}g&=H(x,y),\\
+H(x,y)&:=\tfrac18\bigl(1+4y-4y^2-2x+2xy-x^2\bigr),\\
+\Gamma(x,y)-H(x,y)&=\tfrac18(1-y)(2x-y+3)\ \ge\ 0.
+\end{align*}
+\end{proof}
+The symbolic identities in the proof are re-verified by \texttt{checks/lemma2\_symbolic.py} (sympy, with a rational-grid check of the piecewise form of $g$). The weights $(\frac18,\frac38)$ cannot be exchanged: at $y=\pm1$ one has $E_{\max}=(1-x^2)/8=\Gamma(x,\pm1)$ exactly, while for $x=-1$ and $y\to1$ the maximum of $E$ is $\Gamma-(1-y)^2/8$, so the second weight $\frac38$ is also needed; with the weights swapped the inequality fails (at $(x,y)=(-1,0.9)$ the maximum of $E$ is $0.07$, the swapped bound is $0.02375$).
+
+\begin{corollary}[cut cells]\label{cor:cut}
+With $A=\{u\le2v\}$ and $B=\{2v\ge u+1\}$ in $[0,1]^2$: $\iint_A\varphi\psi-\frac34xy\ge-\Gamma(x,y)$ and $\iint_B\varphi\psi-\frac14xy\ge-\Gamma(x,y)$; the cut cells at the other end of $R_n$ are the images of these under $(u,v)\mapsto(1-u,1-v)$.
+\end{corollary}
+(Fubini gives $\iint_A\varphi\psi=xy-\int\varphi(u)\Psi(u/2)\,du=\frac34xy-E(\varphi,\psi)$. For $B$, the substitution $(u,v)\mapsto(1-u,1-v)$ turns it into $\{v\le u/2\}$, so $\iint_B\varphi\psi=\frac14xy+E(\tilde\varphi,\tilde\psi)$ with $\tilde\varphi(u)=\varphi(1-u)$, and $E(\tilde\varphi,\tilde\psi)=-E(-\tilde\varphi,\tilde\psi)\ge-\Gamma$.)
+
+\begin{lemma}[discrete cut-cell inequality]\label{lem:disc}
+Let $w\ge1$ and let $s,t\in[-1,1]^w$ be real vectors, $X=\sum_is_i$, $Y=\sum_jt_j$, $T(k)=\sum_{j\le k}t_j$ and $D=\sum_{i=1}^ws_iT(\lfloor i/2\rfloor)$. Then
+\[8D-2XY\ \le\ (w^2-X^2)+3(w^2-Y^2)+4w.\]
+\end{lemma}
+\begin{proof}
+Let $\varphi,\psi\colon[0,1]\to[-1,1]$ be the step functions equal to $s_i$ on $(\frac{i-1}w,\frac iw]$ and to $t_j$ on $(\frac{j-1}w,\frac jw]$. Then $x=\int\varphi=X/w$, $y=\int\psi=Y/w$ and $\Psi(k/w)=T(k)/w$ for integers $k$.
+For $u\in(\frac{i-1}w,\frac iw]$ the point $u/2$ is within $\frac1{2w}$ of $\lfloor i/2\rfloor/w$ (for $i=2k$ it lies in $(\frac{2k-1}{2w},\frac kw]$, for $i=2k+1$ in $(\frac kw,\frac{k+1/2}w]$), and $|\psi|\le1$, so
+$|\Psi(u/2)-T(\lfloor i/2\rfloor)/w|\le\frac1{2w}$. Hence
+\[E(\varphi,\psi)=\sum_is_i\int_{(i-1)/w}^{i/w}\Psi(u/2)\,du-\tfrac{xy}4\ \ge\ \frac D{w^2}-w\cdot\frac1w\cdot\frac1{2w}-\frac{XY}{4w^2}.\]
+By Lemma~\ref{lem:cut}, $E\le\Gamma(x,y)$; multiply by $8w^2$ and use $8w^2\Gamma(X/w,Y/w)=(w^2-X^2)+3(w^2-Y^2)$.
+\end{proof}
+\begin{corollary}[cut cells, discrete]\label{cor:cutdisc}
+Let $s,t$ be as above, with $w$ even, and write $G=\frac18[(w^2-X^2)+3(w^2-Y^2)]=w^2\Gamma(X/w,Y/w)$. By Lemma~\ref{lem:cells} the part of the block pair inside $R_n$ is, for the four kinds of cut cell, one of the following sets, and
+\begin{align*}
+m=0:\ \ \sum_{i\le2j-1}s_it_j-\tfrac34XY&=\tfrac14XY-D\ \ge\ -G-\tfrac w2,\\
+m=-1:\ \ \sum_{2j\ge i+w+1}s_it_j-\tfrac14XY&\ge-G-\tfrac w2,
+\end{align*}
+while the cells $m=L-1$ and $m=L$ are the images of these under $(i,j)\mapsto(w+1-i,w+1-j)$ and satisfy the same bounds.
+\end{corollary}
+\begin{proof}
+For $m=0$ the $j$ with $2j-1\ge i$ are those with $j>\lfloor i/2\rfloor$, so the sum is $\sum_is_i(Y-T(\lfloor i/2\rfloor))=XY-D$; apply Lemma~\ref{lem:disc}. For $m=-1$ the substitution $(i,j)\mapsto(w+1-i,w+1-j)$ turns $2j\ge i+w+1$ into $i'\ge2j'$, i.e.\ $j'\le\lfloor i'/2\rfloor$,
+so the sum is $\tilde D$ for the reflected vectors $\tilde s,\tilde t$ (reflection preserves the sums $X,Y$). Apply Lemma~\ref{lem:disc} to $(-\tilde s,\tilde t)$: this turns $D$ into $-\tilde D$ and $X$ into $-X$, and leaves the right-hand side unchanged.
+The cells $m=L-1$ and $m=L$ are reflected copies of $m=0$ and $m=-1$ (Lemma~\ref{lem:cells}), and the same substitution applies in both coordinates.
+\end{proof}
+\begin{remark}[what Lean proves]\label{rem:discrete}
+The Lean development does not use integrals. It proves the integer inequality \texttt{lemA}, which is Lemma~\ref{lem:disc} for even $w$ with the weaker additive error $4w+16$, for integer-valued $s,t$, by the two cases of the proof of Lemma~\ref{lem:cut} carried out in integer arithmetic, together with the reflections (\texttt{DC\_lower}, \texttt{DC\_upper}).
+(For fixed $w$ the left side of Lemma~\ref{lem:disc} minus its right side is convex in $s$ and in $t$ separately, so its maximum over the cube is attained at vertices; an exhaustive check over $s,t\in\{\pm1\}^w$ for $w=2,4,\dots,10$ (\texttt{checks/disc\_cutcell\_check.py}) finds a largest excess of exactly $4$ in each case. This shows how weak $4w$ and $4w+16$ are, and is not used in any proof.)
+Theorem~B depends on the Lean statement only; Lemma~\ref{lem:disc} is the human-readable argument for the same estimate.
+\end{remark}
+
+\subsection{The cover inequality and the cube bound}
+Let $K4_{pq}=4K_{pq}$, $C=\tfrac18\bigl(K4+K4^{\top}+8I+2J\bigr)$ with $J$ the all-ones matrix, and for $x\in\R^L$ write $\operatorname{cform}(x)=x^{\top}Cx$.
+
+\begin{theorem}[cover inequality]\label{thm:cover}
+For even $L\ge4$, even $w\ge2$, $n=Lw$ and every colouring (indeed every integer-valued $s$ with $|s|\le1$), with $X_p$ the block sums,
+\[8W\ \ge\ 2\sum_{p,q}K4_{pq}X_pX_q-8\sum_p(w^2-X_p^2)-L(8w+32).\]
+Consequently $32\mono(n,c)\ge2n^2-16n-8Lw^2-L(8w+32)+8w^2\,\operatorname{cform}(X/w)$.
+\end{theorem}
+\begin{proof}
+$W$ is the sum over all cells $I_p\times I_q$ of the part of $\sum s_as_b$ inside $R_n$. By Lemma~\ref{lem:cells} a full cell ($K4_{pq}=4$) contributes exactly $X_pX_q=\frac{K4_{pq}}4X_pX_q$, and an empty cell contributes $0$.
+A cut cell with $K4_{pq}\in\{3,1\}$ contributes at least $\frac{K4_{pq}}4X_pX_q-G_{pq}-\frac w2$, with $G_{pq}=\frac18[(w^2-X_p^2)+3(w^2-X_q^2)]$, by Corollary~\ref{cor:cutdisc} (here $s,t$ are the signs of the blocks $p$ and $q$; the Lean statement has the error $\frac{4w+16}8$ in place of $\frac w2$, which is the weaker constant used in the display). Summing over the $2L$ cut cells,
+$W\ge\frac14\sum_{p,q}K4_{pq}X_pX_q-\sum_{\text{cut}}G_{pq}-2L\cdot\frac{4w+16}8$. Each block is the $a$-block of exactly two cut cells and the $b$-block of exactly two, so in $8\sum_{\text{cut}}G_{pq}$ the block $p$ appears with
+$2\cdot1+2\cdot3=8$ times $(w^2-X_p^2)$, which gives the display. For the consequence insert this into Lemma~\ref{lem:ident}, and use $\sum_{p,q}(8C)_{pq}X_pX_q=2\sum K4_{pq}X_pX_q+8\sum X_p^2+2(\sum X_p)^2$, in which $2(\sum X_p)^2=2(\sum s)^2$ is exactly the term retained in Lemma~\ref{lem:ident}.
+\end{proof}
+
+Say that $\sigma\ge0$ is a \emph{cube bound} for $L$ if $x^{\top}Cx\ge-\sigma$ for all $x\in[-1,1]^L$.
+
+\begin{corollary}[cube bound $\Rightarrow$ $\delta_3$]\label{cor:cube}
+If $\sigma$ is a cube bound for the even $L\ge4$, then for every even $w\ge2$ and $n=Lw$, $\mono(n,c)\ge b(L,\sigma)n^2-n-L$ for all $c$, and
+\[\delta_3\ \ge\ b(L,\sigma):=\frac1{16}-\frac{L+\sigma}{4L^2}.\]
+\end{corollary}
+\begin{proof}
+Put $x=X/w\in[-1,1]^L$ in Theorem~\ref{thm:cover}: $32\mono\ge2n^2-16n-8n^2/L-8n-32L-8n^2\sigma/L^2$. Divide by $32$, use $24n/32\le n$ and Lemma~\ref{lem:mono}, applied with $2L$ in place of $L$ and $m=w/2$ (so $n=2Lm$ ranges over the multiples of $2L$).
+\end{proof}
+
+\begin{remark}[why it is sharper]
+With a diagonal certificate for $C$ ($e\ge0$, $C+\operatorname{diag}e\succeq0$, $\sigma=\sum e$) this cover gives the exact values $0.0521658$ at $L=128$ and $0.0521505$ at $L=256$ (rounded down), against $0.0511246$ and $0.0516249$ for the strip cover at the same $L$. The gain,
+$+0.00104$ and $+0.00053$, is about the size of the strip cover's lost term $1/(8L)=0.00098,\,0.00049$. But the diagonal relaxation is far from the true minimum of the quadratic form on the cube (a floating-point multi-start local search at $L=256$ finds the value $0.0533617$ for this cover), and its value stays near $0.0522$
+for every size computed. The rest of the improvement comes from a better lower bound for $\min_{x\in[-1,1]^L}x^{\top}Cx$.
+\end{remark}
+
+\section{Triangle cuts, exact certificates and Theorem B}\label{sec:cert}
+
+\subsection{A relaxation of the cube minimum}
+For $x\in[-1,1]^L$ the matrix $xx^{\top}$ is positive semidefinite with diagonal $\le1$ (Shor's relaxation \cite{Shor87}). For distinct $i,j,k$ and signs $\epsilon_1,\epsilon_2,\epsilon_3\in\{\pm1\}$ with product $+1$ (four patterns) the \emph{triangle inequality}
+\begin{equation}\label{eq:tri}
+\epsilon_1x_ix_j+\epsilon_2x_ix_k+\epsilon_3x_jx_k\ \ge\ -1
+\end{equation}
+holds on the cube (cf.\ \cite{Padberg89}): the left side is multilinear, so it suffices to check the vertices. Patterns with product $-1$ are invalid. (In Lean this is \texttt{cutval\_ge}.)
+
+\begin{lemma}[weak duality]\label{lem:dual}
+Let $d\in\R^L_{\ge0}$ and $\mu_t\ge0$ for a finite family $t$ of triples with sign patterns, and let $C_t$ be the symmetric matrix with entries $\epsilon_1/2$ at the positions $(i,j),(j,i)$, $\epsilon_2/2$ at $(i,k),(k,i)$ and $\epsilon_3/2$ at $(j,k),(k,j)$ of the triple $(i,j,k)$ with signs $\epsilon$. If
+$M=C+\operatorname{diag}(d)-\sum_t\mu_tC_t$ is positive semidefinite, then $x^{\top}Cx\ge-(\sum_id_i+\sum_t\mu_t)=:-\sigma$ on $[-1,1]^L$.
+\end{lemma}
+\begin{proof}
+$x^{\top}Cx=x^{\top}Mx-\sum_id_ix_i^2+\sum_t\mu_t\,x^{\top}C_tx\ge0-\sum d_i-\sum\mu_t$, since $x^{\top}C_tx$ is the left side of \eqref{eq:tri} and $x_i^2\le1$.
+\end{proof}
+
+\subsection{Integer certificates}
+Fix an integer $Q\ge1$ (we use $Q=4096$), integers $dn_i\ge0$ and $mn_t\ge0$, and put
+\[N:=2Q\cdot(8C)+16\operatorname{diag}(dn)-8\sum_tmn_t\,\Sigma_t,\]
+where $\Sigma_t$ carries the signs of the cut $t$ on its six off-diagonal positions. Then $N=16Q\,M$ for $d=dn/Q$, $\mu=mn/Q$, so if $N\succeq0$ then $\sigma=(\sum dn+\sum mn)/Q$ is a cube bound.
+To prove $N\succeq0$ in exact arithmetic we use an \emph{approximate Cholesky factorisation with diagonally dominant remainder}: an integer $S>0$ and an integer matrix $G$ such that $E=SN-GG^{\top}$ is
+symmetric with $E_{ii}\ge\sum_{j\ne i}|E_{ij}|$ for every $i$. Then $S\,x^{\top}Nx=\|G^{\top}x\|^2+x^{\top}Ex\ge0$ for all real $x$. (Outside Lean we also use fraction-free Bareiss elimination,
+all leading principal minors positive, as a second check.)
+
+\subsection{Theorem B}
+The multipliers are found by floating-point optimisation (Burer--Monteiro with an augmented Lagrangian, cutting planes, and a repair step) and then rounded to multiples of $1/Q$; this affects only how good a certificate is, never whether it is valid, because validity is the exact check of a finite integer object.
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrl}
+\toprule
+$L$ & cuts & $\sigma$ & $b(L,\sigma)$ & decimal\\
+\midrule
+$64$ & $845$ & $183671/2048$ & $1782409/33554432$ & $0.0531199\ldots$\\
+$128$ & $3586$ & $242779/512$ & $1788837/33554432$ & $0.0533114\ldots$\\
+$256$ & $11931$ & $2190937/1024$ & $14324135/268435456$ & $0.0533615\ldots$\\
+\bottomrule
+\end{tabular}
+\caption{The certificates of Theorem B, all checked by the Lean kernel. $117/2192=0.0533759\ldots$}\label{tab:B}
+\end{table}
+
+\begin{theorem}[Theorem B]\label{thm:B}
+$\delta_3\ge14324135/268435456$, and $\delta_3\ge1788837/33554432$, $\delta_3\ge1782409/33554432$.
+\end{theorem}
+\begin{proof}
+Corollary~\ref{cor:cube} with the cube bounds of Table~\ref{tab:B}, which follow from Lemma~\ref{lem:dual} and the integer certificates; positive semidefiniteness of $N$ in each case is established by the kernel (Section~\ref{sec:formal}).
+\end{proof}
+
+\section{The formalisation}\label{sec:formal}
+
+\subsection{What is in Lean}
+The development is a project in Lean~4.27.0 \cite{Lean4} over Mathlib (v4.27.0) \cite{Mathlib}, $189$ modules and $12.6$ MB of source in the import closure of the two top files \texttt{P1186LowMain} (Theorem~A, and the $L=256$ strip bound) and \texttt{P1186M2Main} (Theorem~B). Theorem~C (Section~\ref{sec:thmC}) adds $153$ modules ($8.8$ MB), so that the shipped Lean project has $342$ modules and $21.3$ MB; the module table of this section is for the $189$.
+Table~\ref{tab:modules} lists the roles. The generic statements are \lean{lower\_of\_cert} (Proposition~\ref{prop:prs}, for every even $L$ and every diagonal certificate), \lean{lower\_of\_cubeLB} (Corollary~\ref{cor:cube}, for every even $L\ge4$ and every cube bound),
+\lean{cubeLB\_of\_cert} (Lemma~\ref{lem:dual} with the kernel-checkable conditions); the instances are \lean{cert128}, \lean{cert256}, \lean{cubeLB64}, \lean{cubeLB128}, \lean{cubeLB256}, and the top-level statements
+\lean{erdos\_1186.variants.prs\_bounds}, \lean{delta3\_ge\_L256}, \lean{delta3\_ge\_model2\_L64}, \lean{delta3\_ge\_model2\_L128}, \lean{delta3\_ge\_model2\_L256}, \lean{delta3\_bounds\_model2\_L256}.
+\begin{table}[h]
+\centering\small
+\begin{tabular}{p{4.6cm}p{8.2cm}}
+\toprule
+Module(s) & Content\\
+\midrule
+\texttt{P1186} & definitions (verbatim from \cite{FC}); the upper bound $\delta_3\le117/2192$; also \lean{probabilistic} and \lean{van\_der\_waerden}, not used in this paper's claims\\
+\texttt{P1186Tab} & the four constants $16304,16028,16028,15756$ by \texttt{decide +kernel}\\
+\texttt{P1186Prs}, \texttt{P1186Low}, \texttt{P1186LowA} & strip cover, Proposition~\ref{prop:prs} (any even $L$, any diagonal certificate)\\
+\texttt{P1186Cert128*}, \texttt{P1186Cert256*} & diagonal certificates $L=128,256$ ($11$ and $59$ modules: a top module, a table, and $8$ resp.\ $57$ chunk modules; the $L=128$ family also holds the library used by both)\\
+\texttt{P1186LowMain} & Theorem~A, and $\delta_3\ge6928985/134217728$\\
+\texttt{P1186M2}, \texttt{M2Low}, \texttt{M2LowA}, \texttt{M2LowB} & cell kernel, discrete cut-cell lemma, cover inequality, Corollary~\ref{cor:cube}\\
+\texttt{P1186M2CertLib} & Lemma~\ref{lem:dual} and the soundness of the integer certificate (generic, no numbers)\\
+\texttt{P1186M2Cert64*}, \texttt{Cert128*}, \texttt{Cert256*} & generated tables and chunked kernel checks: $10$, $21$ and $76$ modules, each family counted with its top module\\
+\texttt{P1186M2Main} & Theorem~B\\
+\bottomrule
+\end{tabular}
+\caption{Module families in the closure. The generated modules contain no hand-typed numbers; their generator reads the JSON certificates.}\label{tab:modules}
+\end{table}
+
+\subsection{Statement fidelity}
+The definitions of \lean{monoCount}, \lean{minMonoCount} and \lean{delta} are copied verbatim from the pinned upstream file (Formal Conjectures, commit c83a94d785d0, 2026-10-22), differing only in the namespace
+(\lean{Erdos1186Day} for \lean{Erdos1186}). The Lean theorem \lean{erdos\_1186.variants.prs\_bounds} has the identical statement $\tfrac{1675}{32768}\le\delta\,3\wedge\delta\,3\le\tfrac{117}{2192}$. This is checked mechanically, after whitespace normalisation, by
+\texttt{checks/fidelity\_check.py} (log ends \texttt{RESULT: ALL OK}), which also records that at the pin the upstream statements \lean{prs\_bounds}, \lean{prs\_conjecture}, \lean{probabilistic}, \lean{van\_der\_waerden} and \lean{erdos\_1186} are \texttt{sorry}. The same script, given \texttt{P1186ExFinal.lean} as a fifth argument, checks that Theorem~C has the name, the type and the absence of binders of the upstream statement \lean{erdos\_1186.variants.prs\_conjecture}, and the namespace of the development (\lean{Erdos1186Day}, as for the definitions) (Section~\ref{sec:claimchecks}; the log was regenerated and again ends \texttt{RESULT: ALL OK}).
+The upstream docstring says each progression $(a,d)$, $d\ge1$, is counted once, which is what the definition does; it matches the first $26$ terms of A121385 by exhaustive computation (\texttt{checks/oeis\_small.py}).
+The statement of Theorem~B, $\tfrac{14324135}{268435456}\le\delta\,3$, is a statement about the same \lean{delta}. (Some comments in the shipped Lean files give decimals rounded to the nearest digit, for example $0.0533616$; the rational in the statement is what is proved, and the paper's decimals of certified lower bounds are rounded down.)
+
+\subsection{Axioms}
+For every theorem cited above, and for the instances \lean{cert128} and \lean{cert256}, \lean{\#print axioms} prints exactly \lean{[propext, Classical.choice, Quot.sound]}. The audit file is \texttt{reproducibility/lean/Audit1186.lean}; its output was obtained twice: in the research repository (\texttt{lean\_axiom\_audit.log}, which does not print \lean{cert128}, \lean{cert256}) and on the shipped tree built from scratch (\texttt{lean\_axiom\_audit\_shipped\_tree.log}, Section~\ref{sec:rebuild}). The audit of Theorem~C and its parts is the separate file \texttt{reproducibility/lean/AuditClaim1186.lean} (Section~\ref{sec:claimchecks}). No \texttt{sorry},
+\texttt{native\_decide} or additional axiom is used; a source scan lists every line of the closure containing a forbidden word (\texttt{checks/closure\_scan.py}), and the authoritative test is the \lean{\#print axioms} output.
+
+\subsection{Kernel checks}
+All certificate checks use \texttt{decide +kernel}. For the cut certificates the kernel checks: (1) every cut is well formed, $dn\ge0$, $mn\ge0$, and $48\sum mn<2^{30}$; (2) an accumulation pass that packs the cut part of every row of $N$ into one integer in base $2^{32}$;
+(3) for each row $a$, that the table row $N_a$ equals $2Q(8C)_a+16dn_a-8(\text{cut part})$: the cut part is never summed entrywise, because an identity between packed integers together with a bound on each digit
+forces the identity digit by digit; (4) the dominance condition of the approximate Cholesky factorisation, row by row. The generic soundness theorems (\lean{Cert.link\_sound}, \lean{Cert.psd}, \lean{cubeLB\_of\_cert}) are hand-written and contain no numbers.
+Technical constraints shaped the layout: one \texttt{def} per row (a single list literal for all rows times out), chunks of $400$ ($L=128$) or $800$ ($L=256$) cuts (a \texttt{List.foldl} over more than about $1000$ items exceeds the kernel recursion depth), and about $90{,}000$ multiply-adds per module
+because memory is not returned between declarations. The gated build times reported by the formalising agents were $282$\,s ($L=64$), $762$\,s ($L=128$) and $5426$\,s ($L=256$, $10.2$ MB of generated source); these runs were under a $9$\,GB memory limit, and peak memory was not measured.
+\textbf{Negative controls.} According to the formalising lane's report (no log of this is shipped; the script is, and the controls were not re-run for this package), seven corruptions of an $L=32$ certificate are each rejected by the kernel at the expected check: one entry of a Cholesky row; one entry of $N$; one multiplier $mn$ raised by one with the accumulators and $N$ untouched; an intermediate accumulator;
+every $dn$ scaled by $0.99$ with $N$ untouched; one sign of one cut flipped (product $-1$); and a mutually consistent corruption (one multiplier raised and all accumulators recomputed), which shows that the link between $N$ and the cut list is what binds them (\texttt{reproducibility/scripts/lean\_cert2\_controls.py}).
+
+\subsection{What the formalisation does not cover}
+(i) The continuum Lemma~\ref{lem:cut} and the transfer to the discrete Lemma~\ref{lem:disc} (the written proof of the discrete estimate; what Lean proves is the integer inequality \lean{lemA}, with a weaker error term, directly). (ii) Everything in Section~\ref{sec:evidence}: the certificates at $L=192$ and $L=512$ are checked by Python only. (iii) The search for the certificates (floating point) is untrusted by design.
+(iv) The mathematics of the claim of Section~\ref{sec:claim} as a text: Theorem~C is a Lean theorem whose statement is the upstream one, and the lanes' interface was audited against the claim's TeX source by an AI agent only (Sections~\ref{sec:thmC} and~\ref{sec:claimlimits}); Theorems~A and~B do not depend on any of it. (v) That $\delta_3$ as defined is the constant the problem intends: this is the statement of the Formal Conjectures authors, and we only checked that it is the one we proved.
+
+\subsection{Independent checks outside Lean}
+Python scripts (\texttt{reproducibility/scripts/}) re-derive the kernel $K4$ from the closed form of Lemma~\ref{lem:cells} and compare it with brute-force cell counts of $R_n$ ($w=2,4,6$); check each cut at all eight cube vertices; and prove positive definiteness of $N$ by Bareiss elimination ($L\le256$) or by exact diagonal dominance after an integer congruence ($L=128,256,512$).
+The logs are in \texttt{reproducibility/logs/} and agree with the Lean statements for $L=64,128,256$. \texttt{checks/disc\_cutcell\_check.py} checks Lemma~\ref{lem:disc} exhaustively on sign vectors for $w\le10$ (largest excess $4$; the lemma allows $4w$).
+The research log of the project reports further checks that are \emph{not} shipped or re-run here: exhaustive enumeration of all colourings for tiny $(L,w)$, an exact worst-case check of the discrete cut-cell lemma for $w\le24$, and annealing of real colourings against the cover inequality.
+\textbf{Review.} No human has reviewed the prose of Sections~\ref{sec:model2}--\ref{sec:cert}. The research log records one independent AI referee (a fresh Claude Opus agent, 26 October 2026) who tried to break the reduction, the cell geometry, the cut-cell lemma and the cover inequality in the research note without reading its scripts and found no error; it did not check any certificate or table. Two further AI referees (fresh Claude agents, 26 October 2026) read successive drafts of this manuscript, the second one the revised text including Lemma~\ref{lem:disc}, Corollary~\ref{cor:cutdisc} and the proof of Theorem~\ref{thm:cover}; their findings (listed in \texttt{submission\_readiness.md}) are incorporated here. A third fresh Claude agent read the draft that contained Theorem~C (Section~\ref{sec:claim}), and its findings are incorporated too. The final text has not been re-refereed, and no human has read it.
+
+\subsection{Standalone rebuild}\label{sec:rebuild}
+On 26 October 2026 the $189$ modules of \texttt{reproducibility/lean} were compiled from the shipped sources, in dependency order, by plain \texttt{lean} 4.27.0 (not \texttt{lake}; \texttt{reproducibility/scripts/build\_closure.py}, which passes the options of \texttt{lakefile.toml}), two jobs at a time, against the compiled Mathlib of the research repository's checkout.
+Its \texttt{lake-manifest.json} lists the same package revisions as the shipped one (Mathlib \texttt{a3a10db0e9d6}). All $189$ compilations returned $0$; none was skipped as up to date. The run took $47$ minutes of wall-clock time ($08{:}42$--$09{:}29$ PDT) and $92$ minutes of summed compile time, on a machine shared with other jobs; the $76$ modules of the $L=256$ certificate took $51$ of those $92$ minutes.
+The axiom audit of Section~\ref{sec:formal} was then re-run with \texttt{LEAN\_PATH} set to the rebuilt tree followed by the Mathlib packages only (no oleans of the research repository's own modules): exit code $0$, $20$ \lean{\#print axioms} lines, all \lean{[propext, Classical.choice, Quot.sound]}.
+Logs: \texttt{reproducibility/logs/standalone\_build\_log.jsonl} (return code and seconds per module), \texttt{standalone\_build\_stdout.txt}, \texttt{lean\_axiom\_audit\_shipped\_tree.log}.
+The $153$ further modules of Theorem~C were rebuilt in the same way on the same day (Section~\ref{sec:claimchecks}).
+What this does \emph{not} show: that \texttt{lake build Erdos} works on a machine without Mathlib (it needs the network and was not run); that Mathlib itself was rebuilt (it was not); or a replay by an independent kernel checker (not done: attempted for Theorem~C only, and the two attempts failed, Section~\ref{sec:claimchecks}). The compile options include \texttt{-Dwarn.sorry=false}, as in the project file, so the compile output is not a test for \texttt{sorry}; the axiom audit is.
+
+\section{Evidence beyond the formal results}\label{sec:evidence}
+All items in this section are computations \emph{outside} Lean; none is used in Theorems~A and~B. The certified bounds are exact (rational certificates checked in exact integer arithmetic by Python) and are printed rounded \emph{down}; everything that comes from a floating-point run is marked \emph{(float)}.
+
+\begin{table}[h]
+\centering\small
+\begin{tabular}{rrlllc}
+\toprule
+$L$ & cuts & certified bound & decimal (rounded down) & gap$\cdot L^2$ & in Lean\\
+\midrule
+$32$ & $127$ & $109667/2097152$ & $0.0522933$ & $1.11$ & no\\
+$64$ & $845$ & $1782409/33554432$ & $0.0531199$ & $1.05$ & yes\\
+$128$ & $3586$ & $1788837/33554432$ & $0.0533114$ & $1.06$ & yes\\
+$192$ & $5783$ & $4027621/75497472$ & $0.0533477$ & $1.04$ & no\\
+$256$ & $11931$ & $14324135/268435456$ & $0.0533615$ & $0.94$ & yes\\
+$512$ & $74264$ & $28651667/536870912$ & $0.0533678$ & $2.10$ (solver slack) & no\\
+\bottomrule
+\end{tabular}
+\caption{Shor $+$ triangle-cut certificates for the cover of Section~\ref{sec:model2}; gap $=117/2192-\text{bound}$. Positive definiteness: Bareiss elimination for $L\le256$ and diagonal dominance for $L=128,256,512$.}\label{tab:evid}
+\end{table}
+
+\paragraph{The gap law.}
+For $L=64,128,192,256$ the gap to $117/2192$ times $L^2$ is $1.05,1.06,1.04,0.94$. At $L=512$ the exact certificate has gap$\times L^2=2.10$, but there the augmented-Lagrangian dual had not converged (the floating-point primal value of the same relaxation is $0.0533720$, the
+raw dual $0.0533151$ (both float), the repaired and certified dual $0.0533678$), so this is most likely solver slack and not a property of the model (we did not prove that). At $L=1024$ ($343{,}040$ cuts) only a floating-point run exists: the primal value is $0.0533745$ (float; a number, not a bound, since the cuts are not exactly satisfied) and the repaired dual is $0.0533491$ (float), below the $L=512$ certificate; no exact certificate was made.
+The smallest values of the cover's quadratic form over the cube found by floating-point multi-start local search are $0.0531202,\,0.0533119,\,0.0533617$ (float; in the units of the bound $b(L,\sigma)$) at $L=64,128,256$. Every cube point gives an upper bound for the best bound $b(L,\sigma)$ that this cover can yield, so these values are upper bounds for it (up to rounding), and the certified bounds lie below them by $2.7\cdot10^{-7}$, $4.0\cdot10^{-7}$, $1.4\cdot10^{-7}$. Hence the Shor-plus-triangle relaxation loses at most about that much on this cover at the sizes tested (the local values are floating-point, so this statement is as reliable as they are, not exact).
+Together this is consistent with $\delta_3=117/2192$ and a cover whose loss is $\approx1.0/L^2$. It does not prove it: a proof would need the minimum of the cover to converge to $117/2192$ \emph{and} the relaxation to stay tight for all $L$, neither of which we know, and an equally good fit would hold if $\delta_3$ were slightly below $117/2192$ by less than the resolution of the data. (Section~\ref{sec:thmC} gives a Lean proof of the equality, from a different argument, which if accepted settles the question; the evidence above was gathered independently of it and is not used in it.)
+
+\paragraph{The strip cover with the same cuts.}
+Keeping the strip cover of \cite{PRS08} but bounding the cube minimum by the same relaxation (with its own cut set) gives exactly certified bounds (Table~\ref{tab:stripcuts}); the sharper cover is higher at every size, by $1.7\cdot10^{-3}$ at $L=64$ down to $2.4\cdot10^{-4}$ at $L=512$.
+\begin{table}[h]
+\centering\small
+\begin{tabular}{rrlll}
+\toprule
+$L$ & cuts (strip) & strip $+$ cuts, certified & strip cover, ceiling & sharper cover $+$ cuts\\
+\midrule
+$64$ & $2167$ & $0.0514278$ & $0.0514282$ & $0.0531199$\\
+$128$ & $4514$ & $0.0523985$ & $0.0523987$ & $0.0533114$\\
+$256$ & $22066$ & $0.0528846$ & $0.0528851$ & $0.0533615$\\
+$512$ & $101524$ & $0.0531289$ & $0.0531334$ & $0.0533678$\\
+$1024$ & $363254$ & $0.0532212$ & $0.0532540$ & (float only)\\
+\bottomrule
+\end{tabular}
+\caption{The strip cover of \cite{PRS08} with triangle cuts (certificates from the research repository, checked in Python only; exact positive definiteness by Bareiss for $L\le256$ and by diagonal dominance; the $L=1024$ certificate is not shipped). The ceiling is $\frac1{16}-\frac1{8L}-\frac{S^*}{8L^2}$ with $S^*=-x^{*\top}Ax^*$ at an exact rational cube point $x^*$, as recorded in the research repository (not recomputed here): every bound of the form $\frac1{16}-\frac1{8L}-\frac{\sigma}{8L^2}$ with $\sigma$ a cube bound for $A$ (Proposition~\ref{prop:prs}), whatever relaxation produced $\sigma$, is at most this. For comparison, diagonal-only exact strip certificates are $0.0511246,\,0.0516249,\,0.0518729$ at $L=128,256,512$.}\label{tab:stripcuts}
+\end{table}
+
+\paragraph{Diagonal certificates on the sharper cover.}
+$0.0522076,\,0.0521973,\,0.0521658,\,0.0521505$ at $L=50,64,128,256$ (exact certificates, rounded down; the $L=64,128,256$ values are in \texttt{reproducibility/logs/verify\_model2\_diag.log}, the $L=50$ value is from the research log and not shipped). Floating-point optima of the same diagonal relaxation (float) rise to a flat maximum near $L=50$ and then decrease slowly ($0.052198$, $0.052166$, $0.052151$, $0.052145$ at $L=64,128,256,512$), so the diagonal relaxation of this cover does not approach $117/2192$ at any size we computed.
+
+\section{Prior figures and novelty}\label{sec:novelty}
+Table~\ref{tab:prior} lists the figures for $\delta_3$ that we know from other sources, and the main results of this paper, with their status (the evidence tables of Section~\ref{sec:evidence} list the other certified values of this work). The searches behind it (web and arXiv searches during October 2026 for improvements of either bound, and the reading of the sources recorded in \texttt{references.bib}) found no improvement of \eqref{eq:prs} in print, no formal proof
+of the bounds in Formal Conjectures at c83a94d (where the statements are \texttt{sorry}), and, apart from the claim of Section~\ref{sec:claim}, nothing newer on $\delta_3$ than \cite{PRS08}, \cite{GKW23} and \cite{Sjoland14} (De Loera, Ventura, Wang and Wesley \cite{DVWW25} compute optimal colourings of small intervals for $x+y=2z$ and discuss the method of \cite{PRS08}, without a new bound for $\delta_3$). (A lane of the research project searched the citing literature of \cite{PRS08} and \cite{GKW23} and extracted and searched the full texts of the papers it judged relevant, among them \cite{GKW23}, \cite{Sjoland14}, \cite{YangMao26} and \cite{BCG10}, for the constant; the agent that wrote this manuscript read the sources named in Table~\ref{tab:prior} only to the extent stated in \texttt{references.bib}.) Other repositories of formal proofs were not searched systematically. The lane of the research project that proved Theorem~C reports for 26 October 2026, on local snapshots, that none of the $660$ open pull requests of Formal Conjectures mentions problem $1186$, that the \texttt{lean-proofs} snapshot has no file for it, and that the database lists the problem as open with no formal solution; we did not repeat the first two checks. A refresh on 26 October 2026 found no improvement of \eqref{eq:prs}, no claim of $\delta_3=117/2192$ other than that of Section~\ref{sec:claim}, and no aiXiv paper on the problem. The database's data file then listed problem 1186 as open, with a formalised statement (since 2026-10-20) and formal status ``unformalized''. The upstream file had a single commit (4beab72, 2026-10-20), its statements were still \texttt{sorry} on the main branch, and no open pull request or issue there concerned the problem. None of this establishes that nothing exists. We therefore say only: \emph{not found in the searches described}.
+
+\begin{table}[h]
+\centering\small
+\begin{tabular}{p{3.9cm}p{3.1cm}p{5.5cm}}
+\toprule
+Figure for $\delta_3$ & Source & Status\\
+\midrule
+$\le 1/16=0.0625$ & random colouring (probabilistic method, as stated in \cite{EP1186} and \cite{FC}) & classical; its Lean statement \lean{probabilistic} is proved in the same development (not a claim of this paper)\\
+$\ge1675/32768=0.0511169\ldots$ & \cite{PRS08} & refereed; Lean: here\\
+$\le117/2192=0.0533759\ldots$ & \cite{PRS08}; found independently in \cite{BCG10} & refereed; conjectured sharp; Lean: here\\
+$\approx0.052341$ (lower) & Sj\"oland, with O.\ Kivinen \cite{Sjoland14}, Sec.~8 & numerical, degree-3 relaxation, no certificate (``work under progress'')\\
+12-block colouring optimal among anti-symmetric colourings with $\le12$ blocks & \cite{GKW23} & refereed (Math.\ Comp.\ 2024); not a bound on $\delta_3$\\
+$\ge0.0516249$, $0.0518729$ ($L=256,512$) & this work (PRS method) & exact; Lean for $L=256$; not claimed as a record\\
+$\ge0.0532492$ ($L=256$) & claim \cite{Toledo26}, its Section~7 (cell model in $\varphi$, Shor $+$ triangle cuts; not used by its proof) & unrefereed; a reviewer reproduced the model's local-search minima to six digits, nobody here reproduced the certified bound; not Lean\\
+$\ge0.0533615$ & this work (Theorem~B) & Lean; ``not found in the searches described''\\
+$=117/2192$ & claim \cite{Toledo26} & unrefereed; its author reports checking it line by line, and an outside audit led to a correction (2026-10-20); three AI reviewers (one: ``undetermined, no gap found''; one rebuilt the finite problems from the claim's text and certified them with its own certificates, in its reading of the definitions, a third re-verified those; the lemmas were not proved as proofs). Formalised in Lean as Theorem~C of this package (Section~\ref{sec:thmC}); merged into the research repository's master branch and built there from source; no human referee\\
+\bottomrule
+\end{tabular}
+\caption{Figures for $\delta_3$. ``Lean'' means a proof against the Formal Conjectures definitions with standard axioms.}\label{tab:prior}
+\end{table}
+A 2026 arXiv preprint \cite{YangMao26} concerns the Butler--Costello--Graham conjecture on whether every pattern admits a colouring beating the random one; the agent that wrote this manuscript read its abstract only (it states no value or bound for $\delta_3$), and a lane of the research project extracted its full text and searched it for the constant without finding an improvement of \eqref{eq:prs}.
+
+\section{The claimed proof that $\delta_3=117/2192$, and Theorem C}\label{sec:claim}
+\textbf{The first part of this section describes a claim by another author; its mathematics is not a result of this paper. Section~\ref{sec:thmC} reports a Lean formalisation of it, Theorem~C.} On 5 October 2026 a proof claim for Problem~1186 was submitted to the proof-claims thread of the problem's page \cite{EP1186} by Carlos Toledo (user carlos\_toledo), who states that it was produced with substantial AI assistance from Claude and that they read and checked the mathematics line by line \cite{Toledo26}. It asserts
+$\delta_3=117/2192$, i.e.\ that the $12$-block colouring is optimal, so that the conjecture of \cite{PRS08} holds; it concerns $k=3$ only. The claimant's paper (its Section~7) and report page also describe a model of $L$ equal cells in the variable $\varphi$, bounded by a Shor relaxation with triangle cuts, with $\delta_3\ge0.05324920$ at $L=256$; that bound was accepted by the claimant's first verifier and, by the claim's own statement, not re-decided by its second. The claim uses the model to explain why discretising $\varphi$ cannot reach $117/2192$, and its proof does not use it. The claimant's report page carries a correction dated 20 October 2026, after an outside audit, withdrawing a remark that the bathtub bound is exact to first order; neither the claim's proof nor its formalisation uses that remark. The post on the problem's page states that the work is not peer reviewed and not formalised in Lean, that its certificates are checked by two independent
+programs in exact rational arithmetic (a statement of the page; we have not seen those programs run; the claim's report adds that the second program was written by an AI agent given only the mathematics), and that appearing on the page does not guarantee correctness.
+
+As we understand the argument (from the page, from the claim's TeX source in the claimant's public repository as read by an AI agent of the project, and from the reports of three AI reviewers in the same research project; we did not read the PDF), it has four steps. (1) By the counting lemma of \cite{PRS08} (the formalisation uses instead the exact $\pm1$ form of Lemma~\ref{lem:ident}) the problem reduces to the infimum of a quadratic functional $Q$ over measurable
+$\varphi\colon[0,1]\to[-1,1]$, with $Q(\varphi^*)=-5/137$ for the $12$-block profile $\varphi^*$, which gives $1/16-5/548=117/2192$. (2) Writing $\varphi=\varphi^*(1-2\sigma)$ expands the functional as a linear term $\int h\sigma$ with $h\ge0$ vanishing exactly at the block edges, plus a quadratic term. (3) A bathtub (rearrangement)
+bound for the linear part (the claim's Lemma~2) and, in the proof of its Lemma~3, bounds for each pair of cells for the quadratic part bound the functional below by a function of finitely many cell averages of $\sigma$, for \emph{every} measurable $\sigma$ (no limiting argument). (4) Five finite exact certificates, on grids of $130$ and $146$ cells, cover the range of $m=\int\sigma\in[0,\frac12]$ (the range $[0,\frac15]$ with bound $0$ and four slabs with positive bounds; $m\le\frac12$ by the symmetry $\varphi\mapsto-\varphi$).
+Three read-only AI reviewers worked on it on 26 October 2026. The first re-derived steps (1)--(2) and tested the lemmas of step (3) by exact computations on random inputs, and concluded that the claim is undetermined end to end, with no gap found; it did not reproduce the finite certificates.
+The second rebuilt the five finite problems of step (4) from the claim's text, produced exact certificates of its own whose bounds are at least the constants stated in the claim, and checked them in exact arithmetic. The third, working from the second one's definitions, re-verified those certificates with independent code.
+None of them ran or checked the claimant's own certificates. That is not a referee report: the proofs of the lemmas of step (3) were not checked as proofs, the finite inequalities were checked in the reviewers' reading of the definitions, and none of those checks was in Lean.
+
+\subsection{Theorem C: a Lean proof of the claimed equality}\label{sec:thmC}
+The research project formalised the claim in Lean, from its description and its own reading of the argument, in parts, against the same Lean definitions as in Section~\ref{sec:formal}. The parts are stated as precise hypotheses in an interface file written by the project's coordinator, who also fixed the two cell grids, the constants and the function names; the AI agents that proved the parts used the interface as given. An audit of the interface against the claim's TeX source (by an AI agent of the project, 26 October 2026; the source of draft v0.2 in the claimant's public repository, read as text; the PDF was not read, and we could not confirm that this source is the version linked on 5 October) found that the Lean development follows the claim's argument step by step, in a discrete form at $n=1096w$. The expansion is the discrete form of the claim's identity $E(\sigma)=\int h\sigma+Q(\varphi^*\sigma)$, with $H_x\approx 2nh(x/n)$. Part (b) below is the claim's Lemma~2 (the bathtub bound) with the claim's rule for the constants $a_i$, $b_i$. Part (c) is the bound for pairs of cells used in the proof of the claim's Lemma~3. The function $L$, the five ranges of $m$, the symmetry $\varphi\mapsto-\varphi$ and the two grids are the claim's; the grids agree point for point with those of the claimant's published certificates for the ranges $[\frac15,\frac3{10}]$ and $[\frac25,\frac9{20}]$ (the other three certificate files were not opened). The formalisation departs from the claim in five places: (i) the counting step uses the exact identity of Lemma~\ref{lem:ident} at $n=1096w$ and Lemma~\ref{lem:mono}, where the claim uses the counting lemma of \cite{PRS08} with step functions; (ii) the value $-\frac5{137}$ at the $12$-block colouring comes from the cover inequality of Theorem~\ref{thm:cover}, where the claim computes $Q(\varphi^*)$ exactly; (iii) only $\pm1$ colourings are treated, where the claim's Theorem~2 covers every measurable $\varphi\colon[0,1]\to[-1,1]$; (iv) the five finite statements are $L\ge0$, weaker than the claim's $L\ge B_j>0$ on the four slabs and $L>0$ for $y\ne0$ on $[0,\frac15]$, so the claim's equality case and its corollary are not formalised; (v) the certificates are the project's own, not the claimant's (other multipliers and form sets, with $6817$ and $1200$ triangle forms where the claim has $2204$ and $470$, and exact positive semidefiniteness where the claim uses $S+\varepsilon I$). The claim's Lemma~1 is not formalised and is not needed. Theorem~C is the Formal Conjectures statement about the $\liminf$; the claim's Theorem~1 also asserts that the limit exists, which is not formalised. The claim, the reviewers, the formalising agents and the auditor all used Claude models, so these checks cannot exclude a misreading of the claim that they share; that does not affect the truth of Theorem~C. The grids' constants and the integer certificates were generated by the project from a reviewer's reconstruction of the claim's finite problems (not from the claimant's own data, which were never run), and the proofs of the parts, with their explicit error constants, are the lanes' own. The result is Theorem~C.
+
+\begin{theorem}[Theorem C]\label{thm:C}
+$\delta_3=117/2192$. In Lean this is the theorem \textup{\lean{Erdos1186Day.erdos\_1186.variants.prs\_conjecture}}, of type $\delta\,3=117/2192$, for the definitions of Section~\ref{sec:formal}, with no hypothesis; \textup{\lean{\#print axioms}} gives \textup{\lean{[propext, Classical.choice, Quot.sound]}}.
+\end{theorem}
+\emph{Credit.} The argument behind Theorem~C, in the form in which the project's reviewers and coordinator read it, is the claim's author's \cite{Toledo26}; the Lean formalisation, with the proofs of its parts, is by AI agents of the research project; the claim is unrefereed. This paper contributes the checks described below, not the argument. The headers of the Lean files say: ``Formalises the proof claimed on erdosproblems.com/1186 (Proof claims, 2026-10-05, unrefereed); the mathematics is its author's.'' (This sentence is in $151$ of the $153$ files; the interface file \texttt{P1186Ex} has a variant of it, and the generated grid-data file \texttt{P1186ExData} mentions ``the claimed proof'' without the credit sentence; we did not edit the shipped sources.) The statement is the upstream one: Formal Conjectures lists it as \texttt{research open} and \texttt{sorry} at the pin \cite{FC}. If the Lean definitions express the constant of the problem (the Formal Conjectures authors' claim, Section~\ref{sec:formal}), Theorem~C answers the conjecture of \cite{PRS08}; we did not find another formal proof of it in the searches described in Section~\ref{sec:novelty}. Theorem~B is a consequence of Theorem~C.
+
+\subsubsection*{How the Lean proof is organised}
+It works at the scale $n=1096\,w$ for every $w\ge1$ ($1096=2\cdot548$, so that the $12$-block colouring $s^*$ of Section~\ref{sec:upper} is constant on each of $548$ consecutive cells of $2w$ points). Let $R=R_n$ be the parallelogram of Lemma~\ref{lem:ident}, $Q(u)=\sum_{(x,y)\in R}u_xu_y$ (so $W=Q(s)$), and write a colouring as $s=s^*(1-2\sigma)$ with $\sigma\in\{0,1\}$ the indicator of the points where it differs from $s^*$. Put $H_x=-s^*_x\bigl(\sum_{y:(x,y)\in R}s^*_y+\sum_{e:(e,x)\in R}s^*_e\bigr)$ (\lean{H2} in Lean). Then, exactly in $\mathbb Z$ and for every $\sigma$ (steps (1) and (2) above),
+\[W(s)=W(s^*)+2\sum_xH_x\sigma_x+4\,Q(s^*\sigma).\]
+The parts are the following. Each has an error term at most linear in $w$, written $-Cw$ with an explicit constant, which does not matter in the limit.
+\begin{enumerate}
+\item[(a)] \emph{Star.} $W(s^*)\ge-\frac5{137}n^2-3288\,w$. (The claim states $Q(\varphi^*)=-\frac5{137}$ as an exact computation; the route below is the present paper's.) It comes from the cover inequality of Theorem~\ref{thm:cover} (Lean \lean{W\_lower}, with $548$ blocks of length $2w$): $s^*$ is constant on each block, so the cut-cell loss is $0$, and what remains is a sum over pairs of blocks whose value, $-43840=-\frac5{137}\cdot1096^2$, the kernel evaluates after closed forms for the column sums of the cell kernel $K4$ (a sum of $274$ terms). The constant $\frac5{137}$ gives $\frac1{16}-\frac5{548}=\frac{117}{2192}$.
+\item[(b)] \emph{Bathtub.} Two grids of cells are fixed, $G_{24}$ with $130$ cells and $G_8$ with $146$ cells, each cell $i$ with rational constants $a_i,b_i$ and a length $\omega_i$ (as a fraction of $[0,1]$). With $y_i$ the density of $\sigma$ on cell $i$, $\sum_{x\in\text{cell }i}H_x\sigma_x\ \ge\ 2n^2(a_iy_i+b_iy_i^2)-C_bw$ for every $\sigma$ and every cell. The proof uses that $H_x$ is within $2$ of an explicit affine function of $x$ on each of the $1096$ pieces of length $w$ (integer tables), a discrete rearrangement (``bathtub'') lemma, and a Boolean check per cell by the kernel, in $5$ chunks for $G_{24}$ and $4$ for $G_8$.
+\item[(c)] \emph{Pairs.} For any well-formed grid, $Q(s^*\sigma)\ge n^2\sum_{i,j}\pi_{ij}(y_i,y_j)-C_pw$. With $P=\omega_i\omega_jy_iy_j$, $A^{\rm in}_{ij}$ the area of the part of cell $i\times$ cell $j$ inside the counting region (computed exactly from the unit-cell kernel $K4$) and $A^{\rm out}_{ij}=\omega_i\omega_j-A^{\rm in}_{ij}$, the function $\pi_{ij}$ is $\max(0,P-A^{\rm out}_{ij})$ if $s^*$ has the same sign on the two cells and $\max(-A^{\rm in}_{ij},-P)$ otherwise.
+\item[(d)] \emph{Finite certificates.} Put $L(y)=\sum_i(a_iy_i+b_iy_i^2)+\sum_{i,j}\pi_{ij}(y_i,y_j)$ for $y\in[0,1]^N$, and $m=\sum_i\omega_iy_i$. There are five statements, $L(y)\ge0$ for $m$ in $[0,\frac15]$, $[\frac15,\frac3{10}]$, $[\frac3{10},\frac25]$ (on $G_{24}$) and $[\frac25,\frac9{20}]$, $[\frac9{20},\frac12]$ (on $G_8$); the claim proves the stronger bounds $L\ge B_j>0$ on the four slabs and $L\ge y^\top Py$ on $[0,\frac15]$, but only $L\ge0$ is needed, and only that is formalised. Each is proved by a certificate of the type of Section~\ref{sec:cert}: $L(y)$ is bounded below by a quadratic form with an exact integer matrix plus nonnegative multiples of valid inequalities (box constraints and, for the ranges that need them, triangle forms: $6817$ in the third range, $1200$ in the fifth, none in the others), and positive semidefiniteness of the matrix is shown by an approximate Cholesky factor with diagonally dominant remainder. The integer data were produced by another agent in Python, from a reviewer's reconstruction of the finite problems, and are checked in Lean by \lean{decide +kernel} on packed integer tables, the triangle sums as exact integer sums in chunks. The soundness library of this format contains no numbers.
+\item[(e)] \emph{Assembly.} Adding (a), twice (b) summed over the cells and four times (c) gives $W(s)\ge-\frac5{137}n^2+4n^2L(y)-Cw$. A density $m\in[0,\frac12]$ falls in one of the five ranges; the symmetry $\sigma\mapsto1-\sigma$ (that is, $s\mapsto-s$, which leaves $W$ unchanged) covers $m>\frac12$. Then $32\mono\ge2n^2-16n+8W$ (Lemma~\ref{lem:ident}) gives $\mono(n,c)\ge\frac{117}{2192}n^2-O(n)$ at $n=1096w$, the passage to all $n$ is as in Lemma~\ref{lem:mono}, and the upper bound of Theorem~A closes the equality.
+\end{enumerate}
+
+\begin{table}[h]
+\centering\small
+\begin{tabular}{p{4.6cm}p{8.2cm}}
+\toprule
+Module(s) & Content\\
+\midrule
+\texttt{P1186Ex}, \texttt{P1186ExData} & the interface: scale $n=1096w$, the colouring $s^*$, the two grids and their constants, the statements of (a)--(d)\\
+\texttt{P1186ExStar} & (a)\\
+\texttt{P1186ExBath*} ($16$ modules) & (b) on $G_{24}$ and $G_8$: the affine approximation of $H_x$, the discrete bathtub lemma, per-cell checks in chunks\\
+\texttt{P1186ExPair} & (c)\\
+\texttt{P1186ExGlue}, \texttt{P1186ExMain} & (e), and the theorem \lean{delta3\_eq\_of\_regions}: $\delta_3=\frac{117}{2192}$ from the five statements of (d) as hypotheses\\
+\texttt{P1186ExCertLib}, \texttt{-Alg}, \texttt{-Chk}, \texttt{-Tri}, \texttt{-Pk} & soundness of the certificate format (hand-written, no numbers)\\
+\texttt{P1186ExCert1}--\texttt{5} ($19,19,33,23,30$ modules) & (d): generated tables and chunked kernel checks, one family per range\\
+\texttt{P1186ExFinal} & Theorem~C\\
+\texttt{P1186ExCertCtl} & negative controls (Section~\ref{sec:claimchecks})\\
+\bottomrule
+\end{tabular}
+\caption{The $153$ Lean modules behind Theorem~C, beyond the $189$ of Theorems~A and~B ($342$ in all). The closure of \texttt{P1186ExFinal} has $163$ modules: these $152$ (all but \texttt{P1186ExCertCtl}) and $11$ shared with the closure of Theorem~A or~B (named in \texttt{reproducibility/README.md}, section~7). All of this is in \texttt{reproducibility/lean/}.}\label{tab:claimmodules}
+\end{table}
+
+\subsection{Checks made for this package}\label{sec:claimchecks}
+\begin{itemize}
+\item \textbf{Which sources.} The $153$ modules were copied, as LF text, from the git blobs of commit f726409 of the branch \texttt{agent/n3c} of the research repository, the tip of the formalising lane at the time (the modules \texttt{P1186ExFinal} and \texttt{P1186ExCertCtl} were added by the commit just before, 97b5bfa; f726409 changed the import list and notes; the two later commits, b451885 and a9b4235, differ from it in two documentation files and in no Lean source, as we checked by a read-only \texttt{git diff} at 14:18 PDT). The $11$ modules shared with Theorems~A and~B are byte-identical in the two commits that supply the package.
+\item \textbf{Statement.} \texttt{checks/fidelity\_check.py}, given \texttt{P1186ExFinal.lean} as a fifth argument, checks that Theorem~C has the name, the type and the absence of binders of the upstream statement, and the namespace of the development (\lean{Erdos1186Day}, as for the definitions); the log ends \texttt{RESULT: ALL OK}. The definitions are those of Section~\ref{sec:formal}.
+\item \textbf{Source scan.} The closure of \texttt{P1186ExFinal} ($163$ modules, $8{,}943{,}323$ bytes) has $11$ source lines containing one of the forbidden words (\texttt{checks/closure\_scan.py}); all are comments saying ``no \texttt{native\_decide}''. \texttt{P1186ExCertCtl} has none.
+\item \textbf{Standalone rebuild.} On 26 October 2026 the same script as in Section~\ref{sec:rebuild} (plain \texttt{lean} $4.27.0$, not \texttt{lake}; two jobs; the same compiled Mathlib) was run on the roots of Theorems~A, B and~C: $341$ modules, of which the $189$ already compiled in the earlier run (Section~\ref{sec:rebuild}, same sources by hash) were skipped as up to date and $152$ were compiled from the shipped sources. All $341$ return codes are $0$. The run took $87$ minutes of wall-clock time ($12{:}36$--$14{:}04$ PDT) and $174$ minutes of summed compile time, on a machine shared with other jobs, including the coordinator's own gated build in the research repository. The last module built was \texttt{P1186ExFinal}. The $153$rd module, \texttt{P1186ExCertCtl}, was compiled separately (below). Logs: \texttt{standalone\_build\_claim\_log.jsonl}, \texttt{standalone\_build\_claim\_stdout.txt}.
+\item \textbf{Axioms.} \texttt{reproducibility/lean/AuditClaim1186.lean} was run with \texttt{LEAN\_PATH} set to the rebuilt tree followed by the Mathlib packages only: exit code $0$; it prints the definitions of \lean{monoCount}, \lean{minMonoCount} and $\delta$, the statement of Theorem~C and of \lean{delta3\_eq\_of\_regions}, and $15$ \lean{\#print axioms} lines, for Theorem~C, \lean{delta3\_eq\_of\_regions}, \lean{delta3\_eq\_of\_parts}, \lean{lower\_of\_parts}, \lean{starOK}, \lean{bathOK24}, \lean{bathOK8}, \lean{pairOK\_of\_WF}, \lean{pairOK24}, \lean{pairOK8} and the five \lean{region} theorems; all give \lean{[propext, Classical.choice, Quot.sound]} (log \texttt{lean\_axiom\_audit\_claim\_tree.log}). The compile options include \texttt{-Dwarn.sorry=false}; this audit, not the compile, is the test for \texttt{sorry}.
+\item \textbf{Negative controls.} \texttt{P1186ExCertCtl} (region~5, one of the two ranges with triangle cuts, grid $G_8$) states, as kernel-checked \texttt{example}s, that the checkers accept the true packed constant, a linear entry and a pair entry, and reject the constant plus one, a linear entry plus $2^{7W}$ ($W$ the digit width of the packing) and the quadratic table with $1$ added to each entry; that a dominance row is accepted for the true Cholesky data and rejected when one Cholesky entry is changed by $10^{12}$; and that the exact group sums of the constant, linear and quadratic parts differ from the claimed values plus one. (Changing that Cholesky entry by $1$ is \emph{not} rejected: the row has margin, and a certificate needs only some valid factor.) These controls cover region~5 only; \texttt{P1186ExBath.lean} contains nine further corruption examples for the bathtub check (report of that lane, not re-examined), and none was shipped for ranges~1--4. We compiled \texttt{P1186ExCertCtl} from the shipped source (one job, $74$ seconds, return code $0$; \texttt{lean\_build\_controls.log}), so the kernel accepted all $11$ examples.
+\item \textbf{Kernel replay: not done.} Two attempts to replay the $164$ modules of the closure with \texttt{lean4checker} (built from tag v4.27.0 in the tools of another package of this project; chunks of eight modules, through the machine's job gate) did not get past the first chunk. The first stopped after $415$ seconds with ``failed to read file'' on a Mathlib \texttt{.olean} that exists on disk (probably memory pressure on the shared machine; not diagnosed); the second was killed after $64$ seconds by the gate's memory cap of $9$ GB. We claim no independent replay for Theorem~C, nor for Theorems~A and~B. Logs: \texttt{lean4checker\_claim\_attempt1\_failed.log}, \texttt{lean4checker\_claim\_attempt2\_killed.log}.
+\item \textbf{Build in the research repository.} The branch was merged into the research repository's master branch on 26 October 2026 (merge commit 202f974; its Lean sources for Theorems~A--C are byte-identical to the shipped ones). Before the build, the $124$ generated certificate modules were regenerated from the integer data with the generator and compared with the merged files: all identical. Then all $131$ certificate-side modules were built from source with \texttt{lake}, one gated \texttt{lake build} per module in dependency order ($13{:}24$--$15{:}13$ PDT, $111$ minutes of summed build time; every build successful); the $22$ other modules of the closure (interface, star, bathtub, pair, assembly) had been built from source with \texttt{lake} in that branch as their parts were merged. There \lean{\#print axioms} gives \lean{[propext, Classical.choice, Quot.sound]} for Theorem~C, the five region theorems and \lean{delta3\_eq\_of\_regions}, and the repository's verification tool reports $861$ proved declarations for the problem and none with \texttt{sorry}.
+\end{itemize}
+The formalising lane's own report (not re-run here) adds: gated builds of every module; a Python re-derivation of every identity of the generated tables for all five ranges; and its own listing of the \lean{\#print axioms} of the five region theorems and of Theorem~C, all standard.
+
+\subsection{Limits of Theorem C}\label{sec:claimlimits}
+\begin{itemize}
+\item It is an unrefereed claim's argument, formalised by AI agents in one day. So far as we know, apart from the claimant, who states that they read and checked the mathematics line by line, and the outside audit recorded in the claim's report (auditor not named), no human has read the claim's argument, and no human has read the Lean sources beyond the statement of Theorem~C.
+\item What makes Theorem~C true is that the kernel accepts the upstream statement with standard axioms. The trust base is that of Section~\ref{sec:formal}: Lean's kernel, Mathlib at the pinned version, and the faithfulness of the upstream definitions to the problem. Whether $\delta_3$ so defined is the constant the problem intends is the Formal Conjectures authors' claim.
+\item The interface of the lanes (the grids $G_{24}$, $G_8$, the constants $a_i,b_i$, $H_x$, $\pi_{ij}$) was audited against the claim's TeX source by an AI agent of the project, not by a human and not against the PDF (Section~\ref{sec:thmC}); the claimant's values of $a_i,b_i$ (which their certificates do not store) were not compared with ours, only the rule that produces them. The claim, the reviewers, the formalising agents and the auditor all used Claude models, so these checks cannot exclude a shared misreading of the claim. This does not affect the truth of Theorem~C.
+\item All the machine checks of Theorem~C, in the research repository and here, were run by AI agents of the project on one machine; none was repeated by a person or on another machine.
+\item The Python programs that produced the integer tables are not part of the proof; the tables are re-checked by the kernel.
+\end{itemize}
+
+\subsection{History of the formalisation}
+The formalisation was done on 26 October 2026, in parts. By about 09:30 PDT (commit b23e2f8 of the research repository) the assembly and the star, bathtub and pair parts were proved and merged, and \lean{delta3\_eq\_of\_regions} gave $\delta_3=117/2192$ with the five finite statements as hypotheses; at that time those five statements were not in Lean (their integer certificates existed and were checked by Python only). The lane writing the Lean checker committed the proofs of the five statements and \texttt{P1186ExFinal} on its branch (commit 97b5bfa, 12:06 PDT; the tip f726409 followed a minute later). The lane reported itself done at about 13:20 PDT. The project's coordinator merged the branch into master, built it there from source and recorded the result between 13:24 and 15:25 PDT (merge commit 202f974). An earlier state of this manuscript reported only the conditional theorem and did not claim Theorem~C.
+
+\section{Discussion and limitations}\label{sec:disc}
+\begin{itemize}
+\item \textbf{What Theorem~B is now.} Theorem~B narrows the interval for $\delta_3$ to relative width $2.7\cdot10^{-4}$. Theorem~C, if accepted, gives the equality and makes Theorem~B a consequence of it; Theorem~B keeps its value as a different route: a cell cover of the whole counting region with a single relaxation, whose proof does not use the claim's argument (the expansion around the optimal profile), although both end in semidefinite certificates with triangle inequalities.
+\item \textbf{What Theorem~C is.} A Lean proof, by AI agents, of the equality claimed in another author's unrefereed argument. Its truth rests on the kernel and the upstream definitions; the mathematics is not ours, so far as we know no human has read the Lean text, and the lanes' interface was audited against the claim's TeX source by an AI agent only (Section~\ref{sec:claimlimits}).
+\item \textbf{Trust base.} Lean's kernel, Mathlib at the pinned version, and the faithfulness of the upstream definitions. The Python scripts are cross-checks, not part of the proof.
+\item \textbf{Scope.} A proof of the displayed Lean statements is a proof of bounds for the $\liminf$ as formalised, for $k=3$. It says nothing about Problem~1186 as posed for general $k$.
+\item \textbf{Scaling.} The kernel scheme costs about $L^3/3$ multiply-adds, so each doubling of $L$ multiplies the kernel time by about $8$; $L=256$ already needs $76$ generated modules and, in summed compile time, $51$ minutes (the standalone rebuild, Section~\ref{sec:rebuild}) or $1.5$ hours (the formalising agents' gated run); the two figures were measured under different conditions and are not comparable. With a gap of about $1/L^2$, this method alone reaches $117/2192$ only in the limit, and every finite $L$ stays below it.
+\item \textbf{Provenance.} The cover, the lemmas and the certificates were generated by AI agents. The Lean statements and certificates were checked by machine; the prose proofs of the lemmas of Section~\ref{sec:model2} were not formalised and were not checked by a human mathematician (Appendix~\ref{app:ai}). The mathematics behind Theorem~C is another author's.
+\end{itemize}
+
+\appendix
+\section{Reproducibility}\label{app:repro}
+\textbf{Package layout.} \texttt{reproducibility/lean/} is a standalone Lake project (Lean v4.27.0, Mathlib v4.27.0) containing $342$ modules, with \texttt{MANIFEST.sha256}: the $189$ modules of Theorems~A and~B, copied from the research repository at its commit 47bee1f, and the $153$ further modules of Theorem~C, copied from commit f726409 of its branch \texttt{agent/n3c} (LF line endings in both).
+\texttt{reproducibility/scripts/} holds the Python verifiers and the data (JSON certificates for $L\le512$), \texttt{reproducibility/logs/} the logs, \texttt{checks/} the fidelity, closure and small-case checks.
+
+\textbf{Commands.} In \texttt{reproducibility/lean}: \texttt{lake exe cache get} then \texttt{lake build Erdos} builds everything (hours); \texttt{lake env lean Audit1186.lean} prints the statements and axioms of Theorems~A and~B, and \texttt{lake env lean AuditClaim1186.lean} those of Theorem~C and its parts. \texttt{bash reproducibility/run\_checks.sh quick} (about $3$ minutes) or \texttt{full} (adds $L=512$; about $13$ minutes in all) re-runs the Python verifications.
+\texttt{py checks/fidelity\_check.py <upstream 1186.lean> <P1186.lean> <P1186LowMain.lean> <P1186M2Main.lean> <P1186ExFinal.lean>}, \texttt{py checks/oeis\_small.py 26} and \texttt{py checks/disc\_cutcell\_check.py} re-run the fidelity, small-case and cut-cell checks. The standalone rebuild of Section~\ref{sec:rebuild} uses \texttt{reproducibility/scripts/build\_closure.py} (instructions in \texttt{reproducibility/README.md}).
+
+\textbf{Where the code and data must live for submission.} aiXiv's review criteria include reproducibility (its own paper, arXiv:2508.15126, App.~A.4), and its submission form was read as asking whether code and data are available (not re-confirmed on 26 October 2026); a deposit (repository or Zenodo) is a publication step that the author must decide.
+
+\section{Statement on the use of AI (draft for the author to confirm)}\label{app:ai}
+\emph{Draft; every bracketed clause is the author's to confirm or correct.}
+The mathematical content of Sections~\ref{sec:model2}--\ref{sec:evidence} (the sharper cover, the cut-cell lemma, the choice and certification of the relaxation, the certificates), the Lean formalisation, the scripts and the text of this manuscript were produced by AI systems (Claude models from Anthropic, running as
+autonomous agents in a research workspace, in October 2026), each in a separate task with its own written report. [The author set the problem, chose what to attempt, read the agents' reports, and is responsible for the claims; the extent of the author's own checking of the proofs is: \textit{to be stated}.]
+[Model identifiers to be confirmed from the run logs; this manuscript was drafted by Claude Sonnet 5.5. The project's ledger lists the lanes of Theorem~C as run by Claude Opus (the assembly, the bathtub and pair parts, and the Lean certificate checker) and Claude Sonnet (the star part and the Python certificates); this is the ledger's record, not checked against the run logs, and the Co-Authored-By trailers of the lanes' commits do not always agree with it, so the identifiers are unresolved.]
+The Lean proofs were checked by the Lean kernel and the scripts' results compared across independent implementations; further AI agents reviewed the claim discussed in Section~\ref{sec:claim}, without a human referee, and other AI agents formalised it (Theorem~C, Section~\ref{sec:thmC}). The mathematics of that claim, and of \cite{PRS08}, is its authors'; the Lean proofs and the checks of Section~\ref{sec:claimchecks} were produced by AI agents.
+
+\bibliographystyle{amsplain}
+\bibliography{references}
+\end{document}

@@ -1,0 +1,65 @@
+# Repeats the formal verification on every push: clean build of the 342 modules, statements, axiom audit of every
+# declaration, upstream definition pin, kernel replay with lean4checker, the exact-arithmetic checks, the regeneration of
+# the generated modules, and the file manifest. The logs are uploaded as an artifact.
+#
+# This workflow has not been run yet. The full run takes hours; GitHub-hosted jobs stop after 6 hours (360 minutes).
+name: verify
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install the Python packages
+        run: python3 -m pip install numpy==2.2.6 scipy==1.16.2 sympy==1.14.0
+
+      - name: Check the file manifest
+        run: python3 verification/make_manifest.py --check
+
+      - name: Build lean4checker v4.27.0
+        run: |
+          git clone --depth 1 --branch v4.27.0 https://github.com/leanprover/lean4checker "$RUNNER_TEMP/lean4checker"
+          cd "$RUNNER_TEMP/lean4checker" && lake build
+
+      - name: Run every check from a clean build
+        env:
+          FETCH_CACHE: "1"
+          JOBS: "2"
+          PYTHON: python3
+        run: LEAN4CHECKER="$RUNNER_TEMP/lean4checker/.lake/build/bin/lean4checker" bash verification/run_all.sh
+
+      - name: Require every check to pass
+        run: |
+          s=verification/logs/SUMMARY.txt
+          grep -q 'Build completed successfully' "$s"
+          grep -q ' 0 sorry warnings' "$s"
+          grep -q 'AXIOM AUDIT PASSED' "$s"
+          grep -q '^headline: *36 axiom lines, 0 non-standard, 0 error lines' "$s"
+          grep -q '^upstream pin: *7 axiom lines, 0 non-standard, 0 error lines' "$s"
+          grep -q '^lean4checker: *342 of 342 modules exit 0' "$s"
+          grep -q 'ALL 14 CHECKS PASSED' "$s"
+          grep -q 'RESULT: ALL IDENTICAL' "$s"
+          grep -q '^RESULT: PASS$' "$s"
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-logs
+          path: verification/logs/

@@ -1,0 +1,13 @@
+closure of ['P1186ExFinal']: 163 modules, 8943323 bytes
+  P1186Cert128Lib.lean:24: Quot.sound` (no `native_decide`).
+  P1186ExBathC24a.lean:8: uses, on cells `0, …, 26 - 1` of `G24`, by `decide +kernel` (no `native_decide`).
+  P1186ExBathC24b.lean:8: uses, on cells `26, …, 52 - 1` of `G24`, by `decide +kernel` (no `native_decide`).
+  P1186ExBathC24c.lean:8: uses, on cells `52, …, 78 - 1` of `G24`, by `decide +kernel` (no `native_decide`).
+  P1186ExBathC24d.lean:8: uses, on cells `78, …, 104 - 1` of `G24`, by `decide +kernel` (no `native_decide`).
+  P1186ExBathC24e.lean:8: uses, on cells `104, …, 130 - 1` of `G24`, by `decide +kernel` (no `native_decide`).
+  P1186ExBathC8a.lean:8: uses, on cells `0, …, 37 - 1` of `G8`, by `decide +kernel` (no `native_decide`).
+  P1186ExBathC8b.lean:8: uses, on cells `37, …, 74 - 1` of `G8`, by `decide +kernel` (no `native_decide`).
+  P1186ExBathC8c.lean:8: uses, on cells `74, …, 110 - 1` of `G8`, by `decide +kernel` (no `native_decide`).
+  P1186ExBathC8d.lean:8: uses, on cells `110, …, 146 - 1` of `G8`, by `decide +kernel` (no `native_decide`).
+  P1186M2CertLib.lean:18: **What the kernel checks** (all by `decide +kernel`, no `native_decide`):
+forbidden-word lines: 11

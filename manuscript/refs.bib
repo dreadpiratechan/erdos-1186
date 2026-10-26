@@ -1,0 +1,166 @@
+% References for the Erdos 1186 manuscript.  "verification" fields (ignored by the bibliography style) record how each entry was verified (2026-10-26); entries marked
+% UNVERIFIED were written from memory and must be checked by the author before submission.
+
+@article{PRS08,
+  author  = {Parrilo, Pablo A. and Robertson, Aaron and Saracino, Dan},
+  title   = {On the asymptotic minimum number of monochromatic 3-term arithmetic progressions},
+  journal = {J. Combin. Theory Ser. A},
+  volume  = {115},
+  number  = {1},
+  year    = {2008},
+  pages   = {185--192},
+  doi     = {10.1016/j.jcta.2007.03.006},
+  note    = {arXiv:math/0609532},
+  verification    = {arXiv:math/0609532. Verified: arXiv abstract and full text read; journal data from the Formal Conjectures file and the search record.}
+}
+
+@article{BCG10,
+  author  = {Butler, Steve and Costello, Kevin P. and Graham, Ron},
+  title   = {Finding patterns avoiding many monochromatic constellations},
+  journal = {Experiment. Math.},
+  volume  = {19},
+  number  = {4},
+  year    = {2010},
+  pages   = {399--411},
+  doi     = {10.1080/10586458.2010.10390631},
+  verification    = {Verified: Project Euclid record (volume, issue, pages). Abstract only was read by this lane; lb1186 extracted the full text (ronspubs PDF) and searched it for the constant: it restates the PRS bounds, noting the bounds differ by about 5 percent and that the authors believe the upper bound is the truth.}
+}
+
+@article{GKW23,
+  author       = {Greenwood, Torin and Kariv, Jonathan and Williams, Noah},
+  title        = {From discrete to continuous: Monochromatic 3-term arithmetic progressions},
+  journal      = {Math. Comp.},
+  volume       = {93},
+  number       = {350},
+  year         = {2024},
+  pages        = {2959--2983},
+  doi          = {10.1090/mcom/3970},
+  note         = {arXiv:2301.00336},
+  verification         = {Verified: arXiv listing (title, authors, submitted 1 January 2023). Only the abstract was read by this lane (the 12-block colouring is optimal among anti-symmetric colourings with at most 12 blocks); a lane of the research project (lb1186) extracted the full text and searched it for the 3-AP constant.}
+}
+
+@misc{Sjoland14,
+  author       = {Sj{\"o}land, Erik},
+  title        = {Enumeration of monochromatic three term arithmetic progressions in two-colorings of any finite group},
+  year         = {2014},
+  howpublished = {arXiv:1408.1088v3},
+  verification         = {Verified: arXiv listing (sole author, v3 of 10 November 2014) and the text of Section 8, read 2026-10-26: the author reports, in collaboration with O. Kivinen, numerical results suggesting 0.052341... from a degree-3 relaxation, with no algebraic certificate ("work under progress").}
+}
+
+@misc{YangMao26,
+  author       = {Yang, Gang and Mao, Yaping},
+  title        = {Complete resolution of the {B}utler--{C}ostello--{G}raham conjecture on monochromatic constellations},
+  year         = {2026},
+  howpublished = {arXiv:2604.02115},
+  verification         = {Verified: arXiv listing only (v1 2 April 2026, v3 3 May 2026); abstract read by this lane; a lane of the research project (lb1186) extracted the full text and searched it for the 3-AP constant. It concerns whether every pattern admits a colouring beating the random one; it states no value or new bound for delta_3.}
+}
+
+@article{Er80,
+  author  = {Erd{\H o}s, Paul},
+  title   = {A survey of problems in combinatorial number theory},
+  journal = {Ann. Discrete Math.},
+  volume  = {6},
+  year    = {1980},
+  pages   = {89--115},
+  doi     = {10.1016/S0167-5060(08)70697-6},
+  verification    = {Citation as given in the research repository's notes and in the Formal Conjectures file (title, journal, volume, pages); the relevant page is p. 93. Not read by the author of this manuscript.}
+}
+
+@misc{EP1186,
+  author       = {Bloom, Thomas F.},
+  title        = {Erd{\H o}s Problem 1186},
+  howpublished = {\url{https://www.erdosproblems.com/1186}, last edited 8 April 2026, accessed 26 October 2026},
+  verification         = {Read 2026-10-26. Shows the bounds 1675/32768 and 117/2192 for delta_3, the remark that the upper bound is conjectured correct, and one entry under ``Proof claims''.}
+}
+
+@misc{Toledo26,
+  author       = {Toledo, Carlos},
+  title        = {The twelve-block colouring is optimal: $\delta_3 = 117/2192$},
+  year         = {2026},
+  note         = {Unrefereed proof claim, draft v0.2, October 2026},
+  howpublished = {Submitted to \url{https://www.erdosproblems.com/forum/thread/1186/proof-claims} on 2026-10-05 (user carlos\_toledo); PDF at \url{https://carlostoledo.co/paper/delta3.pdf}; certificates and records at \url{https://carlostoledo.co/reports/delta3.html}; source at \url{https://github.com/carlostoledo1891/cert-machine}; archive doi:10.5281/zenodo.23171167 (the software record cert-machine v2026.10, as given in the claim; later archived versions doi:10.5281/zenodo.23446020 and doi:10.5281/zenodo.23551746); accessed 2026-10-26},
+  verification         = {The post, the report page and the TeX source (paper/tex/delta3.tex in the repository, draft v0.2) were read as text by an AI agent on 2026-10-26; the PDF and the archives were not read, and the claimant's code was not run. The post says the claim was "Produced with substantial AI assistance (Claude)", that the claimant read and checked the mathematics line by line, that it is not peer reviewed, and that it is not formalised in Lean.}
+}
+
+@misc{FC,
+  author       = {{The Formal Conjectures Authors}},
+  title        = {Formal Conjectures},
+  howpublished = {\url{https://github.com/google-deepmind/formal-conjectures}, file \texttt{FormalConjectures/ErdosProblems/1186.lean}, commit c83a94d785d0fb3b9b9a2a94e8ffff8cce76a346 (2026-10-22)},
+  verification         = {The pinned copy was read from a local clone; the repository address is the one recorded in the clone.}
+}
+
+@misc{OEIS121385,
+  author       = {Butler, Steve},
+  title        = {A121385: Minimal number of monochromatic three-term arithmetic progressions that a two-coloring of $\{1,\dots,n\}$ can contain},
+  howpublished = {The On-Line Encyclopedia of Integer Sequences, \url{https://oeis.org/A121385}},
+  year         = {2006},
+  verification         = {Verified: page read 2026-10-26; submitted 26 July 2006, terms a(35)--a(45) added by R. Pratt, 27 May 2014.}
+}
+
+@inproceedings{Lean4,
+  author    = {de Moura, Leonardo and Ullrich, Sebastian},
+  title     = {The {L}ean 4 theorem prover and programming language},
+  booktitle = {Automated Deduction -- CADE 28},
+  series    = {Lecture Notes in Comput. Sci.},
+  volume    = {12699},
+  year      = {2021},
+  pages     = {625--635},
+  doi       = {10.1007/978-3-030-79876-5_37},
+  verification      = {Verified by web search 2026-10-26 (search-result summaries naming volume, pages and DOI 10.1007/978-3-030-79876-5_37 across several listings; publisher page not opened).}
+}
+
+@inproceedings{Mathlib,
+  author    = {{The mathlib Community}},
+  title     = {The {L}ean mathematical library},
+  booktitle = {Proceedings of the 9th ACM SIGPLAN International Conference on Certified Programs and Proofs (CPP 2020)},
+  year      = {2020},
+  pages     = {367--381},
+  doi       = {10.1145/3372885.3373824},
+  verification      = {Verified by web search 2026-10-26 (search-result summaries: pages 367-381, DOI 10.1145/3372885.3373824, preprint arXiv:1910.09336; publisher page not opened).}
+}
+
+@article{Shor87,
+  author  = {Shor, N. Z.},
+  title   = {Quadratic optimization problems},
+  journal = {Izv. Akad. Nauk SSSR Tekhn. Kibernet.},
+  number  = {1},
+  year    = {1987},
+  pages   = {128--139},
+  note    = {English translation: Soviet J. Comput. Systems Sci. 25 (1987), 1--11},
+  verification    = {Russian original (journal, number 1, 1987, pp. 128-139) confirmed by web search 2026-10-26 in several reference lists (title wording varies between lists); the English translation details were NOT found and are from memory: UNVERIFIED. Needed only to name the relaxation.}
+}
+
+@article{Padberg89,
+  author  = {Padberg, Manfred},
+  title   = {The {B}oolean quadric polytope: some characteristics, facets and relatives},
+  journal = {Math. Programming},
+  volume  = {45},
+  year    = {1989},
+  pages   = {139--172},
+  doi     = {10.1007/BF01589101},
+  verification    = {Verified by web search 2026-10-26 (an abstract listing gives Math. Programming 45 (1989), issue 1, pp. 139-172, DOI 10.1007/bf01589101; the triangle inequalities are among the inequality classes it introduces according to a seminar abstract; full text not read). Needed only to name the triangle inequalities.}
+}
+
+@article{BGL14,
+  author  = {Butler, Steve and Graham, Ron and Lu, Linyuan},
+  title   = {Unrolling residues to avoid progressions},
+  journal = {Math. Mag.},
+  volume  = {87},
+  number  = {2},
+  year    = {2014},
+  pages   = {83--94},
+  doi     = {10.4169/math.mag.87.2.83},
+  verification = {Crossref 2026-10-26; arXiv:1209.2687 (HTML) says that two groups independently found the same colouring of [n].}
+}
+
+@article{DVWW25,
+  author  = {De Loera, Jes{\'u}s A. and Ventura, Denae and Wang, Liuyue and Wesley, William J.},
+  title   = {Optimization tools for computing colorings of $[1,\dots,n]$ with few monochromatic solutions on 3-variable linear equations},
+  journal = {Discrete Appl. Math.},
+  volume  = {373},
+  year    = {2025},
+  pages   = {159--178},
+  doi     = {10.1016/j.dam.2025.04.052},
+  note    = {arXiv:2410.21651},
+  verification = {Crossref 2026-10-26; arXiv HTML searched for PRS and x+y=2z by an AI agent: no new bound for delta_3.}
+}

@@ -1,0 +1,5 @@
+== 2026-10-26T14:15:55 lean4checker (built from tag v4.27.0 in the #357 tools), 164 modules, 21 chunks of <= 8
+Searching for modules matching: [Erdos.Proofs.P1186, Erdos.Proofs.P1186Cert128Lib, Erdos.Proofs.P1186Ex, Erdos.Proofs.P1186ExBath, Erdos.Proofs.P1186ExBathC24a, Erdos.Proofs.P1186ExBathC24b, Erdos.Proofs.P1186ExBathC24c, Erdos.Proofs.P1186ExBathC24d]
+Found 8 modules to check
+chunk 1: rc=137 seconds=64 modules=8 first=Erdos.Proofs.P1186 last=Erdos.Proofs.P1186ExBathC24d attempt=1
+STOPPED at first non-zero exit code

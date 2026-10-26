@@ -1,0 +1,46 @@
+cff-version: 1.2.0
+message: >-
+  If you use these results, please cite the paper. Until it has an identifier,
+  cite this repository and the release tag you used. If you use Theorem C, please also
+  cite the proof claim of Carlos Toledo, whose mathematics it formalises.
+title: "Erdős Problem 1186 (k = 3): Lean formalization, verification scripts and computations"
+version: "1.0.0"
+license: Apache-2.0
+repository-code: "https://github.com/dreadpiratechan/erdos-1186"
+url: "https://quanalabs.com"
+authors:
+  - family-names: Snively
+    given-names: Chandler
+    affiliation: Quana Labs
+keywords:
+  - Erdős problems
+  - monochromatic arithmetic progressions
+  - Ramsey theory
+  - semidefinite programming
+  - formal verification
+  - Lean 4
+abstract: >-
+  Lean 4 formalization, verification scripts and computations for the paper
+  "Machine-checked results on the minimum number of monochromatic 3-term arithmetic
+  progressions in two-colourings (Erdős Problem 1186, case k = 3)". For the constant delta_3
+  of Formal Conjectures it proves 1675/32768 <= delta_3 <= 117/2192 (Parrilo, Robertson and
+  Saracino), delta_3 >= 14324135/268435456, and delta_3 = 117/2192; the last is a Lean
+  formalisation of an unrefereed proof claim by Carlos Toledo, whose mathematics it is.
+  The results and the formalization were produced with AI systems; see docs/PROVENANCE.md.
+preferred-citation:
+  type: article
+  title: "Machine-checked results on the minimum number of monochromatic 3-term arithmetic progressions in two-colourings (Erdős Problem 1186, case k = 3)"
+  authors:
+    - family-names: Snively
+      given-names: Chandler
+      affiliation: Quana Labs
+  year: 2026
+  notes: "Preprint. An identifier will be added on release."
+references:
+  - type: generic
+    title: "The twelve-block colouring is optimal: δ₃ = 117/2192"
+    authors:
+      - family-names: Toledo
+        given-names: Carlos
+    year: 2026
+    notes: "Unrefereed proof claim, draft v0.2, submitted to https://www.erdosproblems.com/forum/thread/1186/proof-claims on 2026-10-05."

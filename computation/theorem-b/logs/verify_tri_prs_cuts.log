@@ -1,0 +1,59 @@
+### verify_tri_prs_cuts: verify_tri.py data/sdp_tri_L64.json
+(1)(2) ok: 2167 cuts, all multipliers positive, d >= 0, cut validity at all vertices
+(4) S = 305983/1024 = 298.811523 ; bound V(n) >= 1725633/33554432 n^2 = 0.05142787 n^2   (json says 1725633/33554432)
+(3) Bareiss: all 64 leading principal minors > 0 -> 2Q*M positive definite (0.0s)
+float sanity: min over tested cube points of q(x) + S = 10.0620 (must be >= 0)
+
+real	0m1.971s
+user	0m0.000s
+sys	0m0.015s
+### verify_tri_prs_cuts: verify_dd.py data/sdp_tri_L64.json
+L=64  cuts=2167  S=305983/1024 (298.811523)  bound 1725633/33554432 = 0.05142787   (json: 1725633/33554432)
+  round 0: N exact computed (0.0s); min diag = 1.153e+18; max offdiag-row-sum / diag = 4.118e-06 ; strictly diagonally dominant: True
+PASS: 2Q*M is positive definite (T upper triangular, invertible; T^T M T strictly diagonally dominant, exact integers). L=64, bound 0.05142787
+
+real	0m0.518s
+user	0m0.000s
+sys	0m0.000s
+### verify_tri_prs_cuts: verify_tri.py data/sdp_tri_L128.json
+(1)(2) ok: 4514 cuts, all multipliers positive, d >= 0, cut validity at all vertices
+(4) S = 4898897/4096 = 1196.019775 ; bound V(n) >= 28131247/536870912 n^2 = 0.05239853 n^2   (json says 28131247/536870912)
+(3) Bareiss: all 128 leading principal minors > 0 -> 2Q*M positive definite (0.8s)
+float sanity: min over tested cube points of q(x) + S = 8.9790 (must be >= 0)
+
+real	0m7.825s
+user	0m0.000s
+sys	0m0.015s
+### verify_tri_prs_cuts: verify_dd.py data/sdp_tri_L128.json
+L=128  cuts=4514  S=4898897/4096 (1196.019775)  bound 28131247/536870912 = 0.05239853   (json: 28131247/536870912)
+  round 0: N exact computed (0.0s); min diag = 1.153e+18; max offdiag-row-sum / diag = 9.706e-06 ; strictly diagonally dominant: True
+PASS: 2Q*M is positive definite (T upper triangular, invertible; T^T M T strictly diagonally dominant, exact integers). L=128, bound 0.05239853
+
+real	0m0.527s
+user	0m0.000s
+sys	0m0.015s
+### verify_tri_prs_cuts: verify_tri.py data/sdp_tri_L256.json
+(1)(2) ok: 22066 cuts, all multipliers positive, d >= 0, cut validity at all vertices
+(4) S = 19600293/4096 = 4785.227783 ; bound V(n) >= 113568859/2147483648 n^2 = 0.05288462 n^2   (json says 113568859/2147483648)
+(3) Bareiss: all 256 leading principal minors > 0 -> 2Q*M positive definite (25.1s)
+float sanity: min over tested cube points of q(x) + S = 13.7584 (must be >= 0)
+
+real	0m54.600s
+user	0m0.000s
+sys	0m0.000s
+### verify_tri_prs_cuts: verify_dd.py data/sdp_tri_L256.json
+L=256  cuts=22066  S=19600293/4096 (4785.227783)  bound 113568859/2147483648 = 0.05288462   (json: 113568859/2147483648)
+  round 0: N exact computed (0.1s); min diag = 1.153e+18; max offdiag-row-sum / diag = 3.170e-05 ; strictly diagonally dominant: True
+PASS: 2Q*M is positive definite (T upper triangular, invertible; T^T M T strictly diagonally dominant, exact integers). L=256, bound 0.05288462
+
+real	0m0.639s
+user	0m0.000s
+sys	0m0.000s
+### verify_tri_prs_cuts: verify_dd.py data/sdp_tri_L512.json
+L=512  cuts=101524  S=78399255/4096 (19140.443115)  bound 456374505/8589934592 = 0.05312898   (json: 456374505/8589934592)
+  round 0: N exact computed (0.3s); min diag = 1.153e+18; max offdiag-row-sum / diag = 7.559e-05 ; strictly diagonally dominant: True
+PASS: 2Q*M is positive definite (T upper triangular, invertible; T^T M T strictly diagonally dominant, exact integers). L=512, bound 0.05312898
+
+real	0m0.833s
+user	0m0.000s
+sys	0m0.000s
