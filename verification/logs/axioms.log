@@ -1,0 +1,10 @@
+TOTAL: 4978 constants (2356 theorems) in 342 modules
+axioms used by any of them: [propext, Quot.sound, Classical.choice]
+constants visited in the dependency walk (project and Mathlib): 21055
+axiom declarations inside the project modules: 0
+AXIOM AUDIT PASSED: every constant of the 342 modules depends only on propext, Classical.choice, Quot.sound
+
+real	0m16.567s
+user	0m0.046s
+sys	0m0.000s
+exit=0

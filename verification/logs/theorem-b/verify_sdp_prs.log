@@ -1,0 +1,10 @@
+### verify_sdp_prs: verify_sdp.py 128 --exact
+L=128: all d_i > 0 (min 0.5664); float64 min eigenvalue of A+D = 5.206e-04 (float error ~ 1.4e-11) -> PD with margin
+exact Bareiss: A+D positive definite = True
+sum d = 697849/512;  c = 9151993/33554432;  V(n) >= 3430919/67108864 n^2 = 0.0511247 n^2  (PRS08 L=128: 1675/32768 = 0.0511169)
+exit=0 (5 s)
+### verify_sdp_prs: verify_sdp.py 256 --exact
+L=256: all d_i > 0 (min 0.7480); float64 min eigenvalue of A+D = 5.087e-04 (float error ~ 5.8e-11) -> PD with margin
+exact Bareiss: A+D positive definite = True
+sum d = 1394087/256;  c = 18236839/67108864;  V(n) >= 6928985/134217728 n^2 = 0.0516250 n^2  (PRS08 L=128: 1675/32768 = 0.0511169)
+exit=0 (31 s)

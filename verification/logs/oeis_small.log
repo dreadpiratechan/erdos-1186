@@ -1,0 +1,32 @@
+n= 1  min monoCount 3 n =   0  A121385 =   0  OK
+n= 2  min monoCount 3 n =   0  A121385 =   0  OK
+n= 3  min monoCount 3 n =   0  A121385 =   0  OK
+n= 4  min monoCount 3 n =   0  A121385 =   0  OK
+n= 5  min monoCount 3 n =   0  A121385 =   0  OK
+n= 6  min monoCount 3 n =   0  A121385 =   0  OK
+n= 7  min monoCount 3 n =   0  A121385 =   0  OK
+n= 8  min monoCount 3 n =   0  A121385 =   0  OK
+n= 9  min monoCount 3 n =   1  A121385 =   1  OK
+n=10  min monoCount 3 n =   1  A121385 =   1  OK
+n=11  min monoCount 3 n =   2  A121385 =   2  OK
+n=12  min monoCount 3 n =   2  A121385 =   2  OK
+n=13  min monoCount 3 n =   3  A121385 =   3  OK
+n=14  min monoCount 3 n =   4  A121385 =   4  OK
+n=15  min monoCount 3 n =   5  A121385 =   5  OK
+n=16  min monoCount 3 n =   6  A121385 =   6  OK
+n=17  min monoCount 3 n =   7  A121385 =   7  OK
+n=18  min monoCount 3 n =   8  A121385 =   8  OK
+n=19  min monoCount 3 n =  10  A121385 =  10  OK
+n=20  min monoCount 3 n =  12  A121385 =  12  OK
+n=21  min monoCount 3 n =  14  A121385 =  14  OK
+n=22  min monoCount 3 n =  16  A121385 =  16  OK
+n=23  min monoCount 3 n =  18  A121385 =  18  OK
+n=24  min monoCount 3 n =  20  A121385 =  20  OK
+n=25  min monoCount 3 n =  22  A121385 =  22  OK
+n=26  min monoCount 3 n =  24  A121385 =  24  OK
+RESULT: ALL OK
+
+real	9m2.123s
+user	0m0.000s
+sys	0m0.015s
+exit=0

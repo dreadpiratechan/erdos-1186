@@ -1,0 +1,35 @@
+### verify_model2cuts: verify_model2cuts.py 32 --brute
+(0) closed-form kernel == brute-force cell counts of R_n (w = 2,4,6)
+(1)(2) ok: 127 cuts, distinct, multipliers >= 1/Q, d >= 0, each pattern product +1 and valid at all 8 cube vertices
+(4) S = 5021/512 = 9.8066 ; delta_3 >= 109667/2097152 = 0.0522933   (file says 109667/2097152)
+(3) Bareiss: all 32 leading principal minors > 0 -> N positive definite (0.0s)
+float sanity: min over 60 greedy-descent cube points of x^T C x + S = 0.0072 (must be >= 0)
+exit=0 (1 s)
+### verify_model2cuts: verify_model2cuts.py 64 --brute
+(0) closed-form kernel == brute-force cell counts of R_n (w = 2,4,6)
+(1)(2) ok: 845 cuts, distinct, multipliers >= 1/Q, d >= 0, each pattern product +1 and valid at all 8 cube vertices
+(4) S = 183671/2048 = 89.6831 ; delta_3 >= 1782409/33554432 = 0.0531199   (file says 1782409/33554432)
+(3) Bareiss: all 64 leading principal minors > 0 -> N positive definite (0.1s)
+float sanity: min over 60 greedy-descent cube points of x^T C x + S = 0.0041 (must be >= 0)
+exit=0 (2 s)
+### verify_model2cuts: verify_model2cuts.py 128 --brute
+(0) closed-form kernel == brute-force cell counts of R_n (w = 2,4,6)
+(1)(2) ok: 3586 cuts, distinct, multipliers >= 1/Q, d >= 0, each pattern product +1 and valid at all 8 cube vertices
+(4) S = 242779/512 = 474.1777 ; delta_3 >= 1788837/33554432 = 0.0533115   (file says 1788837/33554432)
+(3) Bareiss: all 128 leading principal minors > 0 -> N positive definite (1.7s)
+float sanity: min over 60 greedy-descent cube points of x^T C x + S = 0.0256 (must be >= 0)
+exit=0 (3 s)
+### verify_model2cuts: verify_model2cuts.py 192 --brute
+(0) closed-form kernel == brute-force cell counts of R_n (w = 2,4,6)
+(1)(2) ok: 5783 cuts, distinct, multipliers >= 1/Q, d >= 0, each pattern product +1 and valid at all 8 cube vertices
+(4) S = 592667/512 = 1157.5527 ; delta_3 >= 4027621/75497472 = 0.0533478   (file says 4027621/75497472)
+(3) Bareiss: all 192 leading principal minors > 0 -> N positive definite (11.4s)
+float sanity: min over 60 greedy-descent cube points of x^T C x + S = 0.0411 (must be >= 0)
+exit=0 (13 s)
+### verify_model2cuts: verify_model2cuts.py 256 --brute
+(0) closed-form kernel == brute-force cell counts of R_n (w = 2,4,6)
+(1)(2) ok: 11931 cuts, distinct, multipliers >= 1/Q, d >= 0, each pattern product +1 and valid at all 8 cube vertices
+(4) S = 2190937/1024 = 2139.5869 ; delta_3 >= 14324135/268435456 = 0.0533616   (file says 14324135/268435456)
+(3) Bareiss: all 256 leading principal minors > 0 -> N positive definite (44.6s)
+float sanity: min over 60 greedy-descent cube points of x^T C x + S = 0.0928 (must be >= 0)
+exit=0 (47 s)

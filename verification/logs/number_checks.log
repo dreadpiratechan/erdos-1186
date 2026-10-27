@@ -1,0 +1,20 @@
+OK   12-block colouring: block lengths 28,6,28,37,59,116,116,59,37,28,6,28 sum to 548 and are palindromic
+OK   upper bound of Theorem A: 16029 / 548^2 = 117/2192
+OK   Theorem C: 1/16 - 5/548 = 117/2192 (5/548 = (5/137)/4)
+OK   Theorem C star value: (5/137) * 1096^2 = 43840
+OK   ordering 1675/32768 < 6928985/134217728 < 1782409/33554432 < 1788837/33554432 < 14324135/268435456 < 117/2192
+OK   gap of Theorem B: 117/2192 - 14324135/268435456 = 527777/36775657472 = 0.0000143512...
+OK   gap of Theorem B is 1.435...e-5 (truncated)
+OK   relative width of [14324135/268435456, 117/2192] is 2.68...e-4 (truncated)
+OK   1675/32768 = 0.0511169... is a truncation of 0.051116943359
+OK   117/2192 = 0.0533759... is a truncation of 0.053375912408
+OK   14324135/268435456 = 0.0533615... is a truncation of 0.053361561149
+OK   1788837/33554432 = 0.0533114... is a truncation of 0.053311496973
+OK   1782409/33554432 = 0.0531199... is a truncation of 0.053119927644
+OK   6928985/134217728 = 0.0516249... is a truncation of 0.051624961197
+ALL 14 CHECKS PASSED
+
+real	0m0.200s
+user	0m0.000s
+sys	0m0.015s
+exit=0

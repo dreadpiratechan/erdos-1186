@@ -1,0 +1,8 @@
+(130, 146)
+(64, 768, 512, 256, 0, 192)
+(1, -1, -1, 1, 1)
+([mkRat 6 13, mkRat 1097 2192, mkRat 1 2, mkRat 1 1, mkRat 1 2, mkRat 0 1],
+  [mkRat 3283 7124, mkRat 2223 4384, mkRat 1 2, mkRat 1 1, mkRat 553 1096, mkRat 0 1])
+([mkRat 1060465 152254128, mkRat 769385 115316736, mkRat 19951 1801824, mkRat (-337) 450456, mkRat 237865 32432832,
+    mkRat 0 1],
+  [mkRat 118493 15615808, mkRat 141907 19219456, mkRat 1363 150152, mkRat (-4) 18769, mkRat 55327 7207296, mkRat 0 1])

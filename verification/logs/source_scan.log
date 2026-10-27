@@ -1,0 +1,12 @@
+roots (lean/Erdos1186.lean): P1186LowMain, P1186M2Main, P1186ExFinal, P1186ExCertCtl
+import closure: 342 modules; files in lean/Erdos/Proofs: 342; unused files: none
+imports from outside the project: ['Mathlib']
+hashes: 342 files, 21337522 bytes; 0 differ from lean_modules.sha256; 0 listed but absent; 0 with CR bytes
+forbidden words in code (comments, docstrings and strings removed): 0
+the same words inside comments or docstrings (information only): 11 occurrences: native_decide x11 in 11 files
+RESULT: ALL OK
+
+real	0m23.085s
+user	0m0.000s
+sys	0m0.015s
+exit=0

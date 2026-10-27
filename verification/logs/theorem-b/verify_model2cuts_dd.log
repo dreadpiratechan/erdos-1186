@@ -1,0 +1,10 @@
+### verify_model2cuts_dd: verify_model2cuts_dd.py 128
+L=128  cuts=3586  S=242779/512 (474.177734)  bound 1788837/33554432 = 0.05331150   (json: 1788837/33554432)
+  round 0: N exact computed (0.1s); min diag = 1.153e+18; max offdiag-row-sum / diag = 2.254e-05 ; strictly diagonally dominant: True
+PASS: the MODEL-2 integer matrix N is positive definite (T upper triangular, invertible; T^T M T strictly diagonally dominant, exact integers). L=128, bound 0.05331150
+exit=0 (2 s)
+### verify_model2cuts_dd: verify_model2cuts_dd.py 256
+L=256  cuts=11931  S=2190937/1024 (2139.586914)  bound 14324135/268435456 = 0.05336156   (json: 14324135/268435456)
+  round 0: N exact computed (0.2s); min diag = 1.153e+18; max offdiag-row-sum / diag = 5.893e-05 ; strictly diagonally dominant: True
+PASS: the MODEL-2 integer matrix N is positive definite (T upper triangular, invertible; T^T M T strictly diagonally dominant, exact integers). L=256, bound 0.05336156
+exit=0 (2 s)

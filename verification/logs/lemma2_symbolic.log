@@ -1,0 +1,13 @@
+case 1 identity: True
+  vertex (-1,0): (x-y)^2+2y^2 = 1 (<= 2: True)
+  vertex (1,0): (x-y)^2+2y^2 = 1 (<= 2: True)
+  vertex (1,1): (x-y)^2+2y^2 = 2 (<= 2: True)
+case 2 integral == H: True
+Gamma - H == (1-y)(2x-y+3)/8: True
+piecewise form of g matches max(t-c, c-Psi_lo) on a rational grid; mismatches: 0
+ALL OK
+
+real	0m3.848s
+user	0m0.000s
+sys	0m0.015s
+exit=0

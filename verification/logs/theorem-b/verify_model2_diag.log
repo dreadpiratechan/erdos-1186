@@ -1,0 +1,21 @@
+### verify_model2_diag: verify_model2.py 64 --exact --brute
+L=64: closed-form kernel == brute-force cell counts of R_n for w in [2, 4, 6]; en >= 0 (min 14)
+float64 min eigenvalue of C + diag(e) = 1.042e-04
+exact Bareiss: Q*(8C) + diag(en) positive definite = True
+sum e = 6868031/65536 (104.7978);  delta_3 >= 56046529/1073741824 = 0.0521974   (file says 56046529/1073741824)
+(PRS08 published 1675/32768 = 0.0511169; repo PRS-method certificate L=512: 0.0518729)
+exit=0 (0 s)
+### verify_model2_diag: verify_model2.py 128 --exact --brute
+L=128: closed-form kernel == brute-force cell counts of R_n for w in [2, 4, 6]; en >= 0 (min 14)
+float64 min eigenvalue of C + diag(e) = 1.040e-04
+exact Bareiss: Q*(8C) + diag(en) positive definite = True
+sum e = 17998031/32768 (549.2563);  delta_3 >= 112025393/2147483648 = 0.0521659   (file says 112025393/2147483648)
+(PRS08 published 1675/32768 = 0.0511169; repo PRS-method certificate L=512: 0.0518729)
+exit=0 (3 s)
+### verify_model2_diag: verify_model2.py 256 --exact --brute
+L=256: closed-form kernel == brute-force cell counts of R_n for w in [2, 4, 6]; en >= 0 (min 14)
+float64 min eigenvalue of C + diag(e) = 1.037e-04
+exact Bareiss: Q*(8C) + diag(en) positive definite = True
+sum e = 161025515/65536 (2457.0544);  delta_3 >= 895939093/17179869184 = 0.0521505   (file says 895939093/17179869184)
+(PRS08 published 1675/32768 = 0.0511169; repo PRS-method certificate L=512: 0.0518729)
+exit=0 (56 s)

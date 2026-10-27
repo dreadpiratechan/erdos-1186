@@ -1,0 +1,17 @@
+erdos_1186.variants.prs_bounds: copied 5 docstring lines + 1 statement lines; proved by Erdos1186Day.erdos_1186.variants.prs_bounds
+erdos_1186.variants.prs_conjecture: copied 7 docstring lines + 1 statement lines; proved by Erdos1186Day.erdos_1186.variants.prs_conjecture
+erdos_1186.variants.van_der_waerden: copied 5 docstring lines + 1 statement lines; proved by Erdos1186Day.erdos_1186.variants.van_der_waerden
+erdos_1186.variants.probabilistic: copied 4 docstring lines + 2 statement lines; proved by Erdos1186Day.erdos_1186.variants.probabilistic
+FormalConjectures_ErdosProblems_1186.lean: sha256 28cedb69d0241e4e991eea0e59b758ccb29ded87241135d54441ecf946fca292, commit c83a94d785d0fb3b9b9a2a94e8ffff8cce76a346; definitions copied: 13 lines, 7 lines, 10 lines; wrote verification/generated/UpstreamPin.lean
+'pin_monoCount' depends on axioms: [propext, Classical.choice, Quot.sound]
+'pin_minMonoCount' depends on axioms: [propext, Classical.choice, Quot.sound]
+'pin_delta' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Upstream1186.erdos_1186.variants.prs_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Upstream1186.erdos_1186.variants.prs_conjecture' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Upstream1186.erdos_1186.variants.van_der_waerden' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Upstream1186.erdos_1186.variants.probabilistic' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+real	0m16.619s
+user	0m0.000s
+sys	0m0.015s
+exit=0

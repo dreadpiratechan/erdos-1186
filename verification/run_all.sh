@@ -4,10 +4,10 @@
 # Usage (from the repository root, i.e. the folder that contains lean/ and verification/):
 #     bash verification/run_all.sh
 # Environment:
-#     JOBS=2          number of parallel Lean jobs (default 2). The largest generated certificate modules need several
-#                     GB each, so keep JOBS x 5 GB below the free memory. This Lake version (4.27.0) has no -j option;
-#                     JOBS is passed as LEAN_NUM_THREADS, which sets the size of Lake's job pool and of each Lean
-#                     process's thread pool. Also used for the parallel kernel replay.
+#     JOBS=2          number of parallel Lean jobs (default 2). The largest generated certificate modules reached
+#                     8.7 GB each in the run of record, so keep JOBS x 9 GB below the free memory. This Lake version
+#                     (4.27.0) has no -j option; JOBS is passed as LEAN_NUM_THREADS, which sets the size of Lake's job
+#                     pool and of each Lean process's thread pool. Also used for the parallel kernel replay.
 #     LEAN4CHECKER    path to a lean4checker executable built from tag v4.27.0 (optional; the step is skipped if unset)
 #     FETCH_CACHE=1   run `lake exe cache get` first (needed on a fresh machine; downloads the Mathlib build cache)
 #     PYTHON          Python 3 interpreter with numpy, scipy and sympy (default: py on Windows, else python3)
@@ -48,7 +48,7 @@ if [ "${FETCH_CACHE:-0}" = "1" ]; then lake exe cache get > "$L/cache_get.log" 2
   "$PY" -B -c "import json;m=json.load(open('lake-manifest.json'));print('\n'.join('manifest: %s %s %s'%(p['name'],p.get('rev'),p.get('inputRev')) for p in m['packages']))"
   echo "mathlib checkout HEAD: $(git -C .lake/packages/mathlib rev-parse HEAD 2>/dev/null || echo unknown)"
   "$PY" -B -c "import sys,numpy,scipy,sympy;print('python',sys.version.split()[0],'numpy',numpy.__version__,'scipy',scipy.__version__,'sympy',sympy.__version__)"
-  echo "lean4checker: ${LEAN4CHECKER:+$(basename "$LEAN4CHECKER")}${LEAN4CHECKER:-not set}"
+  if [ -n "${LEAN4CHECKER:-}" ]; then echo "lean4checker: $(basename "$LEAN4CHECKER")"; else echo "lean4checker: not set"; fi
   echo "sha256 of the Lake project files (the 342 modules are checked in source_scan.log):"
   sha256sum Erdos1186.lean lakefile.toml lake-manifest.json lean-toolchain
 } > "$L/environment.txt" 2>&1

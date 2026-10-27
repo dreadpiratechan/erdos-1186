@@ -52,7 +52,7 @@ All dates are 2026; times are Pacific Daylight Time, from the research repositor
 | 26 October, 13:24-15:22 | In the research repository: every one of the 131 certificate-side modules of Theorem C built from source with its own gated `lake build` (13:24-15:13, all successful), and the merge commit `202f974` ("merge agent/n3c", 15:22) on master; its Lean files `P1186*` are byte-identical to those of this repository (checked for all 342) | the coordinating agent |
 | 26 October, afternoon | An audit of the Theorem C formalisation against the claim's TeX source (`REVIEWS.md`, Section 6) | an AI agent (Claude) |
 | 26 October, day | The manuscript, a reproducibility package, two standalone rebuilds of the shipped Lean files with plain `lean` (08:42-09:29 and 12:36-14:04), three AI referee reviews of the manuscript (`REVIEWS.md`, Sections 3-5) | AI agents (Claude); the manuscript lane ran Claude Sonnet 5.5 |
-| 26 October, evening | This repository: assembled from the package and the research repository, with new verification scripts; a run of `verification/run_all.sh` on a fresh clone (its logs are in `verification/logs/`) | an AI agent (Claude) |
+| 26 October, afternoon and evening | This repository: assembled from the package and the research repository, with new verification scripts (first commit `f68f061`, 15:48 PDT); a run of `verification/run_all.sh` on a fresh clone of that commit, 15:59-22:05 PDT, `RESULT: PASS` with the kernel replay (its logs are in `verification/logs/`; see `README.md`) | an AI agent (Claude Opus 5.5) |
 
 ## What is in this repository, and where it came from
 
@@ -82,11 +82,12 @@ All dates are 2026; times are Pacific Daylight Time, from the research repositor
   licence. `earlier-runs/2026-10-26-package/` holds the logs of the checks made on the research package before this
   repository existed, with two local folder names replaced by `<research-repository>` and `<paper-workspace>`.
 - **`manuscript/`.** `main.tex`, `refs.bib` and `main.pdf` are copies of the manuscript workspace's `paper.tex`,
-  `references.bib` and `paper.pdf` at the manuscript workspace's commit `6912e94` (26 October 2026, 15:24 PDT;
-  SHA-256 of the three files: `891e4836…`, `c731a3a8…`, `a597b4d6…`). They are a draft, copied unchanged, and will be
-  replaced by the final text. They still refer to the paper package's layout (`reproducibility/...`, `checks/...`), and
-  `main.tex` loads the bibliography as `references` (`ibliography{references}`), so compiling it here needs
-  `refs.bib` renamed or that line changed; no `.bbl` file is included.
+  `references.bib` and `paper.pdf` as committed there at 15:55 PDT on 26 October 2026 (commit `aa39422`; SHA-256 of the
+  three files: `931fc819…`, `326ce7b7…`, `9e4c23b3…`), copied unchanged. They will be replaced by the final text if it
+  changes. They still refer to the paper package's layout (`reproducibility/...`, `checks/...`), its statement on code
+  availability says "available from the author on request", and `main.tex` loads the bibliography as `references`
+  (`\bibliography{references}`), so compiling it here needs `refs.bib` renamed or that line changed; no `.bbl` file is
+  included.
 
 ## The claim behind Theorem C
 

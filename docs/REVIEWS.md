@@ -147,8 +147,9 @@ misreading of the claim that they share.
 
 ## 7. Audits of 26 October (coordinator)
 
-*Placeholder: the coordinating agent will add its audits of this repository and of the final manuscript here before
-release.*
+*Placeholder: the coordinating agent will add here, before release, its audits of this repository and of the final
+manuscript, the fourth AI referee of the manuscript (on the near-final text) and the audit of the references, both of
+which the paper's statement on AI use mentions.*
 
 ## What none of the reviews did
 

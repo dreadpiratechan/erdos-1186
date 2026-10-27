@@ -1,0 +1,32 @@
+== definitions (docstring + body), upstream Erdos1186 vs development Erdos1186Day
+  monoCount     OK   sha256[:12]=96e7cec99a56 (761 chars)
+  minMonoCount  OK   sha256[:12]=467003a9e86d (358 chars)
+  δ             OK   sha256[:12]=a3db6b850e96 (500 chars)
+== namespace and opens
+  upstream namespace   OK  
+  upstream open        OK  
+  development          OK   (namespace Erdos1186Day, open Filter Asymptotics)
+== theorem statements (text between the name and `:=`)
+  erdos_1186.variants.prs_bounds: OK     : 1675 / 32768 ≤ δ 3 ∧ δ 3 ≤ 117 / 2192
+  erdos_1186.variants.van_der_waerden: OK     (k : ℕ) (hk : 2 ≤ k) : 0 < δ k
+  erdos_1186.variants.probabilistic: OK     (k : ℕ) (hk : 2 ≤ k) : δ k ≤ 1 / (((k : ℝ) - 1) * 2 ^ k)
+== upstream status at the pin (informational)
+  upstream erdos_1186.variants.prs_bounds: sorry
+  upstream erdos_1186.variants.van_der_waerden: sorry
+  upstream erdos_1186.variants.probabilistic: sorry
+  upstream erdos_1186.variants.prs_conjecture: sorry
+  upstream erdos_1186: sorry
+== Theorem B statements present in the development
+  OK   (14324135 / 268435456 : ℝ) ≤ δ 3
+  OK   (1788837 / 33554432 : ℝ) ≤ δ 3
+  OK   (1782409 / 33554432 : ℝ) ≤ δ 3
+== Theorem C statement (P1186ExFinal.lean) vs upstream erdos_1186.variants.prs_conjecture
+  erdos_1186.variants.prs_conjecture: OK     : δ 3 = 117 / 2192
+  namespace            OK   (namespace Erdos1186Day)
+  no binders           OK  
+RESULT: ALL OK
+
+real	0m0.256s
+user	0m0.000s
+sys	0m0.015s
+exit=0

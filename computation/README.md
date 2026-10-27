@@ -95,4 +95,5 @@ python3 -B computation/small-cases/lemma2_symbolic.py     # seconds: ALL OK
 ```
 
 `bash computation/theorem-b/run_checks.sh full /tmp/b` adds the L = 512 checks (about 13 minutes in all). The times are
-those of the authoring machine (Windows 10, 16 logical processors, 32 GB, shared with other jobs).
+those of the authoring machine (Windows 10, 16 logical processors, 32 GB, shared with other jobs); under heavier load
+they were up to twice as long (`../verification/logs/`).

@@ -1,8 +1,10 @@
 # Repeats the formal verification on every push: clean build of the 342 modules, statements, axiom audit of every
-# declaration, upstream definition pin, kernel replay with lean4checker, the exact-arithmetic checks, the regeneration of
-# the generated modules, and the file manifest. The logs are uploaded as an artifact.
+# declaration, upstream definition pin, the exact-arithmetic checks, the regeneration of the generated modules, and the
+# file manifest. The logs are uploaded as an artifact.
 #
-# This workflow has not been run yet. The full run takes hours; GitHub-hosted jobs stop after 6 hours (360 minutes).
+# This workflow has not been run yet. It uses one Lean job (JOBS=1), because the largest modules need about 9 GB each and
+# a standard GitHub-hosted Linux runner has 16 GB, and it skips the kernel replay (lean4checker), because the build alone
+# takes hours and GitHub-hosted jobs stop after 6 hours. Run the replay locally (see README.md).
 name: verify
 
 on:
@@ -32,17 +34,12 @@ jobs:
       - name: Check the file manifest
         run: python3 verification/make_manifest.py --check
 
-      - name: Build lean4checker v4.27.0
-        run: |
-          git clone --depth 1 --branch v4.27.0 https://github.com/leanprover/lean4checker "$RUNNER_TEMP/lean4checker"
-          cd "$RUNNER_TEMP/lean4checker" && lake build
-
       - name: Run every check from a clean build
         env:
           FETCH_CACHE: "1"
-          JOBS: "2"
+          JOBS: "1"
           PYTHON: python3
-        run: LEAN4CHECKER="$RUNNER_TEMP/lean4checker/.lake/build/bin/lean4checker" bash verification/run_all.sh
+        run: bash verification/run_all.sh
 
       - name: Require every check to pass
         run: |
@@ -52,10 +49,10 @@ jobs:
           grep -q 'AXIOM AUDIT PASSED' "$s"
           grep -q '^headline: *36 axiom lines, 0 non-standard, 0 error lines' "$s"
           grep -q '^upstream pin: *7 axiom lines, 0 non-standard, 0 error lines' "$s"
-          grep -q '^lean4checker: *342 of 342 modules exit 0' "$s"
+          grep -q '^lean4checker: *SKIPPED' "$s"
           grep -q 'ALL 14 CHECKS PASSED' "$s"
           grep -q 'RESULT: ALL IDENTICAL' "$s"
-          grep -q '^RESULT: PASS$' "$s"
+          grep -q '^RESULT: PASS (kernel replay skipped)$' "$s"
 
       - name: Upload logs
         if: always()

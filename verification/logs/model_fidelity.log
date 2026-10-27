@@ -1,0 +1,15 @@
+lean exit=0
+
+real	0m31.041s
+user	0m0.000s
+sys	0m0.000s
+Lean output equals computation/theorem-c/data/fidelity_lean_out.txt: True
+N (G24, G8)                        OK
+A4 samples                         OK
+sgn samples                        OK
+mval G24 (6 points)                OK
+mval G8 (6 points)                 OK
+Lval G24 (6 points)                OK
+Lval G8 (6 points)                 OK
+FIDELITY OK
+exit=0

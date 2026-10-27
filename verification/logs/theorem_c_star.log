@@ -1,0 +1,11 @@
+T direct = -43840  T (274-term form) = -43840
+w = 1 n = 1096 Wm = -43840 = -43840 w^2: True  Lean bound holds: True
+w = 2 n = 2192 Wm = -175360 = -43840 w^2: True  Lean bound holds: True
+w = 3 n = 3288 Wm = -394560 = -43840 w^2: True  Lean bound holds: True
+w = 4 n = 4384 Wm = -701440 = -43840 w^2: True  Lean bound holds: True
+OK
+
+real	0m1.796s
+user	0m0.000s
+sys	0m0.031s
+exit=0

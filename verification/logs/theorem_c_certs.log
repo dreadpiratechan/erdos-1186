@@ -1,0 +1,41 @@
+[region 1] A. structure OK: 318 cut pairs, 21998 forms {'y': 108, 'yhm': 108, 'yo': 13570, 'yy': 8212} (0.5s)
+[region 1] B. stored N == independently rebuilt N (130 x 130 exact integers) (1.3s)
+[region 1] C1. identity L_theta - sum mu f = v'Sv exact at 6 random points; Lval >= L_theta there (3.8s)
+[region 1] C2. 6 random region points: every form >= 0, Lval >= L_theta >= 0 (6.3s)
+[region 1] D1. N PSD: E = T2*N - C C^T diagonally dominant, T2=1, min slack 334022583562714 >= 0 (6.4s)
+[region 1] D2. margin: S >= 2^-20 I (= 9.537e-07) certified by dominance on N - ceil(D/2^k) I (6.6s)
+[region 1] E. constant row of S is zero; y-block P certified PSD; L >= y'Py + sum mu f >= 0
+[region 2] A. structure OK: 318 cut pairs, 9011 forms {'hm': 1, 'mhm': 1, 'ml': 1, 'o': 8, 'ohm': 6, 'oml': 6, 'oo': 1360, 'y': 62, 'yhm': 48, 'yml': 6, 'yo': 3939, 'yy': 3573} (0.0s)
+[region 2] B. stored N == independently rebuilt N (131 x 131 exact integers) (0.5s)
+[region 2] C1. identity L_theta - sum mu f = v'Sv exact at 6 random points; Lval >= L_theta there (2.8s)
+[region 2] C2. 6 random region points: every form >= 0, Lval >= L_theta >= 0 (4.9s)
+[region 2] D1. N PSD: E = T2*N - C C^T diagonally dominant, T2=1, min slack 674297731425900 >= 0 (5.0s)
+[region 2] D2. margin: S >= 2^-19 I (= 1.907e-06) certified by dominance on N - ceil(D/2^k) I (5.2s)
+[region 2] E. B' = 0; S_00 = 1.3937e-03 > 0 (the reviewers' slack B sits in S_00); L >= v'Sv + sum mu f >= 0
+[region 3] A. structure OK: 318 cut pairs, 9863 forms {'hm': 1, 'mhm': 1, 'ml': 1, 'o': 130, 'ohm': 26, 'oo': 98, 'tri': 6817, 'y': 130, 'yhm': 71, 'yo': 1125, 'yy': 1463} (0.0s)
+[region 3] B. stored N == independently rebuilt N (131 x 131 exact integers) (0.6s)
+[region 3] C1. identity L_theta - sum mu f = v'Sv exact at 6 random points; Lval >= L_theta there (3.8s)
+[region 3] C2. 6 random region points: every form >= 0, Lval >= L_theta >= 0 (7.1s)
+[region 3] D1. N PSD: E = T2*N - C C^T diagonally dominant, T2=1, min slack 603344613343480 >= 0 (7.1s)
+[region 3] D2. margin: S >= 2^-19 I (= 1.907e-06) certified by dominance on N - ceil(D/2^k) I (7.3s)
+[region 3] E. B' = 0; S_00 = 1.3645e-03 > 0 (the reviewers' slack B sits in S_00); L >= v'Sv + sum mu f >= 0
+[region 4] A. structure OK: 294 cut pairs, 5180 forms {'hm': 1, 'mhm': 1, 'ml': 1, 'o': 146, 'ohm': 102, 'oo': 248, 'y': 146, 'yhm': 132, 'yo': 2378, 'yy': 2025} (0.4s)
+[region 4] B. stored N == independently rebuilt N (147 x 147 exact integers) (1.0s)
+[region 4] C1. identity L_theta - sum mu f = v'Sv exact at 6 random points; Lval >= L_theta there (3.9s)
+[region 4] C2. 6 random region points: every form >= 0, Lval >= L_theta >= 0 (7.0s)
+[region 4] D1. N PSD: E = T2*N - C C^T diagonally dominant, T2=1, min slack 660059880137079 >= 0 (7.1s)
+[region 4] D2. margin: S >= 2^-19 I (= 1.907e-06) certified by dominance on N - ceil(D/2^k) I (7.4s)
+[region 4] E. B' = 0; S_00 = 1.0442e-02 > 0 (the reviewers' slack B sits in S_00); L >= v'Sv + sum mu f >= 0
+[region 5] A. structure OK: 294 cut pairs, 4144 forms {'hm': 1, 'mhm': 1, 'ml': 1, 'o': 146, 'ohm': 102, 'oo': 66, 'tri': 1200, 'y': 146, 'yhm': 132, 'yo': 1114, 'yy': 1235} (0.0s)
+[region 5] B. stored N == independently rebuilt N (147 x 147 exact integers) (0.6s)
+[region 5] C1. identity L_theta - sum mu f = v'Sv exact at 6 random points; Lval >= L_theta there (3.5s)
+[region 5] C2. 6 random region points: every form >= 0, Lval >= L_theta >= 0 (6.8s)
+[region 5] D1. N PSD: E = T2*N - C C^T diagonally dominant, T2=1, min slack 1103480184829632 >= 0 (6.9s)
+[region 5] D2. margin: S >= 2^-18 I (= 3.815e-06) certified by dominance on N - ceil(D/2^k) I (7.1s)
+[region 5] E. B' = 0; S_00 = 1.2091e-02 > 0 (the reviewers' slack B sits in S_00); L >= v'Sv + sum mu f >= 0
+ALL OK for regions [1, 2, 3, 4, 5]
+
+real	0m34.123s
+user	0m0.000s
+sys	0m0.015s
+exit=0

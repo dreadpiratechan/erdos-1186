@@ -1,0 +1,181 @@
+def Erdos1186Day.monoCount : ℕ → ℕ → (ℕ → Bool) → ℕ :=
+fun k n c => {p ∈ Finset.Icc 1 n ×ˢ Finset.Icc 1 n | p.1 + (k - 1) * p.2 ≤ n ∧ ∀ i < k, c (p.1 + i * p.2) = c p.1}.card
+def Erdos1186Day.minMonoCount : ℕ → ℕ → ℕ :=
+fun k n => sInf {m | ∃ c, Erdos1186Day.monoCount k n c = m}
+def Erdos1186Day.δ : ℕ → ℝ :=
+fun k => Filter.liminf (fun n => ↑(Erdos1186Day.minMonoCount k n) / ↑n ^ 2) Filter.atTop
+Erdos1186Day.erdos_1186.variants.prs_bounds : 1675 / 32768 ≤ Erdos1186Day.δ 3 ∧ Erdos1186Day.δ 3 ≤ 117 / 2192
+Erdos1186Day.erdos_1186.variants.prs_bounds_lower : 1675 / 32768 ≤ Erdos1186Day.δ 3
+Erdos1186Day.erdos_1186.variants.prs_bounds_upper : Erdos1186Day.δ 3 ≤ 117 / 2192
+Erdos1186Day.delta3_ge_L256 : 6928985 / 134217728 ≤ Erdos1186Day.δ 3
+Erdos1186Day.erdos_1186.variants.van_der_waerden : ∀ (k : ℕ), 2 ≤ k → 0 < Erdos1186Day.δ k
+Erdos1186Day.erdos_1186.variants.probabilistic : ∀ (k : ℕ), 2 ≤ k → Erdos1186Day.δ k ≤ 1 / ((↑k - 1) * 2 ^ k)
+Erdos1186Day.delta3_ge_model2_L64 : 1782409 / 33554432 ≤ Erdos1186Day.δ 3
+Erdos1186Day.delta3_ge_model2_L128 : 1788837 / 33554432 ≤ Erdos1186Day.δ 3
+Erdos1186Day.delta3_ge_model2_L256 : 14324135 / 268435456 ≤ Erdos1186Day.δ 3
+Erdos1186Day.delta3_bounds_model2_L128 : 1788837 / 33554432 ≤ Erdos1186Day.δ 3 ∧ Erdos1186Day.δ 3 ≤ 117 / 2192
+Erdos1186Day.delta3_bounds_model2_L256 : 14324135 / 268435456 ≤ Erdos1186Day.δ 3 ∧ Erdos1186Day.δ 3 ≤ 117 / 2192
+def Erdos1186Night2.DiagCert : ℕ → (ℕ → ℚ) → Prop :=
+fun L d =>
+  (∀ i ∈ Finset.Icc 1 L, 0 ≤ d i) ∧ ∀ (x : ℕ → ℝ), -∑ i ∈ Finset.Icc 1 L, ↑(d i) * x i ^ 2 ≤ Erdos1186Night2.qform L x
+Erdos1186Night2.lower_of_cert : ∀ (L : ℕ),
+  2 ≤ L → Even L → ∀ (d : ℕ → ℚ), Erdos1186Night2.DiagCert L d → Erdos1186Night2.prsBound L d ≤ Erdos1186Day.δ 3
+Erdos1186Night2.cert128 : Erdos1186Night2.DiagCert 128 Erdos1186Night2.d128
+Erdos1186Night2.cert256 : Erdos1186Night2.DiagCert 256 Erdos1186Night2.d256
+def Erdos1186Night2M2.CubeLB : ℕ → ℚ → Prop :=
+fun L σ => ∀ (x : ℕ → ℝ), (∀ p ∈ Finset.Icc 1 L, |x p| ≤ 1) → -↑σ ≤ Erdos1186Night2M2.cform L x
+Erdos1186Night2M2.lower_of_cubeLB : ∀ (L : ℕ),
+  4 ≤ L → Even L → ∀ (σ : ℚ), Erdos1186Night2M2.CubeLB L σ → Erdos1186Night2M2.bound2 L σ ≤ Erdos1186Day.δ 3
+Erdos1186Night2M2.cubeLB_of_cert : ∀ (T : Erdos1186Night2M2.Cert),
+  0 < T.Q →
+    0 < T.S →
+      T.rows.length = T.L →
+        (∀ i ∈ Finset.Icc 1 T.L, (T.nrow i).length = T.L) →
+          (∀ i ∈ Finset.Icc 1 T.L, (T.row i).length ≤ T.L) →
+            (∀ i ∈ Finset.Icc 1 T.L, 0 ≤ T.dnAt i) →
+              (∀ t ∈ T.cuts, Erdos1186Night2M2.Cut.ok T.L t = true) →
+                Erdos1186Night2M2.accumulate T.L T.cuts = T.acc →
+                  48 * (List.map Erdos1186Night2M2.Cut.mn T.cuts).sum < 2 ^ 30 →
+                    (∀ a ∈ Finset.Icc 1 T.L, T.linkOK a = true) →
+                      (∀ i ∈ Finset.Icc 1 T.L, T.rowOK i = true) →
+                        Erdos1186Night2M2.CubeLB T.L
+                          (↑(∑ i ∈ Finset.Icc 1 T.L, T.dnAt i + (List.map Erdos1186Night2M2.Cut.mn T.cuts).sum) / ↑T.Q)
+Erdos1186Night2M2.Cert.link_sound : ∀ (T : Erdos1186Night2M2.Cert),
+  (∀ t ∈ T.cuts, Erdos1186Night2M2.Cut.ok T.L t = true) →
+    Erdos1186Night2M2.accumulate T.L T.cuts = T.acc →
+      48 * (List.map Erdos1186Night2M2.Cut.mn T.cuts).sum < 2 ^ 30 →
+        ∀ a ∈ Finset.Icc 1 T.L,
+          (T.nrow a).length = T.L →
+            T.linkOK a = true →
+              ∀ b ∈ Finset.Icc 1 T.L,
+                T.Mat a b = Erdos1186Night2M2.baseEntry T.L T.Q (T.dnAt a) a b - 8 * Erdos1186Night2M2.rowvec T.cuts a b
+Erdos1186Night2M2.Cert.psd : ∀ (T : Erdos1186Night2M2.Cert),
+  0 < T.S →
+    T.rows.length = T.L →
+      (∀ i ∈ Finset.Icc 1 T.L, (T.nrow i).length = T.L) →
+        (∀ i ∈ Finset.Icc 1 T.L, (T.row i).length ≤ T.L) →
+          (∀ i ∈ Finset.Icc 1 T.L, ∀ j ∈ Finset.Icc 1 T.L, T.Mat i j = T.Mat j i) →
+            (∀ i ∈ Finset.Icc 1 T.L, T.rowOK i = true) →
+              ∀ (x : ℕ → ℝ), 0 ≤ ∑ i ∈ Finset.Icc 1 T.L, ∑ j ∈ Finset.Icc 1 T.L, ↑(T.Mat i j) * x i * x j
+Erdos1186Night2M2.cubeLB64 : Erdos1186Night2M2.CubeLB 64 (183671 / 2048)
+Erdos1186Night2M2.cubeLB128 : Erdos1186Night2M2.CubeLB 128 (242779 / 512)
+Erdos1186Night2M2.cubeLB256 : Erdos1186Night2M2.CubeLB 256 (2190937 / 1024)
+Erdos1186Day.erdos_1186.variants.prs_conjecture : Erdos1186Day.δ 3 = 117 / 2192
+Erdos1186Day.erdos_1186.variants.prs_conjecture : Erdos1186Day.δ (3 : ℕ) = (117 / 2192 : ℝ)
+def Erdos1186Ex.StarOK : Prop :=
+∃ C,
+  ∀ (w : ℕ),
+    1 ≤ w →
+      -(5 / 137) * ↑(Erdos1186Ex.nn w) ^ 2 - C * ↑w ≤ ↑(Erdos1186Night2.Wm (Erdos1186Ex.sstar w) (Erdos1186Ex.nn w))
+def Erdos1186Ex.BathOK : Erdos1186Ex.Grid → Prop :=
+fun G =>
+  ∃ C,
+    ∀ (w : ℕ),
+      1 ≤ w →
+        ∀ (σ : ℕ → ℤ),
+          Erdos1186Ex.IsInd σ →
+            ∀ i < G.N,
+              2 * ↑(Erdos1186Ex.nn w) ^ 2 * (↑(G.ai i) * G.yv w σ i + ↑(G.bi i) * G.yv w σ i ^ 2) - C * ↑w ≤
+                ↑(∑ x ∈ G.cell w i, Erdos1186Ex.H2 w x * σ x)
+def Erdos1186Ex.PairOK : Erdos1186Ex.Grid → Prop :=
+fun G =>
+  ∃ C,
+    ∀ (w : ℕ),
+      1 ≤ w →
+        ∀ (σ : ℕ → ℤ),
+          Erdos1186Ex.IsInd σ →
+            ↑(Erdos1186Ex.nn w) ^ 2 *
+                  ∑ i ∈ Finset.range G.N, ∑ j ∈ Finset.range G.N, G.pterm i j (G.yv w σ i) (G.yv w σ j) -
+                C * ↑w ≤
+              ↑(Erdos1186Ex.Qd (Erdos1186Ex.nn w) fun x => Erdos1186Ex.sstar w x * σ x)
+def Erdos1186Ex.RegionLB : Erdos1186Ex.Grid → ℚ → ℚ → Prop :=
+fun G lo hi => ∀ (y : ℕ → ℝ), (∀ i < G.N, 0 ≤ y i ∧ y i ≤ 1) → ↑lo ≤ G.mval y → G.mval y ≤ ↑hi → 0 ≤ G.Lval y
+def Erdos1186Ex.Grid.Lval : Erdos1186Ex.Grid → (ℕ → ℝ) → ℝ :=
+fun G y =>
+  ∑ i ∈ Finset.range G.N, (↑(G.ai i) * y i + ↑(G.bi i) * y i ^ 2) +
+    ∑ i ∈ Finset.range G.N, ∑ j ∈ Finset.range G.N, G.pterm i j (y i) (y j)
+def Erdos1186Ex.Grid.pterm : Erdos1186Ex.Grid → ℕ → ℕ → ℝ → ℝ → ℝ :=
+fun G i j yi yj =>
+  have P := ↑(G.wt i) * ↑(G.wt j) * yi * yj;
+  have Ain := ↑(G.A4 i j) / (4 * 1096 ^ 2);
+  have Aout := ↑(G.wt i) * ↑(G.wt j) - Ain;
+  if G.sgn i * G.sgn j = 1 then max 0 (P - Aout) else max (-Ain) (-P)
+def Erdos1186Ex.Grid.mval : Erdos1186Ex.Grid → (ℕ → ℝ) → ℝ :=
+fun G y => ∑ i ∈ Finset.range G.N, ↑(G.wt i) * y i
+Erdos1186Ex.delta3_eq_of_regions : Erdos1186Ex.RegionLB Erdos1186Ex.G24 0 (1 / 5) →
+  Erdos1186Ex.RegionLB Erdos1186Ex.G24 (1 / 5) (3 / 10) →
+    Erdos1186Ex.RegionLB Erdos1186Ex.G24 (3 / 10) (2 / 5) →
+      Erdos1186Ex.RegionLB Erdos1186Ex.G8 (2 / 5) (9 / 20) →
+        Erdos1186Ex.RegionLB Erdos1186Ex.G8 (9 / 20) (1 / 2) → Erdos1186Day.δ 3 = 117 / 2192
+Erdos1186Ex.delta3_eq_of_parts : Erdos1186Ex.StarOK →
+  Erdos1186Ex.BathOK Erdos1186Ex.G24 →
+    Erdos1186Ex.BathOK Erdos1186Ex.G8 →
+      Erdos1186Ex.PairOK Erdos1186Ex.G24 →
+        Erdos1186Ex.PairOK Erdos1186Ex.G8 →
+          Erdos1186Ex.RegionLB Erdos1186Ex.G24 0 (1 / 5) →
+            Erdos1186Ex.RegionLB Erdos1186Ex.G24 (1 / 5) (3 / 10) →
+              Erdos1186Ex.RegionLB Erdos1186Ex.G24 (3 / 10) (2 / 5) →
+                Erdos1186Ex.RegionLB Erdos1186Ex.G8 (2 / 5) (9 / 20) →
+                  Erdos1186Ex.RegionLB Erdos1186Ex.G8 (9 / 20) (1 / 2) → Erdos1186Day.δ 3 = 117 / 2192
+Erdos1186Ex.lower_of_parts : Erdos1186Ex.StarOK →
+  Erdos1186Ex.BathOK Erdos1186Ex.G24 →
+    Erdos1186Ex.BathOK Erdos1186Ex.G8 →
+      Erdos1186Ex.PairOK Erdos1186Ex.G24 →
+        Erdos1186Ex.PairOK Erdos1186Ex.G8 →
+          Erdos1186Ex.RegionLB Erdos1186Ex.G24 0 (1 / 5) →
+            Erdos1186Ex.RegionLB Erdos1186Ex.G24 (1 / 5) (3 / 10) →
+              Erdos1186Ex.RegionLB Erdos1186Ex.G24 (3 / 10) (2 / 5) →
+                Erdos1186Ex.RegionLB Erdos1186Ex.G8 (2 / 5) (9 / 20) →
+                  Erdos1186Ex.RegionLB Erdos1186Ex.G8 (9 / 20) (1 / 2) → 117 / 2192 ≤ Erdos1186Day.δ 3
+Erdos1186Ex.starOK : Erdos1186Ex.StarOK
+Erdos1186Ex.bathOK24 : Erdos1186Ex.BathOK Erdos1186Ex.G24
+Erdos1186Ex.bathOK8 : Erdos1186Ex.BathOK Erdos1186Ex.G8
+Erdos1186Ex.pairOK_of_WF : ∀ (G : Erdos1186Ex.Grid), G.WF → Erdos1186Ex.PairOK G
+Erdos1186Ex.pairOK24 : Erdos1186Ex.PairOK Erdos1186Ex.G24
+Erdos1186Ex.pairOK8 : Erdos1186Ex.PairOK Erdos1186Ex.G8
+Erdos1186Ex.region1 : Erdos1186Ex.RegionLB Erdos1186Ex.G24 0 (1 / 5)
+Erdos1186Ex.region2 : Erdos1186Ex.RegionLB Erdos1186Ex.G24 (1 / 5) (3 / 10)
+Erdos1186Ex.region3 : Erdos1186Ex.RegionLB Erdos1186Ex.G24 (3 / 10) (2 / 5)
+Erdos1186Ex.region4 : Erdos1186Ex.RegionLB Erdos1186Ex.G8 (2 / 5) (9 / 20)
+Erdos1186Ex.region5 : Erdos1186Ex.RegionLB Erdos1186Ex.G8 (9 / 20) (1 / 2)
+'Erdos1186Day.erdos_1186.variants.prs_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.erdos_1186.variants.prs_bounds_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.erdos_1186.variants.prs_bounds_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.delta3_ge_L256' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.erdos_1186.variants.van_der_waerden' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.erdos_1186.variants.probabilistic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.delta3_ge_model2_L64' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.delta3_ge_model2_L128' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.delta3_ge_model2_L256' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.delta3_bounds_model2_L128' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.delta3_bounds_model2_L256' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2.lower_of_cert' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2.cert128' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2.cert256' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2M2.lower_of_cubeLB' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2M2.cubeLB_of_cert' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2M2.Cert.link_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2M2.Cert.psd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2M2.cubeLB64' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2M2.cubeLB128' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Night2M2.cubeLB256' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Day.erdos_1186.variants.prs_conjecture' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Ex.delta3_eq_of_regions' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Ex.delta3_eq_of_parts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Ex.lower_of_parts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Ex.starOK' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Ex.bathOK24' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Ex.bathOK8' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Ex.pairOK_of_WF' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Ex.pairOK24' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Ex.pairOK8' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Ex.region1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Ex.region2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Ex.region3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Ex.region4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Erdos1186Ex.region5' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+real	0m27.258s
+user	0m0.000s
+sys	0m0.015s
+exit=0

@@ -1,0 +1,11 @@
+[region 1] Bareiss: N - ceil(D/2^20) I (130 x 130) all leading principal minors > 0: True  (10.8s)
+[region 2] Bareiss: N - ceil(D/2^19) I (131 x 131) all leading principal minors > 0: True  (11.3s)
+[region 3] Bareiss: N - ceil(D/2^19) I (131 x 131) all leading principal minors > 0: True  (11.2s)
+[region 4] Bareiss: N - ceil(D/2^19) I (147 x 147) all leading principal minors > 0: True  (20.5s)
+[region 5] Bareiss: N - ceil(D/2^18) I (147 x 147) all leading principal minors > 0: True  (25.1s)
+BAREISS OK for regions [1, 2, 3, 4, 5]
+
+real	1m19.216s
+user	0m0.000s
+sys	0m0.000s
+exit=0

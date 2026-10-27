@@ -1,0 +1,451 @@
+✔ [7884/7892] Built Erdos.Proofs.P1186Prs (1122s)
+✔ [7885/7893] Built Erdos.Proofs.P1186Tab (1132s)
+✔ [7886/7894] Built Erdos.Proofs.P1186Cert128Lib (286s)
+✔ [7887/7894] Built Erdos.Proofs.P1186LowA (300s)
+⚠ [7888/7895] Built Erdos.Proofs.P1186 (75s)
+warning: Erdos/Proofs/P1186.lean:150:46: This simp argument is unused:
+  Finset.mem_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.coe_Icc, Set.mem_Icc, Finset.mem_c̵o̵e̵,̵ ̵F̵i̵n̵s̵e̵t̵.̵m̵e̵m̵_̵Icc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: Erdos/Proofs/P1186.lean:150:62: This simp argument is unused:
+  Finset.mem_Icc
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.coe_Icc, Set.mem_Icc, Finset.mem_coe,̵ ̵F̵i̵n̵s̵e̵t̵.̵m̵e̵m̵_̵I̵c̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: Erdos/Proofs/P1186.lean:250:17: This simp argument is unused:
+  colOf
+
+Hint: Omit it from the simp argument list.
+  simp only [c̵o̵l̵O̵f̵,̵ ̵hxs, decide_true] at this
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: Erdos/Proofs/P1186.lean:250:29: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp only [colOf, hxs,̵ ̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵] at this
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: Erdos/Proofs/P1186.lean:251:12: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵a̵]̵ ̵at this
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: Erdos/Proofs/P1186.lean:483:18: `Finset.range_succ` has been deprecated: Use `Finset.range_add_one` instead
+warning: Erdos/Proofs/P1186.lean:523:24: This simp argument is unused:
+  Finset.mem_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [R00, R12, Pk, Finset.coe_filter, Finset.mem_product, Finset.mem_Icc,
+        Set.mem_setOf_eq,̵ ̵F̵i̵n̵s̵e̵t̵.̵m̵e̵m̵_̵c̵o̵e̵] at hp ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: Erdos/Proofs/P1186.lean:559:79: This simp argument is unused:
+  Finset.mem_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [hTri, R00, Pk, Finset.coe_product, Finset.coe_filter, Finset.mem_product,
+  ̲  ̲ ̲ ̲ ̲ ̲Finset.mem_Icc,
+  ̵  ̵ ̵ ̵ ̵ ̵Set.mem_setOf_eq, Set.mem_prod, Finset.coe_univ, Set.mem_univ,
+  ̲  ̲ ̲ ̲ ̲ ̲and_true,̵ ̵F̵i̵n̵s̵e̵t̵.̵m̵e̵m̵_̵c̵o̵e̵] at hx ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: Erdos/Proofs/P1186.lean:661:17: This simp argument is unused:
+  Fin.val_mk
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵F̵i̵n̵.̵v̵a̵l̵_̵m̵k̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: Erdos/Proofs/P1186.lean:664:17: This simp argument is unused:
+  Fin.val_mk
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵F̵i̵n̵.̵v̵a̵l̵_̵m̵k̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+info: Erdos/Proofs/P1186.lean:871:0: 'Erdos1186Day.erdos_1186.variants.prs_bounds_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186.lean:872:0: 'Erdos1186Day.erdos_1186.variants.probabilistic' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186.lean:873:0: 'Erdos1186Day.erdos_1186.variants.van_der_waerden' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [7889/7896] Built Erdos.Proofs.P1186Cert128Tab (111s)
+ℹ [7890/7897] Built Erdos.Proofs.P1186Low (65s)
+info: Erdos/Proofs/P1186Low.lean:270:0: 'Erdos1186Night2.lower_of_cert' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186Low.lean:271:0: 'Erdos1186Night2.finite_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186Low.lean:272:0: 'Erdos1186Night2.lower_of_cert_of_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186Low.lean:273:0: 'Erdos1186Night2.lower_of_cert128' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [7891/7897] Built Erdos.Proofs.P1186Cert128Chk74 (101s)
+✔ [7892/7897] Built Erdos.Proofs.P1186Cert128Chk59 (98s)
+✔ [7893/7897] Built Erdos.Proofs.P1186Cert128Chk41 (113s)
+✔ [7894/7898] Built Erdos.Proofs.P1186Cert128Chk1 (157s)
+✔ [7895/7900] Built Erdos.Proofs.P1186Cert128Chk87 (98s)
+✔ [7896/7900] Built Erdos.Proofs.P1186Cert128Chk99 (98s)
+✔ [7897/7902] Built Erdos.Proofs.P1186Cert128Chk123 (65s)
+✔ [7898/7903] Built Erdos.Proofs.P1186Cert128Chk111 (102s)
+✔ [7899/7921] Built Erdos.Proofs.P1186Cert128 (49s)
+✔ [7900/7964] Built Erdos.Proofs.P1186M2 (45s)
+✔ [7901/7964] Built Erdos.Proofs.P1186M2LowA (75s)
+✔ [7902/7965] Built Erdos.Proofs.P1186M2LowB (40s)
+ℹ [7903/7965] Built Erdos.Proofs.P1186M2Low (63s)
+info: Erdos/Proofs/P1186M2Low.lean:253:0: 'Erdos1186Night2M2.lower_of_cubeLB' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186M2Low.lean:254:0: 'Erdos1186Night2M2.finite_bound2' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186M2Low.lean:255:0: 'Erdos1186Night2M2.lower_of_cubeLB64' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186M2Low.lean:256:0: 'Erdos1186Night2M2.lower_of_cubeLB128' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186M2Low.lean:257:0: 'Erdos1186Night2M2.lower_of_cubeLB256' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [7904/7966] Built Erdos.Proofs.P1186Cert256Tab (315s)
+✔ [7905/7967] Built Erdos.Proofs.P1186Cert256Chk256 (45s)
+⚠ [7906/7967] Built Erdos.Proofs.P1186M2CertLib (88s)
+warning: Erdos/Proofs/P1186M2CertLib.lean:604:25: This simp argument is unused:
+  h'
+
+Hint: Omit it from the simp argument list.
+  simp only [hEr, h, h̵'̵,̵ ̵and_self, if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+✔ [7907/7967] Built Erdos.Proofs.P1186Cert256Chk250 (83s)
+✔ [7908/7967] Built Erdos.Proofs.P1186Cert256Chk253 (109s)
+✔ [7909/7967] Built Erdos.Proofs.P1186Cert256Chk244 (100s)
+✔ [7910/7967] Built Erdos.Proofs.P1186Cert256Chk247 (114s)
+✔ [7911/7967] Built Erdos.Proofs.P1186Cert256Chk238 (74s)
+✔ [7912/7967] Built Erdos.Proofs.P1186Cert256Chk241 (85s)
+✔ [7913/7967] Built Erdos.Proofs.P1186Cert256Chk235 (57s)
+✔ [7914/7967] Built Erdos.Proofs.P1186Cert256Chk232 (55s)
+✔ [7915/7967] Built Erdos.Proofs.P1186Cert256Chk229 (47s)
+✔ [7916/7967] Built Erdos.Proofs.P1186Cert256Chk226 (46s)
+✔ [7917/7967] Built Erdos.Proofs.P1186Cert256Chk223 (38s)
+✔ [7918/7967] Built Erdos.Proofs.P1186Cert256Chk220 (37s)
+✔ [7919/7967] Built Erdos.Proofs.P1186Cert256Chk217 (36s)
+✔ [7920/7967] Built Erdos.Proofs.P1186Cert256Chk214 (37s)
+✔ [7921/7967] Built Erdos.Proofs.P1186Cert256Chk211 (34s)
+✔ [7922/7967] Built Erdos.Proofs.P1186Cert256Chk208 (33s)
+✔ [7923/7967] Built Erdos.Proofs.P1186Cert256Chk205 (33s)
+✔ [7924/7967] Built Erdos.Proofs.P1186Cert256Chk202 (33s)
+✔ [7925/7967] Built Erdos.Proofs.P1186Cert256Chk199 (40s)
+✔ [7926/7967] Built Erdos.Proofs.P1186Cert256Chk196 (41s)
+✔ [7927/7967] Built Erdos.Proofs.P1186Cert256Chk193 (50s)
+✔ [7928/7967] Built Erdos.Proofs.P1186Cert256Chk190 (48s)
+✔ [7929/7967] Built Erdos.Proofs.P1186Cert256Chk184 (38s)
+✔ [7930/7967] Built Erdos.Proofs.P1186Cert256Chk187 (41s)
+✔ [7931/7967] Built Erdos.Proofs.P1186Cert256Chk181 (38s)
+✔ [7932/7967] Built Erdos.Proofs.P1186Cert256Chk177 (50s)
+✔ [7933/7967] Built Erdos.Proofs.P1186Cert256Chk173 (57s)
+✔ [7934/7967] Built Erdos.Proofs.P1186Cert256Chk169 (55s)
+✔ [7935/7967] Built Erdos.Proofs.P1186Cert256Chk165 (47s)
+✔ [7936/7967] Built Erdos.Proofs.P1186Cert256Chk161 (47s)
+✔ [7937/7967] Built Erdos.Proofs.P1186Cert256Chk157 (42s)
+✔ [7938/7967] Built Erdos.Proofs.P1186Cert256Chk153 (42s)
+✔ [7939/7967] Built Erdos.Proofs.P1186Cert256Chk149 (56s)
+✔ [7940/7967] Built Erdos.Proofs.P1186Cert256Chk145 (53s)
+✔ [7941/7967] Built Erdos.Proofs.P1186Cert256Chk137 (85s)
+✔ [7942/7967] Built Erdos.Proofs.P1186Cert256Chk141 (95s)
+✔ [7943/7967] Built Erdos.Proofs.P1186Cert256Chk133 (55s)
+✔ [7944/7967] Built Erdos.Proofs.P1186Cert256Chk129 (58s)
+✔ [7945/7967] Built Erdos.Proofs.P1186Cert256Chk125 (33s)
+✔ [7946/7967] Built Erdos.Proofs.P1186Cert256Chk121 (30s)
+✔ [7947/7967] Built Erdos.Proofs.P1186Cert256Chk117 (27s)
+✔ [7948/7967] Built Erdos.Proofs.P1186Cert256Chk113 (26s)
+✔ [7949/7967] Built Erdos.Proofs.P1186Cert256Chk108 (29s)
+✔ [7950/7967] Built Erdos.Proofs.P1186Cert256Chk103 (28s)
+✔ [7951/7967] Built Erdos.Proofs.P1186Cert256Chk98 (26s)
+✔ [7952/7967] Built Erdos.Proofs.P1186Cert256Chk93 (25s)
+✔ [7953/7967] Built Erdos.Proofs.P1186Cert256Chk83 (24s)
+✔ [7954/7967] Built Erdos.Proofs.P1186Cert256Chk88 (25s)
+✔ [7955/7967] Built Erdos.Proofs.P1186Cert256Chk71 (25s)
+✔ [7956/7967] Built Erdos.Proofs.P1186Cert256Chk77 (26s)
+✔ [7957/7967] Built Erdos.Proofs.P1186Cert256Chk57 (25s)
+✔ [7958/7967] Built Erdos.Proofs.P1186Cert256Chk64 (27s)
+✔ [7959/7967] Built Erdos.Proofs.P1186Cert256Chk40 (24s)
+✔ [7960/7967] Built Erdos.Proofs.P1186Cert256Chk49 (25s)
+✔ [7961/7968] Built Erdos.Proofs.P1186Cert256Chk28 (27s)
+✔ [7962/7970] Built Erdos.Proofs.P1186Cert256Chk1 (30s)
+✔ [7963/7970] Built Erdos.Proofs.P1186M2Cert64Nrows (13s)
+✔ [7964/7971] Built Erdos.Proofs.P1186M2Cert64Cuts (13s)
+✔ [7965/7971] Built Erdos.Proofs.P1186M2Cert64Rows (13s)
+✔ [7966/7972] Built Erdos.Proofs.P1186Cert256 (14s)
+✔ [7967/7973] Built Erdos.Proofs.P1186M2Cert64AccTab (11s)
+✔ [7968/7975] Built Erdos.Proofs.P1186LowMain (11s)
+✔ [7969/7975] Built Erdos.Proofs.P1186M2Cert64Tab (13s)
+✔ [7970/7975] Built Erdos.Proofs.P1186M2Cert64Acc1 (20s)
+✔ [7971/7975] Built Erdos.Proofs.P1186M2Cert64Link33 (25s)
+✔ [7972/7977] Built Erdos.Proofs.P1186M2Cert64Chk1 (47s)
+✔ [7973/7978] Built Erdos.Proofs.P1186M2Cert64Link1 (23s)
+✔ [7974/7978] Built Erdos.Proofs.P1186M2Cert128Cuts (29s)
+✔ [7975/7980] Built Erdos.Proofs.P1186M2Cert64 (10s)
+✔ [7976/7981] Built Erdos.Proofs.P1186M2Cert128Nrows (28s)
+✔ [7977/7982] Built Erdos.Proofs.P1186M2Cert128AccTab (21s)
+✔ [7978/7983] Built Erdos.Proofs.P1186M2Cert128Rows (23s)
+✔ [7979/7983] Built Erdos.Proofs.P1186M2Cert128Acc1 (29s)
+✔ [7980/7984] Built Erdos.Proofs.P1186M2Cert128Acc4 (29s)
+✔ [7981/7985] Built Erdos.Proofs.P1186M2Cert128Tab (23s)
+✔ [7982/7986] Built Erdos.Proofs.P1186M2Cert128Acc7 (30s)
+✔ [7983/7987] Built Erdos.Proofs.P1186M2Cert128Link1 (20s)
+✔ [7984/7988] Built Erdos.Proofs.P1186M2Cert128Link33 (20s)
+✔ [7985/7989] Built Erdos.Proofs.P1186M2Cert128Link65 (21s)
+✔ [7986/7990] Built Erdos.Proofs.P1186M2Cert128Link97 (21s)
+✔ [7987/7991] Built Erdos.Proofs.P1186M2Cert128Chk1 (33s)
+✔ [7988/7992] Built Erdos.Proofs.P1186M2Cert128Chk41 (33s)
+✔ [7989/7993] Built Erdos.Proofs.P1186M2Cert128Chk59 (34s)
+✔ [7990/7994] Built Erdos.Proofs.P1186M2Cert128Chk74 (32s)
+✔ [7991/7996] Built Erdos.Proofs.P1186M2Cert128Chk87 (33s)
+✔ [7992/7996] Built Erdos.Proofs.P1186M2Cert128Chk99 (33s)
+✔ [7993/7996] Built Erdos.Proofs.P1186M2Cert128Chk123 (22s)
+✔ [7994/7998] Built Erdos.Proofs.P1186M2Cert128Chk111 (34s)
+✔ [7995/7999] Built Erdos.Proofs.P1186M2Cert256Cuts (52s)
+✔ [7996/7999] Built Erdos.Proofs.P1186M2Cert128 (12s)
+✔ [7997/8002] Built Erdos.Proofs.P1186M2Cert256Nrows (88s)
+✔ [7998/8003] Built Erdos.Proofs.P1186M2Cert256AccTab (105s)
+✔ [7999/8004] Built Erdos.Proofs.P1186M2Cert256Rows (139s)
+✔ [8000/8004] Built Erdos.Proofs.P1186M2Cert256Acc1 (104s)
+✔ [8001/8005] Built Erdos.Proofs.P1186M2Cert256Acc4 (103s)
+✔ [8002/8006] Built Erdos.Proofs.P1186M2Cert256Tab (48s)
+✔ [8003/8007] Built Erdos.Proofs.P1186M2Cert256Acc7 (98s)
+✔ [8004/8008] Built Erdos.Proofs.P1186M2Cert256Acc10 (116s)
+✔ [8005/8009] Built Erdos.Proofs.P1186M2Cert256Acc13 (114s)
+✔ [8006/8010] Built Erdos.Proofs.P1186M2Cert256Link1 (55s)
+✔ [8007/8011] Built Erdos.Proofs.P1186M2Cert256Link33 (60s)
+✔ [8008/8012] Built Erdos.Proofs.P1186M2Cert256Link65 (61s)
+✔ [8009/8013] Built Erdos.Proofs.P1186M2Cert256Link97 (58s)
+✔ [8010/8014] Built Erdos.Proofs.P1186M2Cert256Link129 (69s)
+✔ [8011/8015] Built Erdos.Proofs.P1186M2Cert256Link161 (66s)
+✔ [8012/8016] Built Erdos.Proofs.P1186M2Cert256Link193 (70s)
+✔ [8013/8017] Built Erdos.Proofs.P1186M2Cert256Link225 (68s)
+✔ [8014/8018] Built Erdos.Proofs.P1186M2Cert256Chk1 (52s)
+✔ [8015/8019] Built Erdos.Proofs.P1186M2Cert256Chk40 (57s)
+✔ [8016/8020] Built Erdos.Proofs.P1186M2Cert256Chk28 (61s)
+✔ [8017/8021] Built Erdos.Proofs.P1186M2Cert256Chk49 (50s)
+✔ [8018/8022] Built Erdos.Proofs.P1186M2Cert256Chk57 (52s)
+✔ [8019/8023] Built Erdos.Proofs.P1186M2Cert256Chk71 (33s)
+✔ [8020/8024] Built Erdos.Proofs.P1186M2Cert256Chk64 (37s)
+✔ [8021/8025] Built Erdos.Proofs.P1186M2Cert256Chk83 (34s)
+✔ [8022/8026] Built Erdos.Proofs.P1186M2Cert256Chk77 (37s)
+✔ [8023/8027] Built Erdos.Proofs.P1186M2Cert256Chk88 (34s)
+✔ [8024/8028] Built Erdos.Proofs.P1186M2Cert256Chk93 (35s)
+✔ [8025/8029] Built Erdos.Proofs.P1186M2Cert256Chk98 (34s)
+✔ [8026/8030] Built Erdos.Proofs.P1186M2Cert256Chk103 (35s)
+✔ [8027/8031] Built Erdos.Proofs.P1186M2Cert256Chk108 (37s)
+✔ [8028/8032] Built Erdos.Proofs.P1186M2Cert256Chk113 (32s)
+✔ [8029/8033] Built Erdos.Proofs.P1186M2Cert256Chk117 (33s)
+✔ [8030/8034] Built Erdos.Proofs.P1186M2Cert256Chk121 (33s)
+✔ [8031/8034] Built Erdos.Proofs.P1186M2Cert256Chk125 (34s)
+✔ [8032/8036] Built Erdos.Proofs.P1186M2Cert256Chk129 (35s)
+✔ [8033/8037] Built Erdos.Proofs.P1186M2Cert256Chk133 (35s)
+✔ [8034/8038] Built Erdos.Proofs.P1186M2Cert256Chk137 (35s)
+✔ [8035/8039] Built Erdos.Proofs.P1186M2Cert256Chk141 (39s)
+✔ [8036/8040] Built Erdos.Proofs.P1186M2Cert256Chk145 (40s)
+✔ [8037/8041] Built Erdos.Proofs.P1186M2Cert256Chk149 (39s)
+✔ [8038/8042] Built Erdos.Proofs.P1186M2Cert256Chk153 (38s)
+✔ [8039/8043] Built Erdos.Proofs.P1186M2Cert256Chk157 (39s)
+✔ [8040/8044] Built Erdos.Proofs.P1186M2Cert256Chk161 (39s)
+✔ [8041/8045] Built Erdos.Proofs.P1186M2Cert256Chk165 (42s)
+✔ [8042/8046] Built Erdos.Proofs.P1186M2Cert256Chk169 (41s)
+✔ [8043/8046] Built Erdos.Proofs.P1186M2Cert256Chk173 (41s)
+✔ [8044/8048] Built Erdos.Proofs.P1186M2Cert256Chk177 (40s)
+✔ [8045/8049] Built Erdos.Proofs.P1186M2Cert256Chk181 (32s)
+✔ [8046/8050] Built Erdos.Proofs.P1186M2Cert256Chk184 (32s)
+✔ [8047/8050] Built Erdos.Proofs.P1186M2Cert256Chk187 (31s)
+✔ [8048/8052] Built Erdos.Proofs.P1186M2Cert256Chk190 (32s)
+✔ [8049/8053] Built Erdos.Proofs.P1186M2Cert256Chk193 (31s)
+✔ [8050/8054] Built Erdos.Proofs.P1186M2Cert256Chk196 (31s)
+✔ [8051/8055] Built Erdos.Proofs.P1186M2Cert256Chk199 (31s)
+✔ [8052/8056] Built Erdos.Proofs.P1186M2Cert256Chk202 (30s)
+✔ [8053/8057] Built Erdos.Proofs.P1186M2Cert256Chk205 (31s)
+✔ [8054/8058] Built Erdos.Proofs.P1186M2Cert256Chk208 (31s)
+✔ [8055/8059] Built Erdos.Proofs.P1186M2Cert256Chk211 (31s)
+✔ [8056/8060] Built Erdos.Proofs.P1186M2Cert256Chk214 (31s)
+✔ [8057/8061] Built Erdos.Proofs.P1186M2Cert256Chk217 (30s)
+✔ [8058/8062] Built Erdos.Proofs.P1186M2Cert256Chk220 (30s)
+✔ [8059/8063] Built Erdos.Proofs.P1186M2Cert256Chk223 (32s)
+✔ [8060/8064] Built Erdos.Proofs.P1186M2Cert256Chk226 (31s)
+✔ [8061/8065] Built Erdos.Proofs.P1186M2Cert256Chk229 (34s)
+✔ [8062/8066] Built Erdos.Proofs.P1186M2Cert256Chk232 (34s)
+✔ [8063/8068] Built Erdos.Proofs.P1186M2Cert256Chk235 (33s)
+✔ [8064/8068] Built Erdos.Proofs.P1186M2Cert256Chk238 (32s)
+✔ [8065/8069] Built Erdos.Proofs.P1186M2Cert256Chk241 (34s)
+✔ [8066/8069] Built Erdos.Proofs.P1186M2Cert256Chk244 (34s)
+✔ [8067/8073] Built Erdos.Proofs.P1186M2Cert256Chk247 (43s)
+✔ [8068/8073] Built Erdos.Proofs.P1186M2Cert256Chk250 (43s)
+✔ [8069/8076] Built Erdos.Proofs.P1186M2Cert256Chk256 (20s)
+✔ [8070/8077] Built Erdos.Proofs.P1186ExData (12s)
+✔ [8071/8077] Built Erdos.Proofs.P1186M2Cert256Chk253 (36s)
+✔ [8072/8077] Built Erdos.Proofs.P1186Ex (15s)
+✔ [8073/8078] Built Erdos.Proofs.P1186M2Cert256 (13s)
+ℹ [8074/8078] Built Erdos.Proofs.P1186ExGlue (24s)
+info: Erdos/Proofs/P1186ExGlue.lean:425:0: 'Erdos1186Ex.Wm_eq_Qd' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186ExGlue.lean:426:0: 'Erdos1186Ex.expansion' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186ExGlue.lean:427:0: 'Erdos1186Ex.combine' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186ExGlue.lean:428:0: 'Erdos1186Ex.wm_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186ExGlue.lean:429:0: 'Erdos1186Ex.lower_of_parts' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186ExGlue.lean:430:0: 'Erdos1186Ex.delta3_eq_of_parts' depends on axioms: [propext, Classical.choice, Quot.sound]
+ℹ [8075/8078] Built Erdos.Proofs.P1186ExStar (28s)
+info: Erdos/Proofs/P1186ExStar.lean:141:0: 'Erdos1186Ex.starT_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186ExStar.lean:142:0: 'Erdos1186Ex.Wm_sstar_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186ExStar.lean:143:0: 'Erdos1186Ex.starOK' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [8076/8083] Built Erdos.Proofs.P1186M2Main (12s)
+✔ [8077/8084] Built Erdos.Proofs.P1186ExBathLib (18s)
+✔ [8078/8085] Built Erdos.Proofs.P1186ExBathFU (15s)
+✔ [8079/8095] Built Erdos.Proofs.P1186ExBathTab (11s)
+✔ [8080/8095] Built Erdos.Proofs.P1186ExBathH2 (17s)
+✔ [8081/8095] Built Erdos.Proofs.P1186ExBathChk (11s)
+ℹ [8082/8095] Built Erdos.Proofs.P1186ExPair (28s)
+info: Erdos/Proofs/P1186ExPair.lean:609:0: 'Erdos1186Ex.Pair.Npq_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186ExPair.lean:610:0: 'Erdos1186Ex.Pair.pair_term' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186ExPair.lean:611:0: 'Erdos1186Ex.pairOK_of_WF' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186ExPair.lean:612:0: 'Erdos1186Ex.pairOK24' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Erdos/Proofs/P1186ExPair.lean:613:0: 'Erdos1186Ex.pairOK8' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [8083/8095] Built Erdos.Proofs.P1186ExBathC8d (17s)
+✔ [8084/8095] Built Erdos.Proofs.P1186ExBathC8c (17s)
+✔ [8085/8095] Built Erdos.Proofs.P1186ExBathC8b (17s)
+✔ [8086/8095] Built Erdos.Proofs.P1186ExBathC8a (16s)
+✔ [8087/8095] Built Erdos.Proofs.P1186ExBathC24e (15s)
+✔ [8088/8095] Built Erdos.Proofs.P1186ExBathC24d (15s)
+✔ [8089/8095] Built Erdos.Proofs.P1186ExBathC24c (16s)
+✔ [8090/8095] Built Erdos.Proofs.P1186ExBathC24b (15s)
+✔ [8091/8102] Built Erdos.Proofs.P1186ExBathC24a (13s)
+✔ [8092/8103] Built Erdos.Proofs.P1186ExBathCell (21s)
+✔ [8093/8104] Built Erdos.Proofs.P1186ExCertLib (16s)
+✔ [8094/8105] Built Erdos.Proofs.P1186ExBath (10s)
+✔ [8095/8109] Built Erdos.Proofs.P1186ExMain (9.6s)
+✔ [8096/8186] Built Erdos.Proofs.P1186ExCertAlg (14s)
+✔ [8098/8228] Built Erdos.Proofs.P1186ExCertChk (10s)
+✔ [8099/8228] Built Erdos.Proofs.P1186ExCertTri (14s)
+✔ [8100/8228] Built Erdos.Proofs.P1186ExCertPk (10s)
+✔ [8101/8228] Built Erdos.Proofs.P1186ExCert4Data (84s)
+✔ [8102/8228] Built Erdos.Proofs.P1186ExCert5Data (93s)
+✔ [8103/8228] Built Erdos.Proofs.P1186ExCert2Data (68s)
+✔ [8104/8228] Built Erdos.Proofs.P1186ExCert3Data (106s)
+✔ [8105/8228] Built Erdos.Proofs.P1186ExCert1Data (83s)
+✔ [8106/8228] Built Erdos.Proofs.P1186ExCert4M (65s)
+✔ [8107/8228] Built Erdos.Proofs.P1186ExCert4D14 (38s)
+✔ [8108/8228] Built Erdos.Proofs.P1186ExCert4D13 (50s)
+✔ [8109/8228] Built Erdos.Proofs.P1186ExCert4D12 (49s)
+✔ [8110/8228] Built Erdos.Proofs.P1186ExCert4D11 (37s)
+✔ [8111/8228] Built Erdos.Proofs.P1186ExCert4D10 (37s)
+✔ [8112/8228] Built Erdos.Proofs.P1186ExCert4D9 (31s)
+✔ [8113/8228] Built Erdos.Proofs.P1186ExCert4D8 (31s)
+✔ [8114/8228] Built Erdos.Proofs.P1186ExCert4D7 (33s)
+✔ [8115/8228] Built Erdos.Proofs.P1186ExCert4D6 (31s)
+✔ [8116/8228] Built Erdos.Proofs.P1186ExCert4D5 (32s)
+✔ [8117/8228] Built Erdos.Proofs.P1186ExCert4D4 (31s)
+✔ [8118/8228] Built Erdos.Proofs.P1186ExCert4D3 (32s)
+✔ [8119/8228] Built Erdos.Proofs.P1186ExCert4D2 (31s)
+✔ [8120/8228] Built Erdos.Proofs.P1186ExCert4D1 (31s)
+✔ [8121/8228] Built Erdos.Proofs.P1186ExCert4D0 (32s)
+✔ [8122/8228] Built Erdos.Proofs.P1186ExCert4P4 (51s)
+✔ [8123/8228] Built Erdos.Proofs.P1186ExCert4P3 (56s)
+✔ [8124/8228] Built Erdos.Proofs.P1186ExCert4P2 (56s)
+✔ [8125/8228] Built Erdos.Proofs.P1186ExCert4P1 (61s)
+✔ [8126/8228] Built Erdos.Proofs.P1186ExCert4P0 (60s)
+✔ [8127/8228] Built Erdos.Proofs.P1186ExCert5T0 (16s)
+✔ [8128/8228] Built Erdos.Proofs.P1186ExCert5Q0 (92s)
+✔ [8129/8228] Built Erdos.Proofs.P1186ExCert5M (54s)
+✔ [8130/8228] Built Erdos.Proofs.P1186ExCert5D14 (25s)
+✔ [8131/8228] Built Erdos.Proofs.P1186ExCert5D13 (31s)
+✔ [8132/8228] Built Erdos.Proofs.P1186ExCert5D12 (32s)
+✔ [8133/8228] Built Erdos.Proofs.P1186ExCert5D11 (30s)
+✔ [8134/8228] Built Erdos.Proofs.P1186ExCert5D10 (29s)
+✔ [8135/8228] Built Erdos.Proofs.P1186ExCert5D9 (29s)
+✔ [8136/8228] Built Erdos.Proofs.P1186ExCert5D8 (28s)
+✔ [8137/8228] Built Erdos.Proofs.P1186ExCert5D7 (30s)
+✔ [8138/8228] Built Erdos.Proofs.P1186ExCert5D6 (31s)
+✔ [8139/8228] Built Erdos.Proofs.P1186ExCert5D5 (33s)
+✔ [8140/8228] Built Erdos.Proofs.P1186ExCert5D4 (31s)
+✔ [8141/8228] Built Erdos.Proofs.P1186ExCert5D3 (30s)
+✔ [8142/8228] Built Erdos.Proofs.P1186ExCert5D2 (30s)
+✔ [8143/8228] Built Erdos.Proofs.P1186ExCert5D1 (30s)
+✔ [8144/8228] Built Erdos.Proofs.P1186ExCert5D0 (31s)
+✔ [8145/8228] Built Erdos.Proofs.P1186ExCert5P9 (34s)
+✔ [8146/8228] Built Erdos.Proofs.P1186ExCert5P8 (38s)
+✔ [8147/8228] Built Erdos.Proofs.P1186ExCert5P7 (38s)
+✔ [8148/8228] Built Erdos.Proofs.P1186ExCert5P6 (38s)
+✔ [8149/8228] Built Erdos.Proofs.P1186ExCert5P5 (39s)
+✔ [8150/8228] Built Erdos.Proofs.P1186ExCert5P4 (38s)
+✔ [8151/8228] Built Erdos.Proofs.P1186ExCert5P3 (39s)
+✔ [8152/8228] Built Erdos.Proofs.P1186ExCert5P2 (41s)
+✔ [8153/8228] Built Erdos.Proofs.P1186ExCert5P1 (40s)
+✔ [8154/8228] Built Erdos.Proofs.P1186ExCert5P0 (41s)
+✔ [8155/8228] Built Erdos.Proofs.P1186ExCert2M (47s)
+✔ [8156/8228] Built Erdos.Proofs.P1186ExCert2D10 (22s)
+✔ [8157/8228] Built Erdos.Proofs.P1186ExCert2D9 (33s)
+✔ [8158/8228] Built Erdos.Proofs.P1186ExCert2D8 (33s)
+✔ [8159/8228] Built Erdos.Proofs.P1186ExCert2D7 (32s)
+✔ [8160/8228] Built Erdos.Proofs.P1186ExCert2D6 (31s)
+✔ [8161/8228] Built Erdos.Proofs.P1186ExCert2D5 (30s)
+✔ [8162/8228] Built Erdos.Proofs.P1186ExCert2D4 (31s)
+✔ [8163/8228] Built Erdos.Proofs.P1186ExCert2D3 (29s)
+✔ [8164/8228] Built Erdos.Proofs.P1186ExCert2D2 (30s)
+✔ [8165/8228] Built Erdos.Proofs.P1186ExCert2D1 (29s)
+✔ [8166/8228] Built Erdos.Proofs.P1186ExCert2D0 (30s)
+✔ [8167/8228] Built Erdos.Proofs.P1186ExCert2P4 (27s)
+✔ [8168/8228] Built Erdos.Proofs.P1186ExCert2P3 (54s)
+✔ [8169/8228] Built Erdos.Proofs.P1186ExCert2P2 (55s)
+✔ [8170/8228] Built Erdos.Proofs.P1186ExCert2P1 (54s)
+✔ [8171/8228] Built Erdos.Proofs.P1186ExCert2P0 (51s)
+✔ [8172/8228] Built Erdos.Proofs.P1186ExCert3T4 (12s)
+✔ [8173/8228] Built Erdos.Proofs.P1186ExCert3Q4 (62s)
+✔ [8174/8228] Built Erdos.Proofs.P1186ExCert3T3 (15s)
+✔ [8175/8228] Built Erdos.Proofs.P1186ExCert3Q3 (76s)
+✔ [8176/8228] Built Erdos.Proofs.P1186ExCert3T2 (13s)
+✔ [8177/8228] Built Erdos.Proofs.P1186ExCert3Q2 (69s)
+✔ [8178/8228] Built Erdos.Proofs.P1186ExCert3T1 (15s)
+✔ [8179/8228] Built Erdos.Proofs.P1186ExCert3Q1 (65s)
+✔ [8180/8228] Built Erdos.Proofs.P1186ExCert3T0 (13s)
+✔ [8181/8228] Built Erdos.Proofs.P1186ExCert3Q0 (60s)
+✔ [8182/8228] Built Erdos.Proofs.P1186ExCert3D10 (17s)
+✔ [8183/8228] Built Erdos.Proofs.P1186ExCert3M (38s)
+✔ [8184/8228] Built Erdos.Proofs.P1186ExCert3D9 (28s)
+✔ [8185/8228] Built Erdos.Proofs.P1186ExCert3D8 (27s)
+✔ [8186/8228] Built Erdos.Proofs.P1186ExCert3D7 (27s)
+✔ [8187/8228] Built Erdos.Proofs.P1186ExCert3D6 (27s)
+✔ [8188/8228] Built Erdos.Proofs.P1186ExCert3D5 (26s)
+✔ [8189/8228] Built Erdos.Proofs.P1186ExCert3D4 (26s)
+✔ [8190/8228] Built Erdos.Proofs.P1186ExCert3D3 (26s)
+✔ [8191/8228] Built Erdos.Proofs.P1186ExCert3D2 (26s)
+✔ [8192/8228] Built Erdos.Proofs.P1186ExCert3D1 (24s)
+✔ [8193/8228] Built Erdos.Proofs.P1186ExCert3D0 (24s)
+✔ [8194/8228] Built Erdos.Proofs.P1186ExCert3P8 (24s)
+✔ [8195/8228] Built Erdos.Proofs.P1186ExCert3P7 (30s)
+✔ [8196/8228] Built Erdos.Proofs.P1186ExCert3P6 (29s)
+✔ [8197/8228] Built Erdos.Proofs.P1186ExCert3P5 (30s)
+✔ [8198/8228] Built Erdos.Proofs.P1186ExCert3P4 (30s)
+✔ [8199/8228] Built Erdos.Proofs.P1186ExCert3P3 (31s)
+✔ [8200/8228] Built Erdos.Proofs.P1186ExCert3P2 (29s)
+✔ [8201/8228] Built Erdos.Proofs.P1186ExCert3P1 (28s)
+✔ [8202/8228] Built Erdos.Proofs.P1186ExCert3P0 (30s)
+✔ [8203/8228] Built Erdos.Proofs.P1186ExCert1M (37s)
+✔ [8204/8228] Built Erdos.Proofs.P1186ExCert1D10 (17s)
+✔ [8205/8228] Built Erdos.Proofs.P1186ExCert1D8 (30s)
+✔ [8206/8228] Built Erdos.Proofs.P1186ExCert1D9 (30s)
+✔ [8207/8228] Built Erdos.Proofs.P1186ExCert1D6 (30s)
+✔ [8208/8228] Built Erdos.Proofs.P1186ExCert1D7 (31s)
+✔ [8209/8228] Built Erdos.Proofs.P1186ExCert1D5 (30s)
+✔ [8210/8228] Built Erdos.Proofs.P1186ExCert1D4 (30s)
+✔ [8211/8228] Built Erdos.Proofs.P1186ExCert1D3 (29s)
+✔ [8212/8228] Built Erdos.Proofs.P1186ExCert1D2 (29s)
+✔ [8213/8228] Built Erdos.Proofs.P1186ExCert1D1 (27s)
+✔ [8214/8228] Built Erdos.Proofs.P1186ExCert1D0 (27s)
+✔ [8215/8228] Built Erdos.Proofs.P1186ExCert1P4 (23s)
+✔ [8216/8228] Built Erdos.Proofs.P1186ExCert1P3 (48s)
+✔ [8217/8228] Built Erdos.Proofs.P1186ExCert1P2 (51s)
+✔ [8218/8228] Built Erdos.Proofs.P1186ExCert1P1 (51s)
+✔ [8219/8228] Built Erdos.Proofs.P1186ExCert4 (9.6s)
+✔ [8220/8228] Built Erdos.Proofs.P1186ExCert1P0 (46s)
+✔ [8221/8228] Built Erdos.Proofs.P1186ExCert5 (12s)
+✔ [8222/8228] Built Erdos.Proofs.P1186ExCert2 (10s)
+✔ [8223/8228] Built Erdos.Proofs.P1186ExCert3 (12s)
+✔ [8224/8228] Built Erdos.Proofs.P1186ExCert1 (9.9s)
+ℹ [8225/8228] Built Erdos.Proofs.P1186ExFinal (10s)
+info: Erdos/Proofs/P1186ExFinal.lean:28:0: 'Erdos1186Day.erdos_1186.variants.prs_conjecture' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [8226/8228] Built Erdos.Proofs.P1186ExCertCtl (39s)
+✔ [8227/8228] Built Erdos1186 (9.3s)
+Build completed successfully (8228 jobs).
+
+real	147m12.597s
+user	0m0.000s
+sys	0m0.015s
+exit=0
