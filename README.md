@@ -111,7 +111,7 @@ The Lean sources are left unchanged, so that they stay identical to the research
 
 | Path | Contents |
 |---|---|
-| `manuscript/` | `main.tex`, `refs.bib` and the compiled `main.pdf`: the current draft, copied unchanged from the paper's workspace (see [docs/PROVENANCE.md](docs/PROVENANCE.md) for what in it still refers to the paper package) |
+| `manuscript/` | `main.tex` (the manuscript as one file, bibliography inlined; it compiles without BibTeX), `refs.bib` (the BibTeX source of that bibliography) and the compiled `main.pdf`, copied from the paper's workspace (see [docs/PROVENANCE.md](docs/PROVENANCE.md)) |
 | `lean/` | A standalone Lake project: the 342 proof files under `Erdos/Proofs/`, byte-identical to the research repository's, and `Erdos1186.lean`, which imports the modules of Theorems A, B and C and the negative controls (its closure is all 342 files) |
 | `verification/` | `run_all.sh`, which repeats every check; `Headline.lean`; `AxiomAudit.lean`; the upstream pin (`make_upstream_pin.py`, `upstream/`); `source_scan.py` with `lean_modules.sha256`; `fidelity_check.py`; `regen_check.py`; `number_checks.py`; `make_manifest.py`; `build_closure.py` (an alternative module-by-module build with plain `lean`); `logs/` from the last run; `earlier-runs/` (the logs of the paper package's runs, for reference) |
 | `computation/` | Certificates (JSON), the generators of the Lean certificate modules, the exact verifiers, the certificate builders and the small-case checks; see [computation/README.md](computation/README.md), which says which files are proofs, which are exact cross-checks and which are untrusted search code |

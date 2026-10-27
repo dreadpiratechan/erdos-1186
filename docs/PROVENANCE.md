@@ -81,13 +81,15 @@ All dates are 2026; times are Pacific Daylight Time, from the research repositor
   new. `upstream/` holds the upstream Formal Conjectures file verbatim (commit `c83a94d785d0`, 22 October 2026) and its
   licence. `earlier-runs/2026-10-26-package/` holds the logs of the checks made on the research package before this
   repository existed, with two local folder names replaced by `<research-repository>` and `<paper-workspace>`.
-- **`manuscript/`.** `main.tex`, `refs.bib` and `main.pdf` are copies of the manuscript workspace's `paper.tex`,
-  `references.bib` and `paper.pdf` as committed there at 15:55 PDT on 26 October 2026 (commit `aa39422`; SHA-256 of the
-  three files: `931fc819…`, `326ce7b7…`, `9e4c23b3…`), copied unchanged. They will be replaced by the final text if it
-  changes. They still refer to the paper package's layout (`reproducibility/...`, `checks/...`), its statement on code
-  availability says "available from the author on request", and `main.tex` loads the bibliography as `references`
-  (`\bibliography{references}`), so compiling it here needs `refs.bib` renamed or that line changed; no `.bbl` file is
-  included.
+- **`manuscript/`.** `main.tex` is the manuscript as a single file, as prepared for aiXiv: the workspace's `paper.tex`
+  at its commit `5aa454f` (26 October 2026, about 22:15 PDT) with the bibliography inlined from its BibTeX output and
+  whole-line TeX comments removed, so that it compiles alone, without BibTeX. `main.pdf` is compiled from it (its
+  extracted text is identical to that of the workspace's `paper.pdf`), and `refs.bib` is the workspace's
+  `references.bib`, the source of the inlined bibliography. SHA-256: `main.tex` `8b0d48f5…`, `refs.bib` `d517951d…`,
+  `main.pdf` `8f4a87d0…` (the workspace's `paper.tex`: `8fd186dc…`). This text cites this repository and its run of
+  record (Section 7.8 of the paper) and uses its paths; `earlier-runs/` in it stands for
+  `verification/earlier-runs/2026-10-26-package/`. Its statement on code availability still says "not yet public;
+  available from the author on request", which is to change when the repository is published.
 
 ## The claim behind Theorem C
 

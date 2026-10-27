@@ -64,7 +64,7 @@ by the Lean kernel and the certificates also by exact-arithmetic scripts. The pr
 formalised (Lean proves a different, weaker integer argument) and were only checked by symbolic and exhaustive small-case computations and by AI readers; no human mathematician has checked or refereed them.
 The Lean theorems do not depend on those prose proofs. Reading them as bounds on $\delta_3$ depends on the
 Lean definitions being the ones of the Formal Conjectures source, which we checked mechanically (Section~\ref{sec:formal}); whether those definitions express the intended constant is the Formal Conjectures authors' claim, not ours.
-Novelty statements are provisional (``not found in the searches described''). Section~\ref{sec:claim} reports an unrefereed claim by another author and its Lean formalisation (Theorem~C); the argument is not a result of this paper; its author states that they read and checked it line by line, and the claim's report records an outside audit (auditor not named) and a correction of 20 October 2026; we know of no other reading of it apart from that audit and the project's AI reviewers (Section~\ref{sec:claim}), and no human has read the Lean text. The Lean files of Theorem~C were built from source twice, with \texttt{lake} in the research repository (the $131$ certificate-side modules after the merge of the branch that contains them, the other $22$ as their parts were merged) and here from the shipped sources with plain \texttt{lean}; every build succeeded, and the axioms of Theorem~C and its parts are the three standard ones (Section~\ref{sec:claimchecks}).}}
+Novelty statements are provisional (``not found in the searches described''). Section~\ref{sec:claim} reports an unrefereed claim by another author and its Lean formalisation (Theorem~C); the argument is not a result of this paper; its author states that they read and checked it line by line, and the claim's report records an outside audit (auditor not named) and a correction of 20 October 2026; we know of no other reading of it apart from that audit and the project's AI reviewers (Section~\ref{sec:claim}), and no human has read the Lean text. The Lean modules were built from source three times: with \texttt{lake} in the research repository (for Theorem~C, the $131$ certificate-side modules after the merge of the branch that contains them, the other $22$ as their parts were merged), with plain \texttt{lean} from the paper's package (Sections~\ref{sec:rebuild} and~\ref{sec:claimchecks}), and with \texttt{lake} from a fresh clone of the release repository, where \texttt{lean4checker} also replayed all $342$ modules (Section~\ref{sec:record}); every build and every replay succeeded, and an audit of every constant of the $342$ modules found only the three standard axioms.}}
 \end{center}
 
 \section{Introduction}\label{sec:intro}
@@ -127,7 +127,7 @@ Appendix~\ref{app:repro} is the reproducibility guide and Appendix~\ref{app:ai} 
 Following \cite{FC}: for $k\ge2$, $n\ge1$ and $c\colon\N\to\{\text{true},\text{false}\}$, $\mono_k(n,c)$ is the cardinality of
 $\{(a,d)\in[1,n]^2:\ a+(k-1)d\le n,\ c(a+id)=c(a)\ \text{for all}\ i<k\}$; $\mmin^{(k)}(n)=\min_c\mono_k(n,c)$ and
 $\delta_k=\liminf_{n\to\infty}\mmin^{(k)}(n)/n^2$. (Only $c|_{[1,n]}$ matters.) We write $\mono=\mono_3$, $\mmin=\mmin^{(3)}$, $\delta=\delta_3$ and use the sign
-$s_x=\pm1$ of $c(x)$. The definition agrees with OEIS A121385 \cite{OEIS121385} for all $n\le26$ (exhaustive search, \texttt{checks/oeis\_small.py}).
+$s_x=\pm1$ of $c(x)$. The definition agrees with OEIS A121385 \cite{OEIS121385} for all $n\le26$ (exhaustive search, \texttt{computation/small-cases/oeis\_small.py}).
 
 \begin{lemma}[monotonicity]\label{lem:mono}
 $\mmin(n)\le\mmin(n+1)$. Hence if $L\ge1$ and $\mmin(Lm)\ge\beta L^2m^2-aLm-b$ for all $m\ge1$, then $\delta\ge\beta$.
@@ -240,7 +240,7 @@ H(x,y)&:=\tfrac18\bigl(1+4y-4y^2-2x+2xy-x^2\bigr),\\
 \Gamma(x,y)-H(x,y)&=\tfrac18(1-y)(2x-y+3)\ \ge\ 0.
 \end{align*}
 \end{proof}
-The symbolic identities in the proof are re-verified by \texttt{checks/lemma2\_symbolic.py} (sympy, with a rational-grid check of the piecewise form of $g$). The weights $(\frac18,\frac38)$ cannot be exchanged: at $y=\pm1$ one has $E_{\max}=(1-x^2)/8=\Gamma(x,\pm1)$ exactly, while for $x=-1$ and $y\to1$ the maximum of $E$ is $\Gamma-(1-y)^2/8$, so the second weight $\frac38$ is also needed; with the weights swapped the inequality fails (at $(x,y)=(-1,0.9)$ the maximum of $E$ is $0.07$, the swapped bound is $0.02375$).
+The symbolic identities in the proof are re-verified by \texttt{computation/small-cases/lemma2\_symbolic.py} (sympy, with a rational-grid check of the piecewise form of $g$). The weights $(\frac18,\frac38)$ cannot be exchanged: at $y=\pm1$ one has $E_{\max}=(1-x^2)/8=\Gamma(x,\pm1)$ exactly, while for $x=-1$ and $y\to1$ the maximum of $E$ is $\Gamma-(1-y)^2/8$, so the second weight $\frac38$ is also needed; with the weights swapped the inequality fails (at $(x,y)=(-1,0.9)$ the maximum of $E$ is $0.07$, the swapped bound is $0.02375$).
 
 \begin{corollary}[cut cells]\label{cor:cut}
 With $A=\{u\le2v\}$ and $B=\{2v\ge u+1\}$ in $[0,1]^2$: $\iint_A\varphi\psi-\frac34xy\ge-\Gamma(x,y)$ and $\iint_B\varphi\psi-\frac14xy\ge-\Gamma(x,y)$; the cut cells at the other end of $R_n$ are the images of these under $(u,v)\mapsto(1-u,1-v)$.
@@ -273,7 +273,7 @@ The cells $m=L-1$ and $m=L$ are reflected copies of $m=0$ and $m=-1$ (Lemma~\ref
 \end{proof}
 \begin{remark}[what Lean proves]\label{rem:discrete}
 The Lean development does not use integrals. It proves the integer inequality \texttt{lemA}, which is Lemma~\ref{lem:disc} for even $w$ with the weaker additive error $4w+16$, for integer-valued $s,t$, by the two cases of the proof of Lemma~\ref{lem:cut} carried out in integer arithmetic, together with the reflections (\texttt{DC\_lower}, \texttt{DC\_upper}).
-(For fixed $w$ the left side of Lemma~\ref{lem:disc} minus its right side is convex in $s$ and in $t$ separately, so its maximum over the cube is attained at vertices; an exhaustive check over $s,t\in\{\pm1\}^w$ for $w=2,4,\dots,10$ (\texttt{checks/disc\_cutcell\_check.py}) finds a largest excess of exactly $4$ in each case. This shows how weak $4w$ and $4w+16$ are, and is not used in any proof.)
+(For fixed $w$ the left side of Lemma~\ref{lem:disc} minus its right side is convex in $s$ and in $t$ separately, so its maximum over the cube is attained at vertices; an exhaustive check over $s,t\in\{\pm1\}^w$ for $w=2,4,\dots,10$ (\texttt{computation/small-cases/disc\_cutcell\_check.py}) finds a largest excess of exactly $4$ in each case. This shows how weak $4w$ and $4w+16$ are, and is not used in any proof.)
 Theorem~B depends on the Lean statement only; Lemma~\ref{lem:disc} is the human-readable argument for the same estimate.
 \end{remark}
 
@@ -386,13 +386,13 @@ Module(s) & Content\\
 \subsection{Statement fidelity}
 The definitions of \lean{monoCount}, \lean{minMonoCount} and \lean{delta} are copied verbatim from the pinned upstream file (Formal Conjectures, commit c83a94d785d0, 2026-10-22), differing only in the namespace
 (\lean{Erdos1186Day} for \lean{Erdos1186}). The Lean theorem \lean{erdos\_1186.variants.prs\_bounds} has the identical statement $\tfrac{1675}{32768}\le\delta\,3\wedge\delta\,3\le\tfrac{117}{2192}$. This is checked mechanically, after whitespace normalisation, by
-\texttt{checks/fidelity\_check.py} (log ends \texttt{RESULT: ALL OK}), which also records that at the pin the upstream statements \lean{prs\_bounds}, \lean{prs\_conjecture}, \lean{probabilistic}, \lean{van\_der\_waerden} and \lean{erdos\_1186} are \texttt{sorry}. The same script, given \texttt{P1186ExFinal.lean} as a fifth argument, checks that Theorem~C has the name, the type and the absence of binders of the upstream statement \lean{erdos\_1186.variants.prs\_conjecture}, and the namespace of the development (\lean{Erdos1186Day}, as for the definitions) (Section~\ref{sec:claimchecks}; the log was regenerated and again ends \texttt{RESULT: ALL OK}).
-The upstream docstring says each progression $(a,d)$, $d\ge1$, is counted once, which is what the definition does; it matches the first $26$ terms of A121385 by exhaustive computation (\texttt{checks/oeis\_small.py}).
+\texttt{verification/fidelity\_check.py} (log ends \texttt{RESULT: ALL OK}), which also records that at the pin the upstream statements \lean{prs\_bounds}, \lean{prs\_conjecture}, \lean{probabilistic}, \lean{van\_der\_waerden} and \lean{erdos\_1186} are \texttt{sorry}. The same script, given \texttt{P1186ExFinal.lean} as a fifth argument, checks that Theorem~C has the name, the type and the absence of binders of the upstream statement \lean{erdos\_1186.variants.prs\_conjecture}, and the namespace of the development (\lean{Erdos1186Day}, as for the definitions) (Section~\ref{sec:claimchecks}; the log was regenerated and again ends \texttt{RESULT: ALL OK}).
+The upstream docstring says each progression $(a,d)$, $d\ge1$, is counted once, which is what the definition does; it matches the first $26$ terms of A121385 by exhaustive computation (\texttt{computation/small-cases/oeis\_small.py}).
 The statement of Theorem~B, $\tfrac{14324135}{268435456}\le\delta\,3$, is a statement about the same \lean{delta}. (Some comments in the shipped Lean files give decimals rounded to the nearest digit, for example $0.0533616$; the rational in the statement is what is proved, and the paper's decimals of certified lower bounds are rounded down.)
 
 \subsection{Axioms}
-For every theorem cited above, and for the instances \lean{cert128} and \lean{cert256}, \lean{\#print axioms} prints exactly \lean{[propext, Classical.choice, Quot.sound]}. The audit file is \texttt{reproducibility/lean/Audit1186.lean}; its output was obtained twice: in the research repository (\texttt{lean\_axiom\_audit.log}, which does not print \lean{cert128}, \lean{cert256}) and on the shipped tree built from scratch (\texttt{lean\_axiom\_audit\_shipped\_tree.log}, Section~\ref{sec:rebuild}). The audit of Theorem~C and its parts is the separate file \texttt{reproducibility/lean/AuditClaim1186.lean} (Section~\ref{sec:claimchecks}). No \texttt{sorry},
-\texttt{native\_decide} or additional axiom is used; a source scan lists every line of the closure containing a forbidden word (\texttt{checks/closure\_scan.py}), and the authoritative test is the \lean{\#print axioms} output.
+For every theorem cited above, and for the instances \lean{cert128} and \lean{cert256}, \lean{\#print axioms} prints exactly \lean{[propext, Classical.choice, Quot.sound]}. The audit file is \texttt{earlier-runs/Audit1186.lean} (\texttt{earlier-runs/} stands for \texttt{verification/earlier-runs/2026-10-26-package/} of the release repository, Appendix~\ref{app:repro}); its output was obtained twice: in the research repository (\texttt{lean\_axiom\_audit.log}, which does not print \lean{cert128}, \lean{cert256}) and on the shipped tree built from scratch (\texttt{lean\_axiom\_audit\_shipped\_tree.log}, Section~\ref{sec:rebuild}). The audit of Theorem~C and its parts is the separate file \texttt{earlier-runs/AuditClaim1186.lean} (Section~\ref{sec:claimchecks}). In the release repository, \texttt{verification/Headline.lean} prints the statements and axioms of the $36$ theorems this paper uses, and \texttt{verification/AxiomAudit.lean} the axioms of every constant of the $342$ modules (Section~\ref{sec:record}). No \texttt{sorry},
+\texttt{native\_decide} or additional axiom is used; a source scan of the package listed every line of the closure containing a forbidden word (log \texttt{earlier-runs/closure\_scan\_shipped\_tree.log}), the release repository's \texttt{verification/source\_scan.py}, which removes comments, docstrings and strings first, finds none in the $342$ modules, and the authoritative test is the \lean{\#print axioms} output.
 
 \subsection{Kernel checks}
 All certificate checks use \texttt{decide +kernel}. For the cut certificates the kernel checks: (1) every cut is well formed, $dn\ge0$, $mn\ge0$, and $48\sum mn<2^{30}$; (2) an accumulation pass that packs the cut part of every row of $N$ into one integer in base $2^{32}$;
@@ -400,26 +400,36 @@ All certificate checks use \texttt{decide +kernel}. For the cut certificates the
 forces the identity digit by digit; (4) the dominance condition of the approximate Cholesky factorisation, row by row. The generic soundness theorems (\lean{Cert.link\_sound}, \lean{Cert.psd}, \lean{cubeLB\_of\_cert}) are hand-written and contain no numbers.
 Technical constraints shaped the layout: one \texttt{def} per row (a single list literal for all rows times out), chunks of $400$ ($L=128$) or $800$ ($L=256$) cuts (a \texttt{List.foldl} over more than about $1000$ items exceeds the kernel recursion depth), and about $90{,}000$ multiply-adds per module
 because memory is not returned between declarations. The gated build times reported by the formalising agents were $282$\,s ($L=64$), $762$\,s ($L=128$) and $5426$\,s ($L=256$, $10.2$ MB of generated source); these runs were under a $9$\,GB memory limit, and peak memory was not measured.
-\textbf{Negative controls.} According to the formalising lane's report (no log of this is shipped; the script is, and the controls were not re-run for this package), seven corruptions of an $L=32$ certificate are each rejected by the kernel at the expected check: one entry of a Cholesky row; one entry of $N$; one multiplier $mn$ raised by one with the accumulators and $N$ untouched; an intermediate accumulator;
-every $dn$ scaled by $0.99$ with $N$ untouched; one sign of one cut flipped (product $-1$); and a mutually consistent corruption (one multiplier raised and all accumulators recomputed), which shows that the link between $N$ and the cut list is what binds them (\texttt{reproducibility/scripts/lean\_cert2\_controls.py}).
+\textbf{Negative controls.} According to the formalising lane's report (no log of this is shipped; the script is, and the controls were not re-run, nor in the run of record of Section~\ref{sec:record}), seven corruptions of an $L=32$ certificate are each rejected by the kernel at the expected check: one entry of a Cholesky row; one entry of $N$; one multiplier $mn$ raised by one with the accumulators and $N$ untouched; an intermediate accumulator;
+every $dn$ scaled by $0.99$ with $N$ untouched; one sign of one cut flipped (product $-1$); and a mutually consistent corruption (one multiplier raised and all accumulators recomputed), which shows that the link between $N$ and the cut list is what binds them (\texttt{computation/theorem-b/lean\_cert2\_controls.py}).
 
 \subsection{What the formalisation does not cover}
 (i) The continuum Lemma~\ref{lem:cut} and the transfer to the discrete Lemma~\ref{lem:disc} (the written proof of the discrete estimate; what Lean proves is the integer inequality \lean{lemA}, with a weaker error term, directly). (ii) Everything in Section~\ref{sec:evidence}: the certificates at $L=192$ and $L=512$ are checked by Python only. (iii) The search for the certificates (floating point) is untrusted by design.
 (iv) The mathematics of the claim of Section~\ref{sec:claim} as a text: Theorem~C is a Lean theorem whose statement is the upstream one, and the lanes' interface was audited against the claim's TeX source by an AI agent only (Sections~\ref{sec:thmC} and~\ref{sec:claimlimits}); Theorems~A and~B do not depend on any of it. (v) That $\delta_3$ as defined is the constant the problem intends: this is the statement of the Formal Conjectures authors, and we only checked that it is the one we proved.
 
 \subsection{Independent checks outside Lean}
-Python scripts (\texttt{reproducibility/scripts/}) re-derive the kernel $K4$ from the closed form of Lemma~\ref{lem:cells} and compare it with brute-force cell counts of $R_n$ ($w=2,4,6$); check each cut at all eight cube vertices; and prove positive definiteness of $N$ by Bareiss elimination ($L\le256$) or by exact diagonal dominance after an integer congruence ($L=128,256,512$).
-The logs are in \texttt{reproducibility/logs/} and agree with the Lean statements for $L=64,128,256$. \texttt{checks/disc\_cutcell\_check.py} checks Lemma~\ref{lem:disc} exhaustively on sign vectors for $w\le10$ (largest excess $4$; the lemma allows $4w$).
+Python scripts (\texttt{computation/theorem-b/}) re-derive the kernel $K4$ from the closed form of Lemma~\ref{lem:cells} and compare it with brute-force cell counts of $R_n$ ($w=2,4,6$); check each cut at all eight cube vertices; and prove positive definiteness of $N$ by Bareiss elimination ($L\le256$) or by exact diagonal dominance after an integer congruence ($L=128,256,512$).
+The logs are in \texttt{computation/theorem-b/logs/} and agree with the Lean statements for $L=64,128,256$. \texttt{computation/small-cases/disc\_cutcell\_check.py} checks Lemma~\ref{lem:disc} exhaustively on sign vectors for $w\le10$ (largest excess $4$; the lemma allows $4w$).
 The research log of the project reports further checks that are \emph{not} shipped or re-run here: exhaustive enumeration of all colourings for tiny $(L,w)$, an exact worst-case check of the discrete cut-cell lemma for $w\le24$, and annealing of real colourings against the cover inequality.
 \textbf{Review.} No human has reviewed the prose of Sections~\ref{sec:model2}--\ref{sec:cert}; the AI reviews of it are listed in Appendix~\ref{app:ai}.
 
 \subsection{Standalone rebuild}\label{sec:rebuild}
-On 26 October 2026 the $189$ modules of \texttt{reproducibility/lean} were compiled from the shipped sources, in dependency order, by plain \texttt{lean} 4.27.0 (not \texttt{lake}; \texttt{reproducibility/scripts/build\_closure.py}, which passes the options of \texttt{lakefile.toml}), two jobs at a time, against the compiled Mathlib of the research repository's checkout.
+On 26 October 2026 the $189$ modules of the package's Lean tree (by hash the same sources as \texttt{lean/} of the release repository) were compiled from the shipped sources, in dependency order, by plain \texttt{lean} 4.27.0 (not \texttt{lake}; \texttt{verification/build\_closure.py}, which passes the options of \texttt{lakefile.toml}), two jobs at a time, against the compiled Mathlib of the research repository's checkout.
 Its \texttt{lake-manifest.json} lists the same package revisions as the shipped one (Mathlib \texttt{a3a10db0e9d6}). All $189$ compilations returned $0$; none was skipped as up to date. The run took $47$ minutes of wall-clock time ($08{:}42$--$09{:}29$ PDT) and $92$ minutes of summed compile time, on a machine shared with other jobs; the $76$ modules of the $L=256$ certificate took $51$ of those $92$ minutes.
 The axiom audit of Section~\ref{sec:formal} was then re-run with \texttt{LEAN\_PATH} set to the rebuilt tree followed by the Mathlib packages only (no oleans of the research repository's own modules): exit code $0$, $20$ \lean{\#print axioms} lines, all \lean{[propext, Classical.choice, Quot.sound]}.
-Logs: \texttt{reproducibility/logs/standalone\_build\_log.jsonl} (return code and seconds per module), \texttt{standalone\_build\_stdout.txt}, \texttt{lean\_axiom\_audit\_shipped\_tree.log}.
+Logs: \texttt{earlier-runs/standalone\_build\_log.jsonl} (return code and seconds per module), \texttt{standalone\_build\_stdout.txt}, \texttt{lean\_axiom\_audit\_shipped\_tree.log}.
 The $153$ further modules of Theorem~C were rebuilt in the same way on the same day (Section~\ref{sec:claimchecks}).
-What this does \emph{not} show: that \texttt{lake build Erdos} works on a machine without Mathlib (it needs the network and was not run); that Mathlib itself was rebuilt (it was not); or a replay by an independent kernel checker (not done: attempted for Theorem~C only, and the two attempts failed, Section~\ref{sec:claimchecks}). The compile options include \texttt{-Dwarn.sorry=false}, as in the project file, so the compile output is not a test for \texttt{sorry}; the axiom audit is.
+This run did not use \texttt{lake} and did not rebuild Mathlib. The run of record of the release repository (Section~\ref{sec:record}) adds a clean \texttt{lake} build of all $342$ modules and a kernel replay, again against a compiled Mathlib that was copied, not rebuilt or downloaded. The package's compile options include \texttt{-Dwarn.sorry=false}, as in its project file, so its compile output is not a test for \texttt{sorry}; the axiom audit is. (The release repository does not set this option.)
+
+\subsection{Run of record of the release repository}\label{sec:record}
+The release repository \cite{Artifact} (Appendix~\ref{app:repro}) holds the $342$ modules of Theorems~A--C, byte-identical to the research repository's at its merge commit 202f974, in a Lake project whose root module imports all of them, with a script, \texttt{verification/run\_all.sh}, that repeats every formal and computational check from a clean build. On 26 October 2026 the script was run on a fresh clone of the repository's first commit (f68f061), with two jobs, on the same shared machine and through the same job gate, against a copy of the compiled Mathlib (a3a10db) of the research repository's checkout and without network access ($15{:}59$--$22{:}05$ PDT, $6$ hours $6$ minutes). It ended \texttt{RESULT: PASS}:
+\begin{itemize}
+\item \textbf{Build.} \texttt{lake build} of all $342$ modules from scratch: \texttt{Build completed successfully (8228 jobs)}, in $147$ minutes, with no \texttt{sorry} warning and $11$ linter warnings ($10$ unused \texttt{simp} arguments, one deprecated lemma name).
+\item \textbf{Axioms.} \texttt{verification/Headline.lean}: $36$ \lean{\#print axioms} lines, all \lean{[propext, Classical.choice, Quot.sound]}. \texttt{verification/AxiomAudit.lean}: every one of the $4978$ constants ($2356$ theorems) of the $342$ modules depends only on these three axioms. The upstream pin, which copies the upstream statements of \lean{prs\_bounds}, \lean{prs\_conjecture}, \lean{van\_der\_waerden} and \lean{probabilistic} verbatim from \cite{FC} at c83a94d, proves them from ours and proves the definitions equal by \lean{rfl}: $7$ axiom lines, all standard.
+\item \textbf{Kernel replay.} \texttt{lean4checker} v4.27.0 \cite{lean4checker} replayed each of the $342$ modules in its own process, two at a time: all $342$ exited with code $0$ ($3$ hours $18$ minutes; the longest module took $442$ seconds).
+\item \textbf{Exact arithmetic and small cases.} All pass: the source scan, the statement-text check of Section~\ref{sec:formal}, $14$ checks of the numbers quoted in this paper, the regeneration of the $302$ generated modules byte for byte from the JSON data, the certificates of Theorem~B ($18$ runs) and of the five ranges of Theorem~C (with Bareiss elimination), the value at the $12$-block colouring, a comparison, at sample points, of the Lean definitions of the Theorem~C interface with the Python model that made its certificates, the definition for $n\le26$ against A121385, the cut-cell check and the symbolic lemma.
+\end{itemize}
+The largest resident memory of a single process was $8.7$ GB for \texttt{lean} and $8.1$ GB for \texttt{lean4checker}, close to the gate's $9$ GB cap. Not re-run: the negative controls of Theorem~B. One line of the logs, in which a script printed the local path of the \texttt{lean4checker} executable, was replaced after the run by what the corrected script prints; the logs (\texttt{verification/logs/}, summary in \texttt{SUMMARY.txt}) are otherwise as written. The repository's continuous-integration workflow, with one job and without the kernel replay, has never run.
 
 \section{Evidence beyond the formal results}\label{sec:evidence}
 All items in this section are computations \emph{outside} Lean; none is used in Theorems~A and~B. The certified bounds are exact (rational certificates checked in exact integer arithmetic by Python) and are printed rounded \emph{down}; everything that comes from a floating-point run is marked \emph{(float)}.
@@ -466,7 +476,7 @@ $1024$ & $363254$ & $0.0532212$ & $0.0532540$ & (float only)\\
 \end{table}
 
 \paragraph{Diagonal certificates on the sharper cover.}
-$0.0522076,\,0.0521973,\,0.0521658,\,0.0521505$ at $L=50,64,128,256$ (exact certificates, rounded down; the $L=64,128,256$ values are in \texttt{reproducibility/logs/verify\_model2\_diag.log}, the $L=50$ value is from the research log and not shipped). Floating-point optima of the same diagonal relaxation (float) rise to a flat maximum near $L=50$ and then decrease slowly ($0.052198$, $0.052166$, $0.052151$, $0.052145$ at $L=64,128,256,512$), so the diagonal relaxation of this cover does not approach $117/2192$ at any size we computed.
+$0.0522076,\,0.0521973,\,0.0521658,\,0.0521505$ at $L=50,64,128,256$ (exact certificates, rounded down; the $L=64,128,256$ values are in \texttt{computation/theorem-b/logs/verify\_model2\_diag.log}, the $L=50$ value is from the research log and not shipped). Floating-point optima of the same diagonal relaxation (float) rise to a flat maximum near $L=50$ and then decrease slowly ($0.052198$, $0.052166$, $0.052151$, $0.052145$ at $L=64,128,256,512$), so the diagonal relaxation of this cover does not approach $117/2192$ at any size we computed.
 
 \section{Prior figures and novelty}\label{sec:novelty}
 Table~\ref{tab:prior} lists the figures for $\delta_3$ that we know from other sources, and the main results of this paper, with their status (the evidence tables of Section~\ref{sec:evidence} list the other certified values of this work). The searches behind it (web and arXiv searches during October 2026 for improvements of either bound, and the reading of the sources recorded in \texttt{references.bib}) found no improvement of \eqref{eq:prs} in print, no formal proof
@@ -542,18 +552,18 @@ Module(s) & Content\\
 \texttt{P1186ExCertCtl} & negative controls (Section~\ref{sec:claimchecks})\\
 \bottomrule
 \end{tabular}
-\caption{The $153$ Lean modules behind Theorem~C, beyond the $189$ of Theorems~A and~B ($342$ in all). The closure of \texttt{P1186ExFinal} has $163$ modules: these $152$ (all but \texttt{P1186ExCertCtl}) and $11$ shared with the closure of Theorem~A or~B (named in \texttt{reproducibility/README.md}, section~7). All of this is in \texttt{reproducibility/lean/}.}\label{tab:claimmodules}
+\caption{The $153$ Lean modules behind Theorem~C, beyond the $189$ of Theorems~A and~B ($342$ in all). The closure of \texttt{P1186ExFinal} has $163$ modules: these $152$ (all but \texttt{P1186ExCertCtl}) and $11$ shared with the closure of Theorem~A or~B (\texttt{P1186}, \texttt{P1186Cert128Lib}, \texttt{P1186Low}, \texttt{P1186LowA}, \texttt{P1186M2}, \texttt{P1186M2CertLib}, \texttt{P1186M2Low}, \texttt{P1186M2LowA}, \texttt{P1186M2LowB}, \texttt{P1186Prs}, \texttt{P1186Tab}). All $342$ are in \texttt{lean/Erdos/Proofs/} of the release repository.}\label{tab:claimmodules}
 \end{table}
 
-\subsection{Checks made for this package}\label{sec:claimchecks}
+\subsection{Checks of Theorem~C}\label{sec:claimchecks}
 \begin{itemize}
 \item \textbf{Which sources.} The $153$ modules were copied, as LF text, from the git blobs of commit f726409 of the branch \texttt{agent/n3c} of the research repository, the tip of the formalising lane at the time (the modules \texttt{P1186ExFinal} and \texttt{P1186ExCertCtl} were added by the commit just before, 97b5bfa; f726409 changed the import list and notes; the two later commits, b451885 and a9b4235, differ from it in two documentation files and in no Lean source, as we checked by a read-only \texttt{git diff} at 14:18 PDT). The $11$ modules shared with Theorems~A and~B are byte-identical in the two commits that supply the package.
-\item \textbf{Statement.} \texttt{checks/fidelity\_check.py}, given \texttt{P1186ExFinal.lean} as a fifth argument, checks that Theorem~C has the name, the type and the absence of binders of the upstream statement, and the namespace of the development (\lean{Erdos1186Day}, as for the definitions); the log ends \texttt{RESULT: ALL OK}. The definitions are those of Section~\ref{sec:formal}.
-\item \textbf{Source scan.} The closure of \texttt{P1186ExFinal} ($163$ modules, $8{,}943{,}323$ bytes) has $11$ source lines containing one of the forbidden words (\texttt{checks/closure\_scan.py}); all are comments saying ``no \texttt{native\_decide}''. \texttt{P1186ExCertCtl} has none.
+\item \textbf{Statement.} \texttt{verification/fidelity\_check.py}, given \texttt{P1186ExFinal.lean} as a fifth argument, checks that Theorem~C has the name, the type and the absence of binders of the upstream statement, and the namespace of the development (\lean{Erdos1186Day}, as for the definitions); the log ends \texttt{RESULT: ALL OK}. The definitions are those of Section~\ref{sec:formal}.
+\item \textbf{Source scan.} The closure of \texttt{P1186ExFinal} ($163$ modules, $8{,}943{,}323$ bytes) has $11$ source lines containing one of the forbidden words (log \texttt{earlier-runs/closure\_scan\_claim\_tree.log}); all are comments saying ``no \texttt{native\_decide}''. \texttt{P1186ExCertCtl} has none.
 \item \textbf{Standalone rebuild.} On 26 October 2026 the same script as in Section~\ref{sec:rebuild} (plain \texttt{lean} $4.27.0$, not \texttt{lake}; two jobs; the same compiled Mathlib) was run on the roots of Theorems~A, B and~C: $341$ modules, of which the $189$ already compiled in the earlier run (Section~\ref{sec:rebuild}, same sources by hash) were skipped as up to date and $152$ were compiled from the shipped sources. All $152$ compilations returned $0$. The run took $87$ minutes of wall-clock time ($12{:}36$--$14{:}04$ PDT) and $174$ minutes of summed compile time, on a machine shared with other jobs, including the coordinator's own gated build in the research repository. The last module built was \texttt{P1186ExFinal}. The $153$rd module, \texttt{P1186ExCertCtl}, was compiled separately (below). Logs: \texttt{standalone\_build\_claim\_log.jsonl}, \texttt{standalone\_build\_claim\_stdout.txt}.
-\item \textbf{Axioms.} \texttt{reproducibility/lean/AuditClaim1186.lean} was run with \texttt{LEAN\_PATH} set to the rebuilt tree followed by the Mathlib packages only: exit code $0$; it prints the definitions of \lean{monoCount}, \lean{minMonoCount} and $\delta$, the statement of Theorem~C and of \lean{delta3\_eq\_of\_regions}, and $15$ \lean{\#print axioms} lines, for Theorem~C, \lean{delta3\_eq\_of\_regions}, \lean{delta3\_eq\_of\_parts}, \lean{lower\_of\_parts}, \lean{starOK}, \lean{bathOK24}, \lean{bathOK8}, \lean{pairOK\_of\_WF}, \lean{pairOK24}, \lean{pairOK8} and the five \lean{region} theorems; all give \lean{[propext, Classical.choice, Quot.sound]} (log \texttt{lean\_axiom\_audit\_claim\_tree.log}). The compile options include \texttt{-Dwarn.sorry=false}; this audit, not the compile, is the test for \texttt{sorry}.
+\item \textbf{Axioms.} \texttt{earlier-runs/AuditClaim1186.lean} was run with \texttt{LEAN\_PATH} set to the rebuilt tree followed by the Mathlib packages only: exit code $0$; it prints the definitions of \lean{monoCount}, \lean{minMonoCount} and $\delta$, the statement of Theorem~C and of \lean{delta3\_eq\_of\_regions}, and $15$ \lean{\#print axioms} lines, for Theorem~C, \lean{delta3\_eq\_of\_regions}, \lean{delta3\_eq\_of\_parts}, \lean{lower\_of\_parts}, \lean{starOK}, \lean{bathOK24}, \lean{bathOK8}, \lean{pairOK\_of\_WF}, \lean{pairOK24}, \lean{pairOK8} and the five \lean{region} theorems; all give \lean{[propext, Classical.choice, Quot.sound]} (log \texttt{lean\_axiom\_audit\_claim\_tree.log}). The compile options include \texttt{-Dwarn.sorry=false}; this audit, not the compile, is the test for \texttt{sorry}.
 \item \textbf{Negative controls.} \texttt{P1186ExCertCtl} (region~5, one of the two ranges with triangle cuts, grid $G_8$) states, as kernel-checked \texttt{example}s, that the checkers accept the true packed constant, a linear entry and a pair entry, and reject the constant plus one, a linear entry plus $2^{7W}$ ($W$ the digit width of the packing) and the quadratic table with $1$ added to each entry; that a dominance row is accepted for the true Cholesky data and rejected when one Cholesky entry is changed by $10^{12}$; and that the exact group sums of the constant, linear and quadratic parts differ from the claimed values plus one. (Changing that Cholesky entry by $1$ is \emph{not} rejected: the row has margin, and a certificate needs only some valid factor.) These controls cover region~5 only; \texttt{P1186ExBath.lean} contains nine further corruption examples for the bathtub check (report of that lane, not re-examined), and none was shipped for ranges~1--4. We compiled \texttt{P1186ExCertCtl} from the shipped source (one job, $74$ seconds, return code $0$; \texttt{lean\_build\_controls.log}), so the kernel accepted all $11$ examples.
-\item \textbf{Kernel replay: not done.} Two attempts to replay the closure of Theorem~C ($163$ modules; the replay script listed $164$) with \texttt{lean4checker} (built from tag v4.27.0 in the tools of another package of this project; chunks of eight modules, through the machine's job gate) did not get past the first chunk. The first stopped after $415$ seconds with ``failed to read file'' on a Mathlib \texttt{.olean} that exists on disk (probably memory pressure on the shared machine; not diagnosed); the second was killed after $64$ seconds (exit code 137; most likely the $9$ GB memory cap of the machine's job gate). We claim no independent replay for Theorem~C, nor for Theorems~A and~B. Logs: \texttt{lean4checker\_claim\_attempt1\_failed.log}, \texttt{lean4checker\_claim\_attempt2\_killed.log}.
+\item \textbf{Kernel replay.} Two first attempts, on the package, to replay the closure of Theorem~C ($163$ modules; the replay script listed $164$) with \texttt{lean4checker} (built from tag v4.27.0 in the tools of another package of this project; chunks of eight modules, through the machine's job gate) did not get past the first chunk: the first stopped after $415$ seconds with ``failed to read file'' on a Mathlib \texttt{.olean} that exists on disk (not diagnosed), and the second was killed after $64$ seconds (exit code 137; most likely the gate's $9$ GB memory cap). Logs: \texttt{lean4checker\_claim\_attempt1\_failed.log}, \texttt{lean4checker\_claim\_attempt2\_killed.log}. The run of record of the release repository (Section~\ref{sec:record}) then replayed all $342$ modules, those of Theorems~A and~B included, one process per module and two at a time: all $342$ exited with code $0$.
 \item \textbf{Build in the research repository.} The branch was merged into the research repository's master branch on 26 October 2026 (merge commit 202f974; its Lean sources for Theorems~A--C are byte-identical to the shipped ones). Before the build, the $124$ generated certificate modules were regenerated from the integer data with the generator and compared with the merged files: all identical. Then all $131$ certificate-side modules were built from source with \texttt{lake}, one gated \texttt{lake build} per module in dependency order ($13{:}24$--$15{:}13$ PDT, $111$ minutes of summed build time; every build successful); the $22$ other modules of the closure (interface, star, bathtub, pair, assembly) had been built from source with \texttt{lake} in the master branch as their parts were merged. There \lean{\#print axioms} gives \lean{[propext, Classical.choice, Quot.sound]} for Theorem~C, the five region theorems and \lean{delta3\_eq\_of\_regions}, and the repository's verification tool reports $861$ proved declarations for the problem and none with \texttt{sorry}.
 \end{itemize}
 The formalising lane's own report (not re-run here) adds: gated builds of every module; a Python re-derivation of every identity of the generated tables for all five ranges; and its own listing of the \lean{\#print axioms} of the five region theorems and of Theorem~C, all standard.
@@ -582,13 +592,14 @@ The formalisation was done on 26 October 2026, in parts. By about 09:30 PDT (com
 
 \appendix
 \section{Reproducibility}\label{app:repro}
-\textbf{Package layout.} \texttt{reproducibility/lean/} is a standalone Lake project (Lean v4.27.0, Mathlib v4.27.0) containing $342$ modules, with \texttt{MANIFEST.sha256}: the $189$ modules of Theorems~A and~B, copied from the research repository at its commit 47bee1f, and the $153$ further modules of Theorem~C, copied from commit f726409 of its branch \texttt{agent/n3c} (LF line endings in both).
-\texttt{reproducibility/scripts/} holds the Python verifiers and the data (JSON certificates for $L\le512$), \texttt{reproducibility/logs/} the logs, \texttt{checks/} the fidelity, closure and small-case checks.
+\textbf{Release repository.} The Lean sources, the certificates, the scripts and the logs form the release repository \cite{Artifact}, version 1.0.0.
+\texttt{lean/} is a standalone Lake project (Lean v4.27.0, Mathlib a3a10db, tag v4.27.0) with the $342$ modules under \texttt{Erdos/Proofs/}, byte-identical to the research repository's at 202f974 (the paper's package took the $189$ modules of Theorems~A and~B from its commit 47bee1f and the $153$ of Theorem~C from commit f726409 of the branch \texttt{agent/n3c}, Section~\ref{sec:claimchecks}), and a root module \texttt{Erdos1186.lean} whose import closure is all $342$.
+\texttt{verification/} holds \texttt{run\_all.sh}, \texttt{Headline.lean}, \texttt{AxiomAudit.lean}, the upstream pin (\texttt{make\_upstream\_pin.py} and the pinned upstream file), \texttt{source\_scan.py}, \texttt{fidelity\_check.py}, \texttt{regen\_check.py}, \texttt{number\_checks.py}, \texttt{build\_closure.py} (the module-by-module build with plain \texttt{lean} of Section~\ref{sec:rebuild}), the logs of the run of record (\texttt{logs/}) and the files and logs of the earlier runs on the paper's package (\texttt{earlier-runs/2026-10-26-package/}, written \texttt{earlier-runs/} in the text; the logs named without a directory in Sections~\ref{sec:rebuild} and~\ref{sec:claimchecks} are there).
+\texttt{computation/} holds the certificates (JSON), their generators and exact verifiers for Theorem~B (\texttt{theorem-b/}) and Theorem~C (\texttt{theorem-c/}), and the small-case checks (\texttt{small-cases/}); \texttt{docs/} has the provenance, a guide for a human checker, the literature search and the internal reviews; \texttt{MANIFEST.sha256} lists the SHA-256 of every file.
 
-\textbf{Commands.} In \texttt{reproducibility/lean}: \texttt{lake exe cache get} then \texttt{lake build Erdos} builds everything (hours; not run for this package, whose tree was compiled with plain \texttt{lean}, Section~\ref{sec:rebuild}); \texttt{lake env lean Audit1186.lean} prints the statements and axioms of Theorems~A and~B, and \texttt{lake env lean AuditClaim1186.lean} those of Theorem~C and its parts. \texttt{bash reproducibility/run\_checks.sh quick} (about $3$ minutes) or \texttt{full} (adds $L=512$; about $13$ minutes in all) re-runs the Python verifications.
-\texttt{python3 checks/fidelity\_check.py <upstream 1186.lean> <P1186.lean> <P1186LowMain.lean> <P1186M2Main.lean> <P1186ExFinal.lean>}, \texttt{python3 checks/oeis\_small.py 26} and \texttt{python3 checks/disc\_cutcell\_check.py} (\texttt{py} on Windows) re-run the fidelity, small-case and cut-cell checks. The standalone rebuild of Section~\ref{sec:rebuild} uses \texttt{reproducibility/scripts/build\_closure.py} (instructions in \texttt{reproducibility/README.md}).
+\textbf{Commands.} From the repository root, \texttt{FETCH\_CACHE=1 JOBS=2 bash verification/run\_all.sh} downloads Mathlib and its build cache, builds the $342$ modules from scratch, runs every check of Section~\ref{sec:record} and writes \texttt{verification/logs/SUMMARY.txt}; with \texttt{LEAN4CHECKER} set to a \texttt{lean4checker} v4.27.0 executable it also replays every module. It needs about $9$ GB of memory per job and several hours. \texttt{bash computation/theorem-b/run\_checks.sh quick} (about $3$ minutes) or \texttt{full} (adds $L=512$; about $13$ minutes in all) re-runs the Python verifications of the certificates of Theorem~B and of Section~\ref{sec:evidence} alone; the repository's README describes the other scripts.
 
-\textbf{Code and data availability.} The Lean sources (with \texttt{MANIFEST.sha256}), the JSON certificates, the scripts and the logs are available from the author on request.
+\textbf{Code and data availability.} The release repository (code under the Apache License 2.0, text and data under CC BY 4.0) is not yet public; it is available from the author on request.
 
 \section{Statement on the use of AI}\label{app:ai}
 The mathematical content of Sections~\ref{sec:model2}--\ref{sec:evidence} (the sharper cover, the cut-cell lemma, the choice and certification of the relaxation, the certificates), the Lean formalisation, the scripts and the text of this manuscript were produced by AI systems (Claude models from Anthropic, running as
@@ -599,5 +610,110 @@ The project's records attribute the mathematics of Theorem~B, all the formal pro
 The author takes full responsibility for the content of this paper, including the accuracy of this statement, and for correcting or withdrawing any result that is found to be wrong.
 
 \bibliographystyle{amsplain}
-\bibliography{references}
+\providecommand{\bysame}{\leavevmode\hbox to3em{\hrulefill}\thinspace}
+\providecommand{\MR}{\relax\ifhmode\unskip\space\fi MR }
+\providecommand{\MRhref}[2]{%
+  \href{http://www.ams.org/mathscinet-getitem?mr=#1}{#2}
+}
+\providecommand{\href}[2]{#2}
+\begin{thebibliography}{10}
+
+\bibitem{EP1186}
+Thomas~F. Bloom, \emph{Erd{\H o}s problem 1186},
+  \url{https://www.erdosproblems.com/1186}, last edited 8 April 2026, accessed
+  26 October 2026.
+
+\bibitem{OEIS121385}
+Steve Butler, \emph{A121385: Minimal number of monochromatic three-term
+  arithmetic progressions that a two-coloring of $\{1,\dots,n\}$ can contain},
+  The On-Line Encyclopedia of Integer Sequences,
+  \url{https://oeis.org/A121385}, 2006.
+
+\bibitem{BCG10}
+Steve Butler, Kevin~P. Costello, and Ron Graham, \emph{Finding patterns
+  avoiding many monochromatic constellations}, Experiment. Math. \textbf{19}
+  (2010), no.~4, 399--411.
+
+\bibitem{BGL14}
+Steve Butler, Ron Graham, and Linyuan Lu, \emph{Unrolling residues to avoid
+  progressions}, Math. Mag. \textbf{87} (2014), no.~2, 83--94.
+
+\bibitem{DVWW25}
+Jes{\'u}s~A. De~Loera, Denae Ventura, Liuyue Wang, and William~J. Wesley,
+  \emph{Optimization tools for computing colorings of $[1,\dots,n]$ with few
+  monochromatic solutions on 3-variable linear equations}, Discrete Appl. Math.
+  \textbf{373} (2025), 159--178, arXiv:2410.21651.
+
+\bibitem{Lean4}
+Leonardo de~Moura and Sebastian Ullrich, \emph{The {L}ean 4 theorem prover and
+  programming language}, Automated Deduction -- CADE 28, Lecture Notes in
+  Comput. Sci., vol. 12699, 2021, pp.~625--635.
+
+\bibitem{Er80}
+Paul Erd{\H o}s, \emph{A survey of problems in combinatorial number theory},
+  Ann. Discrete Math. \textbf{6} (1980), 89--115.
+
+\bibitem{GKW23}
+Torin Greenwood, Jonathan Kariv, and Noah Williams, \emph{From discrete to
+  continuous: Monochromatic 3-term arithmetic progressions}, Math. Comp.
+  \textbf{93} (2024), no.~350, 2959--2983, arXiv:2301.00336.
+
+\bibitem{lean4checker}
+{Lean FRO}, \emph{lean4checker},
+  \url{https://github.com/leanprover/lean4checker}, Tag \texttt{v4.27.0}.
+
+\bibitem{Padberg89}
+Manfred Padberg, \emph{The {B}oolean quadric polytope: some characteristics,
+  facets and relatives}, Math. Programming \textbf{45} (1989), 139--172.
+
+\bibitem{PRS08}
+Pablo~A. Parrilo, Aaron Robertson, and Dan Saracino, \emph{On the asymptotic
+  minimum number of monochromatic 3-term arithmetic progressions}, J. Combin.
+  Theory Ser. A \textbf{115} (2008), no.~1, 185--192, arXiv:math/0609532.
+
+\bibitem{Shor87}
+N.~Z. Shor, \emph{Quadratic optimization problems}, Izv. Akad. Nauk SSSR Tekhn.
+  Kibernet. (1987), no.~1, 128--139, English translation: Soviet J. Comput.
+  Systems Sci. 25 (1987), 1--11.
+
+\bibitem{Sjoland14}
+Erik Sj{\"o}land, \emph{Enumeration of monochromatic three term arithmetic
+  progressions in two-colorings of any finite group}, arXiv:1408.1088v3, 2014.
+
+\bibitem{Artifact}
+Chandler Snively, \emph{Erd{\H{o}}s {P}roblem 1186, $k=3$: {L}ean
+  formalisation, verification scripts and computations}, 2026, Release v1.0.0,
+  prepared 26 October 2026; not yet public, available from the author on
+  request.
+
+\bibitem{FC}
+{The Formal Conjectures Authors}, \emph{Formal conjectures},
+  \url{https://github.com/google-deepmind/formal-conjectures}, file
+  \texttt{FormalConjectures/ErdosProblems/1186.lean}, commit
+  c83a94d785d0fb3b9b9a2a94e8ffff8cce76a346 (2026-10-22).
+
+\bibitem{Mathlib}
+{The mathlib Community}, \emph{The {L}ean mathematical library}, Proceedings of
+  the 9th ACM SIGPLAN International Conference on Certified Programs and Proofs
+  (CPP 2020), 2020, pp.~367--381.
+
+\bibitem{Toledo26}
+Carlos Toledo, \emph{The twelve-block colouring is optimal: $\delta_3 =
+  117/2192$}, Submitted to
+  \url{https://www.erdosproblems.com/forum/thread/1186/proof-claims} on
+  2026-10-05 (user carlos\_toledo); PDF at
+  \url{https://carlostoledo.co/paper/delta3.pdf}; certificates and records at
+  \url{https://carlostoledo.co/reports/delta3.html}; source at
+  \url{https://github.com/carlostoledo1891/cert-machine}; archive
+  doi:10.5281/zenodo.23171167 (the software record cert-machine v2026.10, as
+  given in the claim; later archived versions doi:10.5281/zenodo.23446020 and
+  doi:10.5281/zenodo.23551746); accessed 2026-10-26, 2026, Unrefereed proof
+  claim, draft v0.2, October 2026.
+
+\bibitem{YangMao26}
+Gang Yang and Yaping Mao, \emph{Complete resolution of the
+  {B}utler--{C}ostello--{G}raham conjecture on monochromatic constellations},
+  arXiv:2604.02115, 2026.
+
+\end{thebibliography}
 \end{document}

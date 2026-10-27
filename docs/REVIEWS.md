@@ -147,9 +147,41 @@ misreading of the claim that they share.
 
 ## 7. Audits of 26 October (coordinator)
 
-*Placeholder: the coordinating agent will add here, before release, its audits of this repository and of the final
-manuscript, the fourth AI referee of the manuscript (on the near-final text) and the audit of the references, both of
-which the paper's statement on AI use mentions.*
+The coordinating agent of the research project (Claude Opus 5.5) made or commissioned these checks after those of
+Sections 1-6. All of them were done by AI agents.
+
+**Merge of the Theorem C branch (13:24-15:20 PDT).** Before merging the formalising branch into the research
+repository's master (merge commit `202f974`), the coordinator regenerated the 124 generated certificate modules from
+the integer data and compared them with the branch's files: all identical. It then built the 131 certificate-side
+modules from source, one gated `lake build` per module in dependency order (all successful), and printed the axioms of
+Theorem C, the five region theorems and `delta3_eq_of_regions`: all standard. The repository's verification tool
+reported 861 proved declarations for the problem and none with `sorry`.
+
+**Audit of the references and of the statements on prior work (about 14:30-15:10 PDT).** A fresh agent checked every
+bibliography entry and every statement about prior work against the sources (web pages read as text). It found nothing
+blocking, one major problem (a paper cited as an arXiv preprint had appeared in Mathematics of Computation) and 14
+minor ones: missing DOIs, an issue number it could not confirm, two attributions without a cited source, an ambiguous
+sentence on the problem database's formalisation status, a related 2025 paper not mentioned, and the wording about the
+claim's outside audit. The journal reference, the DOIs and the wording were corrected, the related paper is cited, and
+the unconfirmed issue number is omitted.
+
+**Fourth AI referee of the manuscript (text of 15:23 PDT).** A fresh agent refereed the near-final text. It found no
+problem in the mathematics, the Lean statements or the credit to the claimant: it re-derived the main lemmas, compared
+every headline Lean statement with the source, and found every number it checked in agreement with the logs. It raised
+1 blocking finding (draft markers, which needed the author's decisions), 8 major and 23 minor ones. The major ones: the
+statement on AI use did not name the coordinating agent; the paper did not say that the sharper cover of Theorem B was
+developed after the project had read the claim, following a task brief that pointed at the claim's cell model; one
+sentence said the claimant's data "were never run" (what is true is that the project did not run them); a sentence on
+an outside audit of the claim contradicted the rest of the paper; the reduction of Parrilo, Robertson and Saracino was
+wrongly described as Fourier-analytic; the package's READMEs were out of date; the paper gave no location for the code
+and data; and the abstract did not name the claimant. All were fixed except four, left to the author: whether the
+abstract names the claimant, one change of notation, a credit to an upstream issue that was not verified, and moving
+process detail into appendices.
+
+**This repository's run of record (read 22:12 PDT).** The coordinator read `verification/logs/SUMMARY.txt`
+(`RESULT: PASS`), `lean4checker.log` (342 modules, each exit 0) and the end of `build.log` (`Build completed
+successfully (8228 jobs)`). It then changed the manuscript to describe this repository and its run of record (Section
+7.8 of the paper) and copied it into `manuscript/` (see `PROVENANCE.md`). No referee has read the text added then.
 
 ## What none of the reviews did
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Symbolic check of the two cases in the proof of the cut-cell Lemma (Lemma 4.2 of the manuscript).
+"""Symbolic check of the two cases in the proof of the cut-cell Lemma (Lemma 5.2 of the manuscript).
 
 Case 1 (x >= 2y-1, y >= 0):  Gamma - (1-xy)/4 = (2 - (x-y)^2 - 2y^2)/8, and (x-y)^2 + 2y^2 <= 2 on the triangle.
 Case 2 (x <  2y-1):          with c = y/2 - (1+x)/4, tau = (1-y)/2, t* = (1-x)/4,
