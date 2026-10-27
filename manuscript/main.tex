@@ -422,7 +422,7 @@ The $153$ further modules of Theorem~C were rebuilt in the same way on the same 
 This run did not use \texttt{lake} and did not rebuild Mathlib. The run of record of the release repository (Section~\ref{sec:record}) adds a clean \texttt{lake} build of all $342$ modules and a kernel replay, again against a compiled Mathlib that was copied, not rebuilt or downloaded. The package's compile options include \texttt{-Dwarn.sorry=false}, as in its project file, so its compile output is not a test for \texttt{sorry}; the axiom audit is. (The release repository does not set this option.)
 
 \subsection{Run of record of the release repository}\label{sec:record}
-The release repository \cite{Artifact} (Appendix~\ref{app:repro}) holds the $342$ modules of Theorems~A--C, byte-identical to the research repository's at its merge commit 202f974, in a Lake project whose root module imports all of them, with a script, \texttt{verification/run\_all.sh}, that repeats every formal and computational check from a clean build. On 26 October 2026 the script was run on a fresh clone of the repository's first commit (f68f061), with two jobs, on the same shared machine and through the same job gate, against a copy of the compiled Mathlib (a3a10db) of the research repository's checkout and without network access ($15{:}59$--$22{:}05$ PDT, $6$ hours $6$ minutes). It ended \texttt{RESULT: PASS}:
+The release repository \cite{Artifact} (Appendix~\ref{app:repro}) holds the $342$ modules of Theorems~A--C, byte-identical to the research repository's at its merge commit 202f974, in a Lake project whose root module imports all of them, with a script, \texttt{verification/run\_all.sh}, that repeats every formal and computational check from a clean build. On 26 October 2026 the script was run on a fresh clone of the repository's first commit (de82c06; the clone was made as f68f061, before the author line of the commits was changed for publication, with the same files), with two jobs, on the same shared machine and through the same job gate, against a copy of the compiled Mathlib (a3a10db) of the research repository's checkout and without network access ($15{:}59$--$22{:}05$ PDT, $6$ hours $6$ minutes). It ended \texttt{RESULT: PASS}:
 \begin{itemize}
 \item \textbf{Build.} \texttt{lake build} of all $342$ modules from scratch: \texttt{Build completed successfully (8228 jobs)}, in $147$ minutes, with no \texttt{sorry} warning and $11$ linter warnings ($10$ unused \texttt{simp} arguments, one deprecated lemma name).
 \item \textbf{Axioms.} \texttt{verification/Headline.lean}: $36$ \lean{\#print axioms} lines, all \lean{[propext, Classical.choice, Quot.sound]}. \texttt{verification/AxiomAudit.lean}: every one of the $4978$ constants ($2356$ theorems) of the $342$ modules depends only on these three axioms. The upstream pin, which copies the upstream statements of \lean{prs\_bounds}, \lean{prs\_conjecture}, \lean{van\_der\_waerden} and \lean{probabilistic} verbatim from \cite{FC} at c83a94d, proves them from ours and proves the definitions equal by \lean{rfl}: $7$ axiom lines, all standard.
@@ -599,7 +599,7 @@ The formalisation was done on 26 October 2026, in parts. By about 09:30 PDT (com
 
 \textbf{Commands.} From the repository root, \texttt{FETCH\_CACHE=1 JOBS=2 bash verification/run\_all.sh} downloads Mathlib and its build cache, builds the $342$ modules from scratch, runs every check of Section~\ref{sec:record} and writes \texttt{verification/logs/SUMMARY.txt}; with \texttt{LEAN4CHECKER} set to a \texttt{lean4checker} v4.27.0 executable it also replays every module. It needs about $9$ GB of memory per job and several hours. \texttt{bash computation/theorem-b/run\_checks.sh quick} (about $3$ minutes) or \texttt{full} (adds $L=512$; about $13$ minutes in all) re-runs the Python verifications of the certificates of Theorem~B and of Section~\ref{sec:evidence} alone; the repository's README describes the other scripts.
 
-\textbf{Code and data availability.} The release repository (code under the Apache License 2.0, text and data under CC BY 4.0) is not yet public; it is available from the author on request.
+\textbf{Code and data availability.} The release repository is public at \url{https://github.com/dreadpiratechan/erdos-1186} (release v1.0.0 \cite{Artifact}; code under the Apache License 2.0, text and data under CC BY 4.0).
 
 \section{Statement on the use of AI}\label{app:ai}
 The mathematical content of Sections~\ref{sec:model2}--\ref{sec:evidence} (the sharper cover, the cut-cell lemma, the choice and certification of the relaxation, the certificates), the Lean formalisation, the scripts and the text of this manuscript were produced by AI systems (Claude models from Anthropic, running as
@@ -682,9 +682,10 @@ Erik Sj{\"o}land, \emph{Enumeration of monochromatic three term arithmetic
 
 \bibitem{Artifact}
 Chandler Snively, \emph{Erd{\H{o}}s {P}roblem 1186, $k=3$: {L}ean
-  formalisation, verification scripts and computations}, 2026, Release v1.0.0,
-  prepared 26 October 2026; not yet public, available from the author on
-  request.
+  formalisation, verification scripts and computations},
+  \url{https://github.com/dreadpiratechan/erdos-1186}, 2026, Release v1.0.0 (26
+  October 2026),
+  \url{https://github.com/dreadpiratechan/erdos-1186/tree/v1.0.0}.
 
 \bibitem{FC}
 {The Formal Conjectures Authors}, \emph{Formal conjectures},

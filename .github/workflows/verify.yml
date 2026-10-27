@@ -2,7 +2,7 @@
 # declaration, upstream definition pin, the exact-arithmetic checks, the regeneration of the generated modules, and the
 # file manifest. The logs are uploaded as an artifact.
 #
-# This workflow has not been run yet. It uses one Lean job (JOBS=1), because the largest modules need about 9 GB each and
+# Its runs are not part of the run of record (verification/logs/). It uses one Lean job (JOBS=1), because the largest modules need about 9 GB each and
 # a standard GitHub-hosted Linux runner has 16 GB, and it skips the kernel replay (lean4checker), because the build alone
 # takes hours and GitHub-hosted jobs stop after 6 hours. Run the replay locally (see README.md).
 name: verify

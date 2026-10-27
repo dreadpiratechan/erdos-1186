@@ -52,7 +52,7 @@ All dates are 2026; times are Pacific Daylight Time, from the research repositor
 | 26 October, 13:24-15:22 | In the research repository: every one of the 131 certificate-side modules of Theorem C built from source with its own gated `lake build` (13:24-15:13, all successful), and the merge commit `202f974` ("merge agent/n3c", 15:22) on master; its Lean files `P1186*` are byte-identical to those of this repository (checked for all 342) | the coordinating agent |
 | 26 October, afternoon | An audit of the Theorem C formalisation against the claim's TeX source (`REVIEWS.md`, Section 6) | an AI agent (Claude) |
 | 26 October, day | The manuscript, a reproducibility package, two standalone rebuilds of the shipped Lean files with plain `lean` (08:42-09:29 and 12:36-14:04), three AI referee reviews of the manuscript (`REVIEWS.md`, Sections 3-5) | AI agents (Claude); the manuscript lane ran Claude Sonnet 5.5 |
-| 26 October, afternoon and evening | This repository: assembled from the package and the research repository, with new verification scripts (first commit `f68f061`, 15:48 PDT); a run of `verification/run_all.sh` on a fresh clone of that commit, 15:59-22:05 PDT, `RESULT: PASS` with the kernel replay (its logs are in `verification/logs/`; see `README.md`) | an AI agent (Claude Opus 5.5) |
+| 26 October, afternoon and evening | This repository: assembled from the package and the research repository, with new verification scripts (first commit `de82c06`, made as `f68f061`, 15:48 PDT); a run of `verification/run_all.sh` on a fresh clone of that commit, 15:59-22:05 PDT, `RESULT: PASS` with the kernel replay (its logs are in `verification/logs/`; see `README.md`) | an AI agent (Claude Opus 5.5) |
 
 ## What is in this repository, and where it came from
 
@@ -81,15 +81,19 @@ All dates are 2026; times are Pacific Daylight Time, from the research repositor
   new. `upstream/` holds the upstream Formal Conjectures file verbatim (commit `c83a94d785d0`, 22 October 2026) and its
   licence. `earlier-runs/2026-10-26-package/` holds the logs of the checks made on the research package before this
   repository existed, with two local folder names replaced by `<research-repository>` and `<paper-workspace>`.
-- **`manuscript/`.** `main.tex` is the manuscript as a single file, as prepared for aiXiv: the workspace's `paper.tex`
-  at its commit `d5f9974` (26 October 2026, 22:54 PDT) with the bibliography inlined from its BibTeX output and
-  whole-line TeX comments removed, so that it compiles alone, without BibTeX. `main.pdf` is compiled from it (its
-  extracted text is identical to that of the workspace's `paper.pdf`), and `refs.bib` is the workspace's
-  `references.bib`, the source of the inlined bibliography. SHA-256: `main.tex` `ae2e0962…`, `refs.bib` `d517951d…`,
-  `main.pdf` `d800ffd7…` (the workspace's `paper.tex`: `a2c476ac…`). This text cites this repository and its run of
-  record (Section 7.8 of the paper) and uses its paths; `earlier-runs/` in it stands for
-  `verification/earlier-runs/2026-10-26-package/`. Its statement on code availability still says "not yet public;
-  available from the author on request", which is to change when the repository is published.
+- **`manuscript/`.** `main.tex` is the manuscript as a single file, as prepared for aiXiv: the paper workspace's
+  `paper.tex` with the bibliography inlined from its BibTeX output and whole-line TeX comments removed, so that it
+  compiles alone, without BibTeX. `main.pdf` is compiled from it (its extracted text is identical to that of the
+  workspace's `paper.pdf`), and `refs.bib` is the workspace's `references.bib`, the source of the inlined bibliography.
+  The text cites this repository by its release tag, v1.0.0, reports its run of record (Section 7.8 of the paper) and
+  uses its paths; `earlier-runs/` in it stands for `verification/earlier-runs/2026-10-26-package/`. The copy prepared
+  for aiXiv also names the commit of the release, in its statement on code availability and in the bibliography entry
+  for this repository; it is otherwise the same text.
+- **Commit identity.** Before publication (26 October 2026, about 23:15 PDT) the first four commits were rewritten so
+  that their author and committer are `Chandler Snively <lab@quanalabs.com>`, as in the erdos-357 repository, in place
+  of a personal address. No file changed: the trees are the same. Old and new hashes: `f68f061` → `de82c06` (tree
+  `08cc3e2`), `ff98508` → `8f3d0a5`, `c790ea2` → `94914af`, `3bbacb2` → `ef00896`. The run of record was made from a
+  clone of `f68f061`.
 
 ## The claim behind Theorem C
 

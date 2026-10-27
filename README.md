@@ -21,7 +21,7 @@ and says nothing about the general problem.
 > no human has read the Lean sources beyond the statements, and the paper has not been peer reviewed. The formal verification below is the main evidence for correctness. See
 > [docs/PROVENANCE.md](docs/PROVENANCE.md) and the statement on AI use at the end of the paper.
 
-**Release v1.0.0** (prepared 26 October 2026; not yet published).
+**Release v1.0.0** (26 October 2026).
 
 ## Results and their status
 
@@ -174,7 +174,8 @@ RESULT: PASS
 
 The script exits with status 0 only if every step it ran passed; otherwise the summary ends with `RESULT: FAIL`.
 
-**The run of record.** It was made on 26 October 2026 from a fresh clone of this repository's first commit (`f68f061`),
+**The run of record.** It was made on 26 October 2026 from a fresh clone of this repository's first commit (`de82c06`; cloned as `f68f061`, before the author line of
+the commits was changed for publication, with the same files),
 at a short path, on Windows 10 with Git Bash, `JOBS=2` and lean4checker `v4.27.0`, on a machine shared with other jobs
 and through its job gate, which kills any single process above 9 GB of memory. Mathlib was not downloaded: the
 compiled Mathlib checkout of the research repository (the same commit `a3a10db`) was copied into `lean/.lake/packages`,
@@ -196,8 +197,9 @@ limit; the cache then unpacks without reporting an error, but the build fails on
 
 The workflow in `.github/workflows/verify.yml` runs the same script on Linux, with one Lean job (a standard runner has
 16 GB of memory) and without the kernel replay (the build alone takes hours, and hosted jobs stop after 6 hours).
-**It has not been run yet**: it will run for the first time when the repository is pushed to a host that runs it, and it
-may not finish within the limit.
+**Its runs are not part of the run of record.** The first ones started when release v1.0.0 was pushed. A run may not
+finish within the limit, and the regeneration of the Theorem B certificates, which rounds floating-point values, may
+differ on Linux.
 
 The Python checks alone (no Lean, about 10 minutes) are listed in [computation/README.md](computation/README.md).
 
