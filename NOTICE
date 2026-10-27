@@ -20,7 +20,7 @@ Sequences, sequence A121385 (https://oeis.org/A121385), licensed under CC BY-SA 
 
 The Theorem C files formalise an unrefereed proof claim by Carlos Toledo ("The twelve-block
 colouring is optimal: delta_3 = 117/2192", draft v0.2, posted on erdosproblems.com/1186 on
-5 October 2026). The mathematics of that claim is its author's. None of the claimant's files,
+5 October 2026). The mathematics of that claim is Toledo's. None of the claimant's files,
 certificates or code is included in this repository.
 
 The Lean files depend on Mathlib (https://github.com/leanprover-community/mathlib4, Apache License

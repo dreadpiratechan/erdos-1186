@@ -82,11 +82,11 @@ All dates are 2026; times are Pacific Daylight Time, from the research repositor
   licence. `earlier-runs/2026-10-26-package/` holds the logs of the checks made on the research package before this
   repository existed, with two local folder names replaced by `<research-repository>` and `<paper-workspace>`.
 - **`manuscript/`.** `main.tex` is the manuscript as a single file, as prepared for aiXiv: the workspace's `paper.tex`
-  at its commit `5aa454f` (26 October 2026, about 22:15 PDT) with the bibliography inlined from its BibTeX output and
+  at its commit `d5f9974` (26 October 2026, 22:54 PDT) with the bibliography inlined from its BibTeX output and
   whole-line TeX comments removed, so that it compiles alone, without BibTeX. `main.pdf` is compiled from it (its
   extracted text is identical to that of the workspace's `paper.pdf`), and `refs.bib` is the workspace's
-  `references.bib`, the source of the inlined bibliography. SHA-256: `main.tex` `8b0d48f5…`, `refs.bib` `d517951d…`,
-  `main.pdf` `8f4a87d0…` (the workspace's `paper.tex`: `8fd186dc…`). This text cites this repository and its run of
+  `references.bib`, the source of the inlined bibliography. SHA-256: `main.tex` `ae2e0962…`, `refs.bib` `d517951d…`,
+  `main.pdf` `d800ffd7…` (the workspace's `paper.tex`: `a2c476ac…`). This text cites this repository and its run of
   record (Section 7.8 of the paper) and uses its paths; `earlier-runs/` in it stands for
   `verification/earlier-runs/2026-10-26-package/`. Its statement on code availability still says "not yet public;
   available from the author on request", which is to change when the repository is published.

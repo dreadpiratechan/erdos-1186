@@ -20,7 +20,7 @@ These are the definitions `monoCount`, `minMonoCount` and `δ` of Formal Conject
 |---|---|---|
 | `Erdos1186Day.erdos_1186.variants.prs_bounds` (Theorem A) | `1675 / 32768 ≤ δ 3 ∧ δ 3 ≤ 117 / 2192` | the bounds of Parrilo, Robertson and Saracino (2008): every colouring of {1, …, n} has at least (1675/32768 − o(1)) n² monochromatic 3-APs, and some colourings have at most (117/2192 + o(1)) n² of them, along a subsequence |
 | `Erdos1186Day.delta3_ge_model2_L256` (Theorem B) | `(14324135 / 268435456 : ℝ) ≤ δ 3` | δ₃ ≥ 0.0533615…; also `delta3_ge_model2_L64` (1782409/33554432) and `delta3_ge_model2_L128` (1788837/33554432), from smaller certificates |
-| `Erdos1186Day.erdos_1186.variants.prs_conjecture` (Theorem C) | `δ 3 = 117 / 2192` | the conjecture of Parrilo, Robertson and Saracino: the 12-block colouring is asymptotically optimal. **The mathematics is another author's** (see `../README.md`) |
+| `Erdos1186Day.erdos_1186.variants.prs_conjecture` (Theorem C) | `δ 3 = 117 / 2192` | the conjecture of Parrilo, Robertson and Saracino: the 12-block colouring is asymptotically optimal. **The mathematics is Carlos Toledo's** (see `../README.md`) |
 | `Erdos1186Day.delta3_ge_L256` | `(6928985 / 134217728 : ℝ) ≤ δ 3` | the strip cover of Parrilo et al. with a larger certificate (L = 256); not a claim of the paper beyond its use in the evidence tables |
 | `Erdos1186Day.erdos_1186.variants.van_der_waerden`, `...probabilistic` | `0 < δ k` and `δ k ≤ 1 / ((k − 1) 2^k)` for k ≥ 2 | two further upstream statements proved in the same development; not results of the paper |
 
@@ -82,7 +82,7 @@ statements as Lean prints them, and the axioms of each.
   `cubeLB_of_cert`). No numbers.
 - `P1186LowMain.lean`, `P1186M2Main.lean`: the instances that give Theorems A and B.
 
-**Step 5: Theorem C** (27 hand-written modules, about 220 KB). The mathematics is the claimant's; the Lean is the project's.
+**Step 5: Theorem C** (27 hand-written modules, about 220 KB). The mathematics is Toledo's; the Lean is the project's.
 - `P1186Ex.lean` (131 lines), **the interface**. Read all of it. It fixes the scale n = 1096w, the 12-block colouring
   `sstar`, the counting region `rdI` and its quadratic form `Qd`, the linear coefficients `H2`, the grids and their cell
   data (`Grid.N`, `lo`, `hi`, `wt`, `ai`, `bi`, `sgn`, `A4`), the cell densities `yv`, the pair bound `pterm`, the finite

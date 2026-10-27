@@ -174,9 +174,9 @@ developed after the project had read the claim, following a task brief that poin
 sentence said the claimant's data "were never run" (what is true is that the project did not run them); a sentence on
 an outside audit of the claim contradicted the rest of the paper; the reduction of Parrilo, Robertson and Saracino was
 wrongly described as Fourier-analytic; the package's READMEs were out of date; the paper gave no location for the code
-and data; and the abstract did not name the claimant. All were fixed except four, left to the author: whether the
-abstract names the claimant, one change of notation, a credit to an upstream issue that was not verified, and moving
-process detail into appendices.
+and data; and the abstract did not name the claimant. All were fixed except three, left to the author: one change of notation,
+a credit to an upstream issue that was not verified, and moving process detail into appendices. The naming was the
+author's decision: on 26 October the author decided to name the claimant throughout, and the abstract does so.
 
 **This repository's run of record (read 22:12 PDT).** The coordinator read `verification/logs/SUMMARY.txt`
 (`RESULT: PASS`), `lean4checker.log` (342 modules, each exit 0) and the end of `build.log` (`Build completed

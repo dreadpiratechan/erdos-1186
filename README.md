@@ -16,8 +16,8 @@ and says nothing about the general problem.
 
 > **How this work was done.** Theorem B and its proof, and all the Lean proofs, were produced by AI systems in a research
 > project directed by the author (the mathematics of Theorem A is that of Parrilo, Robertson and Saracino). The paper and
-> the verification were also prepared with AI. **Theorem C is a Lean formalisation of another author's unrefereed proof
-> claim; the mathematics of Theorem C is theirs, not ours.** No independent human mathematician has checked the proofs,
+> the verification were also prepared with AI. **Theorem C is a Lean formalisation of Carlos Toledo's unrefereed proof
+> claim; the mathematics of Theorem C is Toledo's, not ours.** No independent human mathematician has checked the proofs,
 > no human has read the Lean sources beyond the statements, and the paper has not been peer reviewed. The formal verification below is the main evidence for correctness. See
 > [docs/PROVENANCE.md](docs/PROVENANCE.md) and the statement on AI use at the end of the paper.
 
