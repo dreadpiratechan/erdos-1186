@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: >-
-  If you use these results, please cite the paper. Until it has an identifier,
+  If you use these results, please cite the paper, aiXiv:2610.02762. For the code and data,
   cite this repository and the release tag you used. If you use Theorem C, please also
   cite the proof claim of Carlos Toledo, whose mathematics it formalises.
 title: "Erdős Problem 1186 (k = 3): Lean formalization, verification scripts and computations"
@@ -35,7 +35,8 @@ preferred-citation:
       given-names: Chandler
       affiliation: Quana Labs
   year: 2026
-  notes: "Preprint. An identifier will be added on release."
+  url: "https://aixiv.online/abs/2610.02762"
+  notes: "Preprint, aiXiv:2610.02762 (27 October 2026). Not peer reviewed."
 references:
   - type: generic
     title: "The twelve-block colouring is optimal: δ₃ = 117/2192"

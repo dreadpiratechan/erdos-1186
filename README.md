@@ -1,7 +1,7 @@
 # Erdős Problem 1186, k = 3: machine-checked results on monochromatic 3-term progressions
 
 This repository accompanies the paper *Machine-checked results on the minimum number of monochromatic 3-term arithmetic
-progressions in two-colourings (Erdős Problem 1186, case k = 3)* by Chandler Snively (Quana Labs, 2026). It contains:
+progressions in two-colourings (Erdős Problem 1186, case k = 3)* by Chandler Snively (Quana Labs, 2026), [aiXiv:2610.02762](https://aixiv.online/abs/2610.02762). It contains:
 
 - the manuscript;
 - the Lean 4 formalization of its theorems, pinned to an exact toolchain;
@@ -205,8 +205,8 @@ The Python checks alone (no Lean, about 10 minutes) are listed in [computation/R
 
 ## Citing
 
-Please cite the paper; see [CITATION.cff](CITATION.cff). Until an identifier exists, cite this repository and its release
-tag. If you use Theorem C, please also cite the proof claim of Carlos Toledo, whose mathematics it formalises.
+Please cite the paper, aiXiv:2610.02762 (https://aixiv.online/abs/2610.02762); see [CITATION.cff](CITATION.cff). For the code and data, cite this repository
+and its release tag. If you use Theorem C, please also cite the proof claim of Carlos Toledo, whose mathematics it formalises.
 
 ## Licence
 
